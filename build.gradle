@@ -4,6 +4,11 @@
  * It is extraordinarily rare that you will ever need to edit this file.
  */
 
+configurations {
+    doc { transitive false }
+}
+
+
 buildscript {
     repositories {
         mavenCentral()
