@@ -30,7 +30,7 @@ public class Arm extends Mechanism{
     public void setPos(double angle, int motor) {
         double position = angleToPos(angle);
         controller.setTargetPosition(position);
-        motors[motor].setPower(controller.update(motors[motor].getCurrentPosition()));
+        motors[motor-1].setPower(controller.update(motors[motor-1].getCurrentPosition()));
 
     }
 
