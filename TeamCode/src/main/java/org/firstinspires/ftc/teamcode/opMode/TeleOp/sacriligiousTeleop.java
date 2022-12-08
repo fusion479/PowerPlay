@@ -16,7 +16,9 @@ public class sacriligiousTeleop extends LinearOpMode {
     Arm arm = new Arm();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-    public static double target = 90;
+    public static int target = 90;
+    public static int motor = 1;
+    public double powerOut;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -26,29 +28,32 @@ public class sacriligiousTeleop extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
         while (opModeIsActive()) {
-            arm.power(0.25 * gamepad2.left_stick_x, 1);
-            arm.power(0.1 * gamepad2.right_stick_x, 2);
+            arm.power(0.25 * gamepad1.left_stick_x, 1);
+            arm.power(0.25 * gamepad1.right_stick_x, 2);
 
             drive.setWeightedDrivePower(
                     new Pose2d(
 
-                            -gamepad1.right_stick_x,
-                           -gamepad1.left_stick_x,
-                            gamepad1.left_stick_y
+                            -gamepad2.right_stick_x,
+                           -gamepad2.left_stick_x,
+                            gamepad2.left_stick_y
                     )
             );
 
             drive.update();
-            arm.setPos(90, 1);
+            powerOut = arm.update(motor);
             if(gamepad1.a) {
-                arm.update(1);
+                arm.power(powerOut, motor);
             }
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            tele.addData("actual pos: ")
-            telemetry.update();
+            if(gamepad1.b) {
+                arm.recalibrate();
+            }
+            tele.addData("motor1 pos", arm.motors[0].getCurrentPosition());
+            tele.addData("motor2 pos", arm.motors[1].getCurrentPosition());
+            tele.addData("powerOut: ", powerOut);
+            tele.addData("angle: ", arm.posToAngle(arm.motors[motor-1].getCurrentPosition()));
+            tele.addData("cosine: ", Math.cos(Math.toRadians(arm.posToAngle(arm.motors[motor-1].getCurrentPosition()))));
+            tele.update();
         }
     }
 }
