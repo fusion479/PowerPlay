@@ -17,10 +17,10 @@ public class Arm extends Mechanism{
     public DcMotorEx motors[] = new DcMotorEx[2];
     private int targets[] = new int[2];
     public static double tpd = 2786.2/360;
-    public static double kP = 0;
+    public static double kP = -0.000000000001;
     public static double kD = 0;
     public static double kI = 0;
-    public static double kCos = 0;
+    public static double kCos = -0.025;
     public static PIDCoefficients coeffs = new PIDCoefficients(kP, kD, kI);
     @Override
     public void init(HardwareMap hwMap) {
@@ -34,7 +34,7 @@ public class Arm extends Mechanism{
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
-        motors[1].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void setPosition(int motor, int position) {
