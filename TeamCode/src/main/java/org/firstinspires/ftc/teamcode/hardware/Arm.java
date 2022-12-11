@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Arm extends Mechanism{
@@ -17,10 +18,11 @@ public class Arm extends Mechanism{
     public DcMotorEx motors[] = new DcMotorEx[2];
     private int targets[] = new int[2];
     public static double tpd = 2786.2/360;
-    public static double kP = -0.000000000001;
-    public static double kD = 0;
+    public static double kP = -0.00065;
+    public static double kD = -0.07;
     public static double kI = 0;
     public static double kCos = -0.02;
+    public static double kS = 0;
     public static PIDCoefficients coeffs = new PIDCoefficients(kP, kD, kI);
     @Override
     public void init(HardwareMap hwMap) {
@@ -56,10 +58,12 @@ public class Arm extends Mechanism{
         double i = kI * totalIntegral;
         double d = kD * (error-lastError) / time;
         double f = kCos * Math.cos(Math.toRadians(posToAngle(current)));
-        double pidf = p + i + d + f;
+        double s = kS * Math.signum(error);
+        double pidfs = p + i + d + f + s;
+        pidfs = Range.clip(pidfs, -0.75, 0.75);
         lastError = error;
         timer.reset();
-        return pidf;
+        return pidfs;
     }
 
     public double posToAngle(double pos) {
