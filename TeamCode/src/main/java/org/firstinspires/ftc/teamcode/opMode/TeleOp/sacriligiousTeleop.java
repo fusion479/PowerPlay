@@ -16,7 +16,7 @@ public class sacriligiousTeleop extends LinearOpMode {
     Arm arm = new Arm();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-    public static int target = 90;
+    public static int target = 675;
     public static int motor = 1;
     public double powerOut;
 
@@ -41,6 +41,7 @@ public class sacriligiousTeleop extends LinearOpMode {
             );
 
             drive.update();
+            arm.setPosition(motor, target);
             powerOut = arm.update(motor);
             if(gamepad1.a) {
                 arm.power(powerOut, motor);

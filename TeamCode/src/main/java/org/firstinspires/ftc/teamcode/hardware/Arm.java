@@ -20,7 +20,7 @@ public class Arm extends Mechanism{
     public static double kP = -0.000000000001;
     public static double kD = 0;
     public static double kI = 0;
-    public static double kCos = -0.025;
+    public static double kCos = -0.02;
     public static PIDCoefficients coeffs = new PIDCoefficients(kP, kD, kI);
     @Override
     public void init(HardwareMap hwMap) {

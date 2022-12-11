@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 public class Parking extends LinearOpMode {
     public static double time = 0.03;
     ElapsedTime timer = new ElapsedTime();
-    public
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive bot = new SampleMecanumDrive(hardwareMap);
