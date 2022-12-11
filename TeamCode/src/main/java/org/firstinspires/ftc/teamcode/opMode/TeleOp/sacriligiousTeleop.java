@@ -54,6 +54,8 @@ public class sacriligiousTeleop extends LinearOpMode {
             tele.addData("powerOut: ", powerOut);
             tele.addData("angle: ", arm.posToAngle(arm.motors[motor-1].getCurrentPosition()));
             tele.addData("cosine: ", Math.cos(Math.toRadians(arm.posToAngle(arm.motors[motor-1].getCurrentPosition()))));
+            tele.addData("error: ", target - arm.motors[motor-1].getCurrentPosition());
+            tele.addData("target: ", target);
             tele.update();
         }
     }
