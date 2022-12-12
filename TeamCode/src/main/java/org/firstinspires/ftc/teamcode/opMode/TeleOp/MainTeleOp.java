@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Arm;
-@TeleOp
+@TeleOp (name = "Main TeleOp", group = "_Main")
 @Config
-public class sacriligiousTeleop extends LinearOpMode {
+public class MainTeleOp extends LinearOpMode {
     Arm arm = new Arm();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());

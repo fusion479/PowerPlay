@@ -4,16 +4,16 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.util.kellen;
+import org.firstinspires.ftc.teamcode.util.Kellen;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-public class sleeveVision extends Mechanism{
+public class SleeveVision extends Mechanism{
     private OpenCvWebcam webcam;
     public static boolean preview = true;
-    private kellen pipe = new kellen();
+    private Kellen pipe = new Kellen();
     int viewid;
     public void init(HardwareMap hwMap) {
         viewid = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.teleOp;
+package org.firstinspires.ftc.teamcode.opMode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -6,16 +6,11 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.util.kellen;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
+import org.firstinspires.ftc.teamcode.util.Kellen;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 /*
  * This version of the internal camera example uses EasyOpenCV's interface to the
@@ -23,10 +18,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
  */
 @TeleOp
 @Config
-public class phoneCam extends LinearOpMode
+public class PhoneCam extends LinearOpMode
 {
     OpenCvCamera phoneCam;
-    kellen colors;
+    Kellen colors;
     public static String c = "green";
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -52,7 +47,7 @@ public class phoneCam extends LinearOpMode
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        colors = new kellen(c);
+        colors = new Kellen(c);
         phoneCam.setPipeline(colors);
 
         /*

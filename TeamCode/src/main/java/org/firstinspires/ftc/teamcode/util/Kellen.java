@@ -11,13 +11,13 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 @Config
-public class kellen extends OpenCvPipeline {
+public class Kellen extends OpenCvPipeline {
     //pipe line class for detecting capstone (or objects in three different regions)
     //default color detections set to lime green
-    public kellen() {
+    public Kellen() {
         color = "green";
     }
-    public kellen(String choice) {
+    public Kellen(String choice) {
         color = choice;
     }
     boolean viewportPaused;
