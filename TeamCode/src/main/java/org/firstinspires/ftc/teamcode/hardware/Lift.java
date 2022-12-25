@@ -32,9 +32,9 @@ public class Lift extends Mechanism {
     public static double kD = 0;
     public static double kF = 0;
 
-    public static int POS_LOW = 15;
-    public static int POS_MEDIUM = 25;
-    public static int POS_HIGH = 35;
+    public static double POS_LOW = 15;
+    public static double POS_MEDIUM = 25;
+    public static double POS_HIGH = 35;
 
     public Lift(LinearOpMode opMode) { this.opMode = opMode; }
 
@@ -86,7 +86,7 @@ public class Lift extends Mechanism {
         rightLiftMotor.update();
     }
 
-    // TODO: implement ?
+    // TODO: implement this for bottoming
     public boolean touchSensor() {
         return leftTouchSensor.isPressed() && rightTouchSensor.isPressed();
     }

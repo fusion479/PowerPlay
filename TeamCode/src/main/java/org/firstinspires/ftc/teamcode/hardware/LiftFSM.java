@@ -16,9 +16,9 @@ public class LiftFSM extends Mechanism{
     public Lift lift = new Lift(opMode);
 
     public enum LiftState {
+        EXTENDED,
+        BOTTOMED,
         REST,
-        EXTENDING,
-        RETRACTING,
     };
 
     private Thread bottomThread;
@@ -48,7 +48,7 @@ public class LiftFSM extends Mechanism{
         try {
             Thread.sleep(0);
             lift.goBottom();
-            liftState = LiftState.BOTTOM;
+            liftState = LiftState.REST;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,7 +58,7 @@ public class LiftFSM extends Mechanism{
         try {
             lift.goLow();
             Thread.sleep(test);
-            liftState = LiftState.LOW;
+            liftState = LiftState.EXTENDED;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -68,7 +68,7 @@ public class LiftFSM extends Mechanism{
         try {
             lift.goMedium();
             Thread.sleep(test);
-            liftState = LiftState.MEDIUM;
+            liftState = LiftState.EXTENDED;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -78,7 +78,7 @@ public class LiftFSM extends Mechanism{
         try {
             lift.goHigh();
             Thread.sleep(test);
-            liftState = LiftState.HIGH;
+            liftState = LiftState.EXTENDED;
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -90,19 +90,26 @@ public class LiftFSM extends Mechanism{
         } catch (IllegalThreadStateException ignored) {}
     }
 
+    // consult and change controls if needed
     public void loop(Gamepad gamepad) {
         switch (liftState) {
-            case BOTTOM:
+            case REST:
                 lift.goBottom();
+                liftState = LiftState.BOTTOMED;
                 break;
-            case LOW:
-                lift.goLow();
+            case BOTTOMED:
+                if (gamepad.b) {
+                    runThread(highThread);
+                } else if (gamepad.y) {
+                    runThread(mediumThread);
+                } else if (gamepad.x) {
+                    runThread(lowThread);
+                }
                 break;
-            case MEDIUM:
-                lift.goMedium();
-                break;
-            case HIGH:
-                lift.goHigh();
+            case EXTENDED:
+                if (gamepad.a) {
+                    runThread(bottomThread);
+                }
                 break;
         }
 
