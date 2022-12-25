@@ -16,10 +16,7 @@ public class LiftFSM extends Mechanism{
     public Lift lift = new Lift(opMode);
 
     public enum LiftState {
-        BOTTOM,
-        LOW,
-        MEDIUM,
-        HIGH,
+        REST,
         EXTENDING,
         RETRACTING,
     };
@@ -108,6 +105,9 @@ public class LiftFSM extends Mechanism{
                 lift.goHigh();
                 break;
         }
+
+
+
     }
 
     @Override
