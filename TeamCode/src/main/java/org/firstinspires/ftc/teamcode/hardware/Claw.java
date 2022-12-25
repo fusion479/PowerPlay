@@ -1,34 +1,45 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 @Config
 public class Claw extends Mechanism {
-    public Servo[] axis = new Servo[2];
-    public CRServo[] spin = new CRServo[2];
-    public static double downPos = 0;
-    public static double upPos = 1;
-    @Override
+    private Servo claw;
+
+    public static double OPEN_POS = 0;
+    public static double CLOSED_POS = 1;
+    public Claw(LinearOpMode opMode) {this.opMode = opMode;}
+
     public void init(HardwareMap hwMap) {
-        axis[0] = hwMap.get(Servo.class, "axis1");
-        axis[1] = hwMap.get(Servo.class, "axis2");
-        spin[0] = hwMap.get(CRServo.class, "spin1");
-        spin[1] = hwMap.get(CRServo.class, "spin2");
+        claw = hwMap.get(Servo.class, "claw");
+        // TODO: uncomment as necessary
+//        claw.setDirection(Servo.Direction.REVERSE);
     }
 
-    public void down() {
-        axis[0].setPosition(downPos);
-        axis[1].setPosition(downPos);
+    public void loop(Gamepad gamepad) {
+        if (gamepad.left_bumper) {
+            open();
+        } else if (gamepad.right_bumper) {
+            close();
+        }
     }
 
-    public void up() {
-        axis[0].setPosition(upPos);
-        axis[1].setPosition(upPos);
+    public void open() {
+        claw.setPosition(OPEN_POS);
     }
-    public void run(double power) {
-        spin[0].setPower(power);
-        spin[1].setPower(power);
+
+    public void close() {
+        claw.setPosition(CLOSED_POS);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("clawPos", claw.getPosition());
     }
 }

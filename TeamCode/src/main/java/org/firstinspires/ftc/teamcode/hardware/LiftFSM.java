@@ -10,7 +10,7 @@ import com.stuyfission.fissionlib.util.Mechanism;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
-public class LiftFSM extends Mechanism{
+public class LiftFSM extends Mechanism {
     public LiftFSM(LinearOpMode opMode) {this.opMode = opMode;}
 
     public Lift lift = new Lift(opMode);
@@ -40,6 +40,7 @@ public class LiftFSM extends Mechanism{
         mediumThread = new Thread(goMedium);
         highThread = new Thread(goHigh);
     }
+
     public void init(HardwareMap hwMap, Telemetry tele) {
         init(hwMap);
     }

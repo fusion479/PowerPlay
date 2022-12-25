@@ -5,23 +5,27 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.hardware.Claw;
-@TeleOp
-public class ClawTest extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.hardware.Arm;
+import org.firstinspires.ftc.teamcode.hardware.Turret;
+
+
+@TeleOp(name = "Turret Testing", group = "prototype")
+public class TurretTest extends LinearOpMode {
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-    Claw claw = new Claw(this);
+    Turret turret = new Turret(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
-        claw.init(hardwareMap);
-        waitForStart();
-        while(opModeIsActive()) {
-            claw.loop(gamepad1);
+        turret.init(hardwareMap);
 
-            claw.telemetry(tele);
-            tele.update();
+        waitForStart();
+
+        while (opModeIsActive() && !isStopRequested()) {
+            turret.loop(gamepad1);
+
+            turret.telemetry(tele);
         }
     }
 }
