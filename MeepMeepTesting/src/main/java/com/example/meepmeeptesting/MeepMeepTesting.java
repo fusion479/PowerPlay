@@ -14,7 +14,7 @@ import javax.sql.PooledConnection;
 public class MeepMeepTesting {
 
     public static double startX = -36;
-    public static double startY = -72;
+    public static double startY = -70.5 + (13.3858/2);
     public static double startAng = Math.toRadians(90);
 
         public static void main(String[] args) {
@@ -39,8 +39,8 @@ public class MeepMeepTesting {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPosRedL)
-                                .lineTo(new Vector2d(startX, -36))
-                                .lineTo(new Vector2d(-60, -36))
+                                .lineTo(new Vector2d(startX, park1.getY()))
+                                .lineTo(new Vector2d(park1.getX(), park1.getY()))
                                 .build()
                 );
 
