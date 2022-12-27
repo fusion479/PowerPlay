@@ -5,25 +5,33 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.hardware.Claw;
+import org.firstinspires.ftc.teamcode.hardware.Arm;
+
 @TeleOp
-public class clawtest extends LinearOpMode {
+public class armTest extends LinearOpMode {
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-    Claw claw = new Claw();
+    Arm arm = new Arm();
+    boolean isPressed = false;
     @Override
     public void runOpMode() throws InterruptedException {
-        claw.init(hardwareMap);
+        arm.init(hardwareMap);
         waitForStart();
         while(opModeIsActive()) {
-            claw.run(gamepad1.left_stick_x);
-            if (gamepad1.a) {
-                claw.up();
+            if (!isPressed && gamepad1.a) {
+                arm.toggle();
             }
             if (gamepad1.b) {
-                claw.down();
+                arm.resetArm();
             }
+            if (gamepad1.x) {
+                arm.pick();
+            }
+            if (gamepad1.y) {
+                arm.place();
+            }
+            isPressed = gamepad1.a;
         }
     }
 }
