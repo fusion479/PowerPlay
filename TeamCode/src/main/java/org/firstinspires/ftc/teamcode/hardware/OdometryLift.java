@@ -32,11 +32,11 @@ public class OdometryLift extends Mechanism {
     public void loop(Gamepad gamepad) {
         switch (odoLiftState) {
             case UP:
-                if (gamepad.circle) {
+                if (gamepad.dpad_left) {
                     down();
                 }
             case DOWN:
-                if (gamepad.circle) {
+                if (gamepad.dpad_left) {
                     up();
                 }
         }

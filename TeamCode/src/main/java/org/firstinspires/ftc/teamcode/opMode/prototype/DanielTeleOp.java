@@ -48,7 +48,7 @@ public class DanielTeleOp extends LinearOpMode {
             drivetrain.loop(gamepad1);
             liftFSM.loop(gamepad1);
             odometryLift.loop(gamepad1);
-            turretFSM.loop(gamepad1);
+//            turretFSM.loop(gamepad2);
 
             // TODO: uncomment as telemetry is needed
 //            arm.telemetry(tele);
@@ -58,5 +58,29 @@ public class DanielTeleOp extends LinearOpMode {
             odometryLift.telemetry(tele);
             turretFSM.telemetry(tele);
         }
+
+        /*
+        controls:
+
+        A: retract slides
+        B: go high
+        X: go low
+        Y: go medium
+
+        dpad_down: arm down
+        dpad_right: arm 90deg
+        dpad_up: arm up
+
+        dpad_left: toggle odo lift
+
+        left bumper: toggle claw
+
+        left + right sticks: driving
+
+        game pad 2:
+        back button: toggle manual operation
+        right stick x: turn turret if manual
+        right bumper: toggle 90 deg and straight
+         */
     }
 }

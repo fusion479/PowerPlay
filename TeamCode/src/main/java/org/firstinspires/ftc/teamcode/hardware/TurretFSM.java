@@ -43,18 +43,22 @@ public class TurretFSM extends Mechanism {
             case MANUAL:
                 if (gamepad.back) {
                     runThread(straightThread);
+                } else {
+                    turret.turnTurret(gamepad.right_stick_x * .5);
                 }
                 break;
             case REST:
                 if (gamepad.back) {
                     runThread(manualThread);
+                } else if (gamepad.right_bumper) {
+                    runThread(turn90Thread);
                 }
                 break;
             case TURNING:
                 if (gamepad.back) {
                     runThread(manualThread);
-                } else if (gamepad.dpad_right) {
-                    runThread(turn90Thread);
+                } else if (gamepad.right_bumper) {
+                    runThread(straightThread);
                 }
                 break;
         }
