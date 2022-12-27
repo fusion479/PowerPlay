@@ -10,14 +10,14 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-public class sleeveVision extends Mechanism{
+public class SleeveVision extends Mechanism{
     private OpenCvWebcam webcam;
     public static boolean preview = true;
-    private kellen pipe = new kellen();
-    int viewid;
+    private kellen camPipeline = new kellen();
+    int viewID;
     public void init(HardwareMap hwMap) {
-        viewid = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
-        if(preview) webcam = OpenCvCameraFactory.getInstance().createWebcam(hwMap.get(WebcamName.class, "camera"),viewid);
+        viewID = hwMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hwMap.appContext.getPackageName());
+        if(preview) webcam = OpenCvCameraFactory.getInstance().createWebcam(hwMap.get(WebcamName.class, "camera"), viewID);
         else webcam = OpenCvCameraFactory.getInstance().createWebcam(hwMap.get(WebcamName.class, "camera"));
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -60,10 +60,10 @@ public class sleeveVision extends Mechanism{
     }
 
     public void setPipeline() {
-        webcam.setPipeline(pipe);
+        webcam.setPipeline(camPipeline);
     }
     public int color() {
-        return pipe.whichRegion();
+        return camPipeline.whichRegion();
     }
 }
 

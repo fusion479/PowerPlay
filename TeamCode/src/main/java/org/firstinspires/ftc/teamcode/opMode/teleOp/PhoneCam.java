@@ -7,15 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.util.kellen;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera2;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 /*
  * This version of the internal camera example uses EasyOpenCV's interface to the
@@ -23,7 +18,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
  */
 @TeleOp
 @Config
-public class phoneCam extends LinearOpMode
+public class PhoneCam extends LinearOpMode
 {
     OpenCvCamera phoneCam;
     kellen colors;
