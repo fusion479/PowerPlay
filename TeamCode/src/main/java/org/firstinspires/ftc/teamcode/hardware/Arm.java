@@ -6,13 +6,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Arm extends Mechanism {
+    public Arm(LinearOpMode opMode) {this.opMode = opMode;}
 
     private Servo armLeft1;
     private Servo armLeft2;
     private Servo armRight1;
     private Servo armRight2;
-
-    public Arm(LinearOpMode opMode) {this.opMode = opMode;}
 
     @Override
     public void init(HardwareMap hwMap) {

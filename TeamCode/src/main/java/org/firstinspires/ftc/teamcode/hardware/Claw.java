@@ -11,11 +11,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Claw extends Mechanism {
+    public Claw(LinearOpMode opMode) {this.opMode = opMode;}
+
     private Servo claw;
 
     public static double OPEN_POS = 0;
     public static double CLOSED_POS = 1;
-    public Claw(LinearOpMode opMode) {this.opMode = opMode;}
+
+    public enum ClawState {
+        OPEN,
+        CLOSED,
+    };
+
+    public ClawState clawState;
 
     public void init(HardwareMap hwMap) {
         claw = hwMap.get(Servo.class, "claw");
@@ -24,11 +32,18 @@ public class Claw extends Mechanism {
     }
 
     public void loop(Gamepad gamepad) {
-        if (gamepad.left_bumper) {
-            open();
-        } else if (gamepad.right_bumper) {
-            close();
+        switch (clawState) {
+            case OPEN:
+                if (gamepad.left_bumper) {
+                    open();
+                }
+                break;
+            case CLOSED:
+                if (gamepad.left_bumper) {
+                    close();
+                }
         }
+
     }
 
     public void open() {

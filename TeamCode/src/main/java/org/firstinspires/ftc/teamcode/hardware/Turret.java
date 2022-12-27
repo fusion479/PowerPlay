@@ -12,7 +12,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @Config
 public class Turret extends Mechanism{
-
     public Turret(LinearOpMode opMode) {this.opMode = opMode;}
 
     private DcMotor turret1;

@@ -17,19 +17,20 @@ public class MeepMeepTesting {
     public static double startY = -70.5 + (13.3858/2);
     public static double startAng = Math.toRadians(90);
 
+    public static double FORWARD_DIST = 30;
+    public static double LATERAL_DIST = 25;
+
         public static void main(String[] args) {
             // Declare a MeepMeep instance
             // With a field size of 800 pixels
-        MeepMeep meepMeep = new MeepMeep(800);
+            MeepMeep meepMeep = new MeepMeep(800);
 
-        Pose2d startPosRedL = new Pose2d(startX, startY, startAng);
-        Pose2d startPosRedR = new Pose2d(-startX, startY, startAng);
-        Pose2d startPosBlueR = new Pose2d(startX, -startY, -startAng);
-        Pose2d startPosBlueL = new Pose2d(-startX, -startY, -startAng);
+            Pose2d startPosRedL = new Pose2d(startX, startY, startAng);
+            Pose2d startPosRedR = new Pose2d(-startX, startY, startAng);
+            Pose2d startPosBlueR = new Pose2d(startX, -startY, -startAng);
+            Pose2d startPosBlueL = new Pose2d(-startX, -startY, -startAng);
 
-        Pose2d park1 = new Pose2d(-60, -36, startAng);
-
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+            RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Required: Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 10.5689)
                 .setDimensions(13.3858, 13.3858)
@@ -39,13 +40,13 @@ public class MeepMeepTesting {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPosRedL)
-                                .lineTo(new Vector2d(startX, park1.getY()))
-                                .lineTo(new Vector2d(park1.getX(), park1.getY()))
+                                .forward(FORWARD_DIST)
+                                .strafeLeft(LATERAL_DIST)
                                 .build()
                 );
 
         // Set field image
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
+            meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
                 .setDarkMode(true)
                 // Background opacity from 0-1
                 .setBackgroundAlpha(0.95f)

@@ -21,6 +21,8 @@ public class LiftFSM extends Mechanism {
         REST,
     };
 
+    public LiftState liftState;
+
     private Thread bottomThread;
     private Thread lowThread;
     private Thread mediumThread;
@@ -28,8 +30,6 @@ public class LiftFSM extends Mechanism {
 
     // RETRACT STATE DELAY (idk)
     public static long test = 100;
-
-    public LiftState liftState;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -43,6 +43,36 @@ public class LiftFSM extends Mechanism {
 
     public void init(HardwareMap hwMap, Telemetry tele) {
         init(hwMap);
+    }
+
+    // consult and change controls if needed
+    public void loop(Gamepad gamepad) {
+        switch (liftState) {
+            case REST:
+                lift.goBottom();
+                liftState = LiftState.BOTTOMED;
+                break;
+            case BOTTOMED:
+                if (gamepad.b) {
+                    runThread(highThread);
+                } else if (gamepad.y) {
+                    runThread(mediumThread);
+                } else if (gamepad.x) {
+                    runThread(lowThread);
+                }
+                break;
+            case EXTENDED:
+                if (gamepad.a) {
+                    runThread(bottomThread);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Current state", liftState);
+        lift.telemetry(telemetry);
     }
 
     public Runnable goBottom = () -> {
@@ -89,38 +119,5 @@ public class LiftFSM extends Mechanism {
         try {
             thread.start();
         } catch (IllegalThreadStateException ignored) {}
-    }
-
-    // consult and change controls if needed
-    public void loop(Gamepad gamepad) {
-        switch (liftState) {
-            case REST:
-                lift.goBottom();
-                liftState = LiftState.BOTTOMED;
-                break;
-            case BOTTOMED:
-                if (gamepad.b) {
-                    runThread(highThread);
-                } else if (gamepad.y) {
-                    runThread(mediumThread);
-                } else if (gamepad.x) {
-                    runThread(lowThread);
-                }
-                break;
-            case EXTENDED:
-                if (gamepad.a) {
-                    runThread(bottomThread);
-                }
-                break;
-        }
-
-
-
-    }
-
-    @Override
-    public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Current state", liftState);
-        lift.telemetry(telemetry);
     }
 }

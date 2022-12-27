@@ -149,6 +149,7 @@ public class Kellen extends OpenCvPipeline {
         return b3p * 100;
     }
 
+    // TODO: MAKE THIS AN ENUM
     public int whichRegion() {
         int region = 0;
         if(b1p > b2p && b1p > b3p) {
