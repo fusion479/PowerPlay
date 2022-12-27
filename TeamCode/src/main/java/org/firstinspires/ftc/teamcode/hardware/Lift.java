@@ -61,19 +61,13 @@ public class Lift extends Mechanism{
     }
 
     public void loop() {
-        if(!(limits[1].isPressed() || limits[0].isPressed())) {
+        if(hitLimit() && !isReset) {
+            recalibrate();
+        }else {
             update(0);
             update(1);
-            //if(resetter.milliseconds() > 1) { //might need this in case lift doesn't move off the switch before the conditional catches itself
-                isReset = false;
-            //}
-        }else if(!isReset){
-            recalibrate();
-            target = 0;
-            motors[0].setPower(0);
-            motors[1].setPower(0);
-            isReset = true;
         }
+        isReset = hitLimit();
     }
    //TODO: ask kellen how to convert
     public double inchToPos(double inches) {
@@ -93,12 +87,19 @@ public class Lift extends Mechanism{
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        target = 0;
+        motors[0].setPower(0);
+        motors[1].setPower(0);
         resetter.reset();
     }
 
     public void setPower(double power) {
         motors[0].setPower(power);
         motors[1].setPower(power);
+    }
+
+    public boolean hitLimit() {
+        return limits[0].isPressed() || limits[1].isPressed();
     }
 
 }
