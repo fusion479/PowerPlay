@@ -1,16 +1,11 @@
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-import java.util.Vector;
-import kotlin.math.MathKt;
-
-public class Cycles {
+public class CyclesRedLeft {
 
     public static double startX = -36;
     public static double startY = -70.5 + (13.3858/2);
@@ -23,6 +18,9 @@ public class Cycles {
         Pose2d startPosBlueR = new Pose2d(startX, -startY, -startAng);
         Pose2d startPosBlueL = new Pose2d(-startX, -startY, -startAng);
 
+        Pose2d scoringPos = new Pose2d(-34, -12, Math.toRadians(45));
+        Pose2d coneStackPos = new Pose2d(-60, -12, Math.toRadians(0));
+
         MeepMeep meepMeep = new MeepMeep(800);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -31,13 +29,18 @@ public class Cycles {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPosRedL)
-                                .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(45)))
+                                .lineToLinearHeading(scoringPos)
                                 .addDisplacementMarker(() -> {
                                     //lift.goHigh();
                                     //claw.open();
                                     //lift.goBottom();
                                 })
-                                .lineToLinearHeading(new Pose2d(-56, -12, Math.toRadians(0)))
+                                .lineToLinearHeading(coneStackPos)
+                                .lineToLinearHeading(scoringPos)
+                                .lineToLinearHeading(coneStackPos)
+                                .lineToLinearHeading(scoringPos)
+                                .lineToLinearHeading(coneStackPos)
+                                .lineToLinearHeading(scoringPos)
                                 .build()
                 );
 

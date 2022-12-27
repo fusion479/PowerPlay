@@ -62,6 +62,19 @@ public class Lift extends Mechanism {
         goBottom();
     }
 
+    @Override
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("leftSlidePos", leftLiftMotor.getPosition());
+        telemetry.addData("rightSlidePos", rightLiftMotor.getPosition());
+        telemetry.addData("leftTouch", leftTouchSensor.isPressed());
+        telemetry.addData("rightTouch", rightTouchSensor.isPressed());
+    }
+
+    public void update() {
+        leftLiftMotor.update();
+        rightLiftMotor.update();
+    }
+
     public void goBottom() {
         leftLiftMotor.setTargetPosition(0);
         rightLiftMotor.setTargetPosition(0);
@@ -81,21 +94,8 @@ public class Lift extends Mechanism {
         rightLiftMotor.setTargetPosition(POS_HIGH);
     }
 
-    public void update() {
-        leftLiftMotor.update();
-        rightLiftMotor.update();
-    }
-
     // TODO: implement this for bottoming
     public boolean touchSensor() {
         return leftTouchSensor.isPressed() && rightTouchSensor.isPressed();
-    }
-
-    @Override
-    public void telemetry(Telemetry telemetry) {
-        telemetry.addData("leftSlidePos", leftLiftMotor.getPosition());
-        telemetry.addData("rightSlidePos", rightLiftMotor.getPosition());
-        telemetry.addData("leftTouch", leftTouchSensor.isPressed());
-        telemetry.addData("rightTouch", rightTouchSensor.isPressed());
     }
 }
