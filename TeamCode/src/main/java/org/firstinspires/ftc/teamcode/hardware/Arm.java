@@ -14,8 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @Config
 public class Arm extends Mechanism{
-    Servo left[] = new Servo[2];
-    Servo right[] = new Servo[2];
+    Servo left, right;
     Servo claw;
     //CONSTANTS
     public static double initPos = 0;
@@ -28,31 +27,27 @@ public class Arm extends Mechanism{
     @Override
     public void init(HardwareMap hwMap) {
         claw = hwMap.get(Servo.class, "claw");
-        left[0] = hwMap.get(Servo.class, "left1");
-        left[0].setDirection(Servo.Direction.FORWARD);
-        left[1] = hwMap.get(Servo.class, "left2");
-        left[1].setDirection(Servo.Direction.REVERSE);
-        right[0] = hwMap.get(Servo.class, "right1");
-        right[0].setDirection(Servo.Direction.REVERSE);
-        right[1] = hwMap.get(Servo.class, "right2");
-        right[1].setDirection(Servo.Direction.FORWARD);
+        left = hwMap.get(Servo.class, "armLeft");
+        left.setDirection(Servo.Direction.FORWARD);
+        right = hwMap.get(Servo.class, "armRight");
+        right.setDirection(Servo.Direction.REVERSE);
         resetArm();
         open();
     }
 
     public void resetArm() {
-        setPosArr(left, initPos);
-        setPosArr(right, initPos);
+        left.setPosition(initPos);
+        right.setPosition(initPos);
     }
 
     public void pick() {
-        setPosArr(left, pickPos);
-        setPosArr(right, pickPos);
+        left.setPosition(pickPos);
+        right.setPosition(pickPos);
     }
 
     public void place() {
-        setPosArr(left, placePos);
-        setPosArr(right, placePos);
+        left.setPosition(placePos);
+        right.setPosition(placePos);
     }
 
     public void open() {

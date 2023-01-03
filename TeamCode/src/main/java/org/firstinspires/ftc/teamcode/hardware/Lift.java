@@ -10,21 +10,25 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 @Config
 public class Lift extends Mechanism{
     DcMotorEx motors[] = new DcMotorEx[2];
-    TouchSensor limits[] = new TouchSensor[2];
+    TouchSensor limit;
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0;
+    public static double kG = 0.0005;
     public static double kP = 0;
     public static double kD = 0;
     public static double bound = 0.02;
     public static double vMax = 1;
 
     public static double target = 0;
-    public double lastError[] = new double[2]; //separate error for each motor
+    public double lastError[] = {0, 0}; //separate error for each motor
+    public double powers[] = {0,0};
     public boolean isReset = true;
     @Override
     public void init(HardwareMap hwMap) {
@@ -38,8 +42,7 @@ public class Lift extends Mechanism{
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
-        limits[0] = hwMap.get(TouchSensor.class, "limitL");
-        limits[1] = hwMap.get(TouchSensor.class, "limitR");
+        limit = hwMap.get(TouchSensor.class, "limit");
         resetter.reset();
         timer.reset();
     }
@@ -53,6 +56,7 @@ public class Lift extends Mechanism{
         }
         lastError[motor] = error;
         timer.reset();
+        powers[motor] = Range.clip(pd + kG, -vMax, vMax);
         motors[motor].setPower(Range.clip(pd + kG, -vMax, vMax));
     }
 
@@ -61,13 +65,13 @@ public class Lift extends Mechanism{
     }
 
     public void loop() {
-        if(hitLimit() && !isReset) {
+        if(limit.isPressed() && !isReset) {
             recalibrate();
         }else {
             update(0);
             update(1);
         }
-        isReset = hitLimit();
+        isReset = limit.isPressed();
     }
    //TODO: ask kellen how to convert
     public double inchToPos(double inches) {
@@ -98,8 +102,16 @@ public class Lift extends Mechanism{
         motors[1].setPower(power);
     }
 
-    public boolean hitLimit() {
-        return limits[0].isPressed() || limits[1].isPressed();
+    public double getAvgError() {
+        return ((target-getPos(0)) + (target-getPos(1))) / 2;
+    }
+
+    public double getError(int motor) {
+        return target - getPos(motor);
+    }
+
+    public double getCurrent(int motor) {
+        return motors[motor].getCurrent(CurrentUnit.AMPS);
     }
 
 }

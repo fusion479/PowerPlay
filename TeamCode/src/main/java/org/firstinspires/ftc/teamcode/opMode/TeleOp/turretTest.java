@@ -15,23 +15,37 @@ public class turretTest extends LinearOpMode {
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     public static double target = 200;
+    public static double loopbool = 0;
+    public static double manbool = 0;
+    public static double calibool = 0;
     @Override
     public void runOpMode() throws InterruptedException {
         turret.init(hardwareMap);
         waitForStart();
         while(opModeIsActive()) {
             turret.setTargetPosition(target);
-            if(gamepad1.a) {
-                turret.update();
+            if(loopbool == 1) {
+                manbool = 0;
+                turret.loop();
             }
-            if(gamepad1.x) {
-                turret.setPower(gamepad1.left_stick_x);
+            if(manbool == 1) {
+                loopbool = 0;
+                turret.setPower(0);
             }
-            tele.addData("turrpos: ", turret.getPos());
+            if(calibool == 1) {
+                loopbool = 0;
+                manbool = 0;
+                turret.recalibrate();
+                calibool = 0;
+            }
+            tele.addData("turr0pos: ", turret.getPos(0));
+            tele.addData("turr1pos: ", turret.getPos(1));
             tele.addData("turrangle: ", turret.getAngle());
-            tele.addData("error: ", target-turret.getPos());
+            tele.addData("error0: ", turret.getError(0));
+            tele.addData("error1: ", turret.getError(1));
             tele.addData("target: ", target);
             tele.addData("target angle: ", target/turret.tpd);
+            tele.addData("avg error: ", turret.getAvgError());
             tele.update();
         }
     }
