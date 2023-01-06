@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 @Config
 public class Lift extends Mechanism{
@@ -49,7 +50,7 @@ public class Lift extends Mechanism{
 
     public void update(int motor) {
         double time = timer.milliseconds();
-        double error = motors[motor].getCurrentPosition() - target;
+        double error = motors[0].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
         if(Math.abs(error) < bound) {
             pd = 0;
@@ -57,7 +58,7 @@ public class Lift extends Mechanism{
         lastError[motor] = error;
         timer.reset();
         powers[motor] = Range.clip(pd + kG, -vMax, vMax);
-        motors[motor].setPower(Range.clip(pd + kG, -vMax, vMax));
+        motors[motor].setPower(powers[motor]);
     }
 
     public void setTargetPosition(double pos) {

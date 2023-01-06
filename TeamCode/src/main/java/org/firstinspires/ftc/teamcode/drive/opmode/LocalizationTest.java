@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.Turret;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -21,9 +22,10 @@ public class LocalizationTest extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+        Turret turret = new Turret();
+        turret.init(hardwareMap);
+        turret.setTargetPosition(0);
         waitForStart();
-
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
@@ -34,6 +36,7 @@ public class LocalizationTest extends LinearOpMode {
             );
 
             drive.update();
+            turret.loop();
 
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());

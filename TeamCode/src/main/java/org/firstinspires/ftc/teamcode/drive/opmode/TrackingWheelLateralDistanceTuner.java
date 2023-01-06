@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
+import org.firstinspires.ftc.teamcode.hardware.Turret;
 
 /**
  * Opmode designed to assist the user in tuning the `StandardTrackingWheelLocalizer`'s
@@ -68,6 +69,9 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Turret turret = new Turret();
+        turret.init(hardwareMap);
+        turret.setTargetPosition(0);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
@@ -96,7 +100,8 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         boolean tuningFinished = false;
 
         while (!isStopRequested() && !tuningFinished) {
-            Pose2d vel = new Pose2d(0, 0, -gamepad1.right_stick_x);
+            turret.loop();
+            Pose2d vel = new Pose2d(0, 0, -gamepad1.left_stick_x);
             drive.setDrivePower(vel);
 
             drive.update();
