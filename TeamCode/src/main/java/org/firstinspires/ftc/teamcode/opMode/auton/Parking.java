@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.auton;
+package org.firstinspires.ftc.teamcode.opMode.Auton;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -15,15 +15,17 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class Parking extends LinearOpMode {
 
     private SampleMecanumDrive drive;
-    private SleeveVision sleeveVision = new SleeveVision();
+//    private SleeveVision sleeveVision = new SleeveVision();
 
-    public static double FORWARD_DIST = 30;
-    public static double LATERAL_DIST = 25;
+    public static double FORWARD_DIST = -30;
+    public static double LATERAL_DIST = -24;
+
+    public static int whichPark = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
-        sleeveVision.init(hardwareMap);
+//        sleeveVision.init(hardwareMap);
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(FORWARD_DIST)
@@ -43,17 +45,27 @@ public class Parking extends LinearOpMode {
 
         waitForStart();
 
-        if (sleeveVision.color() == 0) {
+//        if (sleeveVision.color() == 0) {
+//            drive.followTrajectorySequenceAsync(middlePark);
+//        } else if (sleeveVision.color() == 1) {
+//            drive.followTrajectorySequenceAsync(leftPark);
+//        } else if (sleeveVision.color() == 2) {
+//            drive.followTrajectorySequenceAsync(middlePark);
+//        } else if (sleeveVision.color() == 3) {
+//            drive.followTrajectorySequenceAsync(rightPark);
+//        }
+
+        if (whichPark == 0) {
             drive.followTrajectorySequenceAsync(middlePark);
-        } else if (sleeveVision.color() == 1) {
+        } else if (whichPark == 1) {
             drive.followTrajectorySequenceAsync(leftPark);
-        } else if (sleeveVision.color() == 2) {
+        } else if (whichPark == 2) {
             drive.followTrajectorySequenceAsync(middlePark);
-        } else if (sleeveVision.color() == 3) {
+        } else if (whichPark == 3) {
             drive.followTrajectorySequenceAsync(rightPark);
         }
 
-        telemetry.addData("detected region", sleeveVision.color());
+//        telemetry.addData("detected region", sleeveVision.color());
 
         // TODO: MAKE THIS AN ENUM
         while(opModeIsActive() && !isStopRequested()) {

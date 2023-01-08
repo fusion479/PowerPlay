@@ -21,11 +21,16 @@ public class Lift extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0.0005;
-    public static double kP = 0;
+    public static double kG = 0.005;
+    public static double kP = 0.003;
     public static double kD = 0;
     public static double bound = 0.02;
     public static double vMax = 1;
+
+    //pos
+    public static double low = 630;
+    public static double mid = 1400;
+    public static double high = 2200;
 
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
@@ -41,7 +46,7 @@ public class Lift extends Mechanism{
         motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
+        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         limit = hwMap.get(TouchSensor.class, "limit");
         resetter.reset();
@@ -50,7 +55,7 @@ public class Lift extends Mechanism{
 
     public void update(int motor) {
         double time = timer.milliseconds();
-        double error = motors[0].getCurrentPosition() - target;
+        double error = (-1*motors[0].getCurrentPosition()) - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
         if(Math.abs(error) < bound) {
             pd = 0;
@@ -74,7 +79,7 @@ public class Lift extends Mechanism{
         }
         isReset = limit.isPressed();
     }
-   //TODO: ask kellen how to convert
+    //TODO: ask kellen how to convert
     public double inchToPos(double inches) {
         return inches; //lol idk how to convert
     }
