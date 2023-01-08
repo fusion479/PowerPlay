@@ -20,8 +20,8 @@ public class Arm extends Mechanism{
     public static double initPos = 0;
     public static double pickPos = 0.5;
     public static double placePos = 1;
-    public static double close = 0;
-    public static double open = 1;
+    public static double close = 0.95;
+    public static double open = 0.75;
 
     public boolean isOpen = false;
     @Override

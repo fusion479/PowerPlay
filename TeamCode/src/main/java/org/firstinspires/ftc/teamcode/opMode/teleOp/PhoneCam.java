@@ -22,7 +22,6 @@ public class PhoneCam extends LinearOpMode
 {
     OpenCvCamera phoneCam;
     kellen colors;
-    public static String c = "green";
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     @Override
@@ -47,7 +46,7 @@ public class PhoneCam extends LinearOpMode
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        colors = new kellen(c);
+        colors = new kellen();
         phoneCam.setPipeline(colors);
 
         /*
@@ -106,7 +105,7 @@ public class PhoneCam extends LinearOpMode
             tele.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
             tele.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
             tele.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
-            tele.addData("center color percent", colors.region2percent());
+            tele.addData("center color percent", colors.whichRegion());
             tele.update();
 
             /*
@@ -139,13 +138,7 @@ public class PhoneCam extends LinearOpMode
                 //phoneCam.closeCameraDevice();
             }
 
-            if(gamepad1.b) {
-                colors.color = "blue";
-            }
 
-            if(gamepad1.x) {
-                colors.color = "yellow";
-            }
             /*
              * For the purposes of this sample, throttle ourselves to 10Hz loop to avoid burning
              * excess CPU cycles for no reason. (By default, telemetry is only sent to the DS at 4Hz
