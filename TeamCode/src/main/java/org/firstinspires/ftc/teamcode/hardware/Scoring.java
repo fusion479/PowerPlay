@@ -15,16 +15,16 @@ public class Scoring extends Mechanism {
     ElapsedTime time = new ElapsedTime();
     public static double coneDetect = 0;
     public static int level = 0;
-    public static double armdelay = 100;
-    public enum states {
+    public static double armDelay = 100;
+    public enum ScoringStates {
         IDLE,
         PREP,
         SCORE
     }
-    states system;
+    ScoringStates scoringState;
     @Override
     public void init(HardwareMap hwMap) {
-        system = states.IDLE;
+        scoringState = ScoringStates.IDLE;
         lift.init(hwMap);
         arm.init(hwMap);
         clawSense = hwMap.get(DistanceSensor.class, "clawSense");
@@ -32,22 +32,22 @@ public class Scoring extends Mechanism {
     }
 
     public void loop() {
-        switch(system) {
+        switch(scoringState) {
             case IDLE:
                 lift.bottom();
                 arm.pick();
                 if(clawSense.getDistance(DistanceUnit.MM) <= coneDetect) {
                     arm.close();
                     arm.place();
-                    system = states.PREP;
-                }else {
+                    scoringState = ScoringStates.PREP;
+                } else {
                     arm.open();
                 }
                 break;
             case PREP:
                 if(clawSense.getDistance(DistanceUnit.MM) >= coneDetect) {
-                    system = states.IDLE;
-                }else {
+                    scoringState = ScoringStates.IDLE;
+                } else {
                     lift.setHeight(level);
                     arm.close();
                     arm.place();
@@ -56,23 +56,23 @@ public class Scoring extends Mechanism {
             case SCORE:
                 time.reset();
                 arm.open();
-                if(time.milliseconds() > armdelay) {
-                    system = states.IDLE;
+                if(time.milliseconds() > armDelay) {
+                    scoringState = ScoringStates.IDLE;
                 }
                 break;
         }
     }
 
     public void idle() {
-        system = states.IDLE;
+        scoringState = ScoringStates.IDLE;
     }
 
     public void prep() {
-        system = states.PREP;
+        scoringState = ScoringStates.PREP;
     }
 
     public void score() {
-        system = states.SCORE;
+        scoringState = ScoringStates.SCORE;
     }
 
     public void setLevel(int height) {

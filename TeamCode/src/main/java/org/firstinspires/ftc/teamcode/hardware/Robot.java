@@ -8,9 +8,9 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public class Robot extends Mechanism {
     Turret turret = new Turret();
-    Scoring system = new Scoring();
+    Scoring scoring = new Scoring();
 SampleMecanumDrive drive;
-    Gamepad pad;
+    Gamepad gamepad1;
     boolean isPressedX = false;
     boolean isPressedY = false;
     boolean isPressedB = false;
@@ -18,42 +18,42 @@ SampleMecanumDrive drive;
     @Override
     public void init(HardwareMap hwMap) {
         turret.init(hwMap);
-        system.init(hwMap);
+        scoring.init(hwMap);
         drive = new SampleMecanumDrive(hwMap);
     }
 
-    public void init(HardwareMap hwMap, Gamepad contr) {
+    public void init(HardwareMap hwMap, Gamepad gamepad1) {
         init(hwMap);
-        pad = contr;
+        this.gamepad1 = gamepad1;
     }
 
     public void loop() {
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        -pad.left_stick_y,
-                        -pad.left_stick_x,
-                        -pad.right_stick_x
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x,
+                        -gamepad1.right_stick_x
                 )
         );
 
         drive.update();
-        system.loop();
+        scoring.loop();
         turret.loop();
-        if(!isPressedX && pad.x && system.system == Scoring.states.SCORE) {
-            system.setLevel(3);
+        if(!isPressedX && gamepad1.x && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+            scoring.setLevel(3);
         }
-        if(!isPressedY && pad.y && system.system == Scoring.states.SCORE) {
-            system.setLevel(2);
+        if(!isPressedY && gamepad1.y && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+            scoring.setLevel(2);
         }
-        if(!isPressedB && pad.b && system.system == Scoring.states.SCORE) {
-            system.setLevel(1);
+        if(!isPressedB && gamepad1.b && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+            scoring.setLevel(1);
         }
-        if(!isPressedrB && pad.right_bumper && system.system == Scoring.states.PREP) {
-            system.score();
+        if(!isPressedrB && gamepad1.right_bumper && scoring.scoringState == Scoring.ScoringStates.PREP) {
+            scoring.score();
         }
-        isPressedrB = pad.right_bumper;
-        isPressedY = pad.y;
-        isPressedX = pad.x;
-        isPressedB = pad.b;
+        isPressedrB = gamepad1.right_bumper;
+        isPressedY = gamepad1.y;
+        isPressedX = gamepad1.x;
+        isPressedB = gamepad1.b;
     }
 }

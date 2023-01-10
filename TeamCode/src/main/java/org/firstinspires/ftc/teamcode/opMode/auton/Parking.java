@@ -29,7 +29,7 @@ public class Parking extends LinearOpMode {
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(FORWARD_DIST)
-                .waitSeconds(0.3)
+                .waitSeconds(0.2)
                 .strafeLeft(LATERAL_DIST)
                 .build();
 
@@ -39,13 +39,15 @@ public class Parking extends LinearOpMode {
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(FORWARD_DIST)
-                .waitSeconds(0.3)
+                .waitSeconds(0.2)
                 .strafeRight(LATERAL_DIST)
                 .build();
 
 
 
         waitForStart();
+
+        telemetry.addData("detected region", sleeveVision.color());
 
         if (sleeveVision.color() == 0) {
             drive.followTrajectorySequenceAsync(middlePark);
@@ -60,7 +62,6 @@ public class Parking extends LinearOpMode {
         // TODO: MAKE THIS AN ENUM
         while(opModeIsActive() && !isStopRequested()) {
             drive.update();
-            telemetry.addData("detected region", sleeveVision.color());
             telemetry.update();
         }
     }
