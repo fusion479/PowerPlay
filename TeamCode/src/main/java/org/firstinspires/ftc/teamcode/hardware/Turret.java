@@ -12,8 +12,8 @@ public class Turret extends Mechanism{
     DcMotorEx turrs[] = new DcMotorEx[2];
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
-    public static double kP = -0.004;
-    public static double kD = 0;
+    public static double kP = -0.00125;
+    public static double kD = -0.003;
     public static double kS = 0;
     public static double vMax = 1;
     public static double tpd = 2.296875; //encoder res * gear ratio / 360 degrees = ticks per degree

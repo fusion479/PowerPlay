@@ -21,8 +21,8 @@ public class Lift extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0.005;
-    public static double kP = 0.003;
+    public static double kG = 0.0005;
+    public static double kP = -0.001;
     public static double kD = 0;
     public static double bound = 0.02;
     public static double vMax = 1;
@@ -46,16 +46,21 @@ public class Lift extends Mechanism{
         motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motors[0].setDirection(DcMotorSimple.Direction.REVERSE);
+        motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         limit = hwMap.get(TouchSensor.class, "limit");
         resetter.reset();
         timer.reset();
     }
 
+
+    public void setTargetPosition(double pos) {
+        target = pos;
+    }
+
     public void update(int motor) {
         double time = timer.milliseconds();
-        double error = (-1*motors[0].getCurrentPosition()) - target;
+        double error = motors[0].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
         if(Math.abs(error) < bound) {
             pd = 0;
@@ -64,10 +69,6 @@ public class Lift extends Mechanism{
         timer.reset();
         powers[motor] = Range.clip(pd + kG, -vMax, vMax);
         motors[motor].setPower(powers[motor]);
-    }
-
-    public void setTargetPosition(double pos) {
-        target = pos;
     }
 
     public void loop() {
@@ -79,6 +80,26 @@ public class Lift extends Mechanism{
         }
         isReset = limit.isPressed();
     }
+
+    public void setHeight(int level) {
+        if(level == 0) {
+            setTargetPosition(0);
+        }
+        if(level == 1) {
+            setTargetPosition(low);
+        }
+        if(level == 2) {
+            setTargetPosition(mid);
+        }
+        if(level == 3) {
+            setTargetPosition(high);
+        }
+    }
+
+    public void bottom() {
+        setTargetPosition(0);
+    }
+
     //TODO: ask kellen how to convert
     public double inchToPos(double inches) {
         return inches; //lol idk how to convert

@@ -17,9 +17,9 @@ public class Arm extends Mechanism{
     Servo left, right;
     Servo claw;
     //CONSTANTS
-    public static double initPos = 0;
-    public static double pickPos = 0.5;
-    public static double placePos = 1;
+    public static double initPos = 1;
+    public static double pickPos = 0.4;
+    public static double placePos = 0.6;
     public static double close = 0.95;
     public static double open = 0.75;
 
@@ -28,26 +28,24 @@ public class Arm extends Mechanism{
     public void init(HardwareMap hwMap) {
         claw = hwMap.get(Servo.class, "claw");
         left = hwMap.get(Servo.class, "armLeft");
-        left.setDirection(Servo.Direction.FORWARD);
         right = hwMap.get(Servo.class, "armRight");
-        right.setDirection(Servo.Direction.REVERSE);
         resetArm();
         open();
     }
 
     public void resetArm() {
         left.setPosition(initPos);
-        right.setPosition(initPos);
+        right.setPosition(1-initPos);
     }
 
     public void pick() {
         left.setPosition(pickPos);
-        right.setPosition(pickPos);
+        right.setPosition(1-pickPos);
     }
 
     public void place() {
         left.setPosition(placePos);
-        right.setPosition(placePos);
+        right.setPosition(1-placePos);
     }
 
     public void open() {
@@ -58,6 +56,14 @@ public class Arm extends Mechanism{
     public void close() {
         claw.setPosition(close);
         isOpen = false;
+    }
+
+    public void left(double pos) {
+        left.setPosition(pos);
+    }
+
+    public void right(double pos) {
+        right.setPosition(pos);
     }
 
     public void toggle() {

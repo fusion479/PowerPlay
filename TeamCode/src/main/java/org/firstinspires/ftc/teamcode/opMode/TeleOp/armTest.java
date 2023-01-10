@@ -2,15 +2,16 @@
 package org.firstinspires.ftc.teamcode.opMode.TeleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Arm;
-
+@Config
 @TeleOp
 public class armTest extends LinearOpMode {
-
+    public static double pos = 0;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     Arm arm = new Arm();
@@ -31,6 +32,12 @@ public class armTest extends LinearOpMode {
             }
             if (gamepad1.y) {
                 arm.place();
+            }
+            if(gamepad1.dpad_right) {
+                arm.right(pos);
+            }
+            if(gamepad1.dpad_left) {
+                arm.left(1-pos);
             }
             isPressed = gamepad1.a;
         }

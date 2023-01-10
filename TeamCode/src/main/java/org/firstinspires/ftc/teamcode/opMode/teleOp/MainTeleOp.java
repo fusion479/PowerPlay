@@ -7,20 +7,21 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
+import org.firstinspires.ftc.teamcode.hardware.Robot;
 
 @TeleOp (name = "Main TeleOp", group = "_Main")
 @Config
 public class MainTeleOp extends LinearOpMode {
-    Drivetrain bot = new Drivetrain();
+    Robot robot = new Robot();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bot.init(hardwareMap);
+        robot.init(hardwareMap, gamepad1);
         waitForStart();
         while (opModeIsActive()) {
-            bot.loop(gamepad1);
+            robot.loop();
         }
     }
 }
