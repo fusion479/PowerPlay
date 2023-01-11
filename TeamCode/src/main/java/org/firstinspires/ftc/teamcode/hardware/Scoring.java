@@ -13,7 +13,7 @@ public class Scoring extends Mechanism {
     Arm arm = new Arm();
     DistanceSensor clawSense;
     ElapsedTime time = new ElapsedTime();
-    public static double coneDetect = 0;
+    public static double distanceThreshold = 37;
     public static int level = 0;
     public static double armDelay = 100;
     public enum ScoringStates {
@@ -36,7 +36,7 @@ public class Scoring extends Mechanism {
             case IDLE:
                 lift.bottom();
                 arm.pick();
-                if(clawSense.getDistance(DistanceUnit.MM) <= coneDetect) {
+                if(clawSense.getDistance(DistanceUnit.MM) <= distanceThreshold) {
                     arm.close();
                     arm.place();
                     scoringState = ScoringStates.PREP;
@@ -45,7 +45,7 @@ public class Scoring extends Mechanism {
                 }
                 break;
             case PREP:
-                if(clawSense.getDistance(DistanceUnit.MM) >= coneDetect) {
+                if(clawSense.getDistance(DistanceUnit.MM) >= distanceThreshold) {
                     scoringState = ScoringStates.IDLE;
                 } else {
                     lift.setHeight(level);

@@ -27,7 +27,7 @@ public class kellen extends OpenCvPipeline {
     private double b1p, b2p, b3p;
     public static String c1 = "green";
     public static String c2 = "yellow";
-    public static String c3 = "orange";
+    public static String c3 = "purple";
 
     private Rect ROI;
 
@@ -86,6 +86,7 @@ public class kellen extends OpenCvPipeline {
         b1p = Core.sumElems(box1).val[0] / ROI.area()/255;
         b2p = Core.sumElems(box2).val[0] / ROI.area()/255;
         b3p = Core.sumElems(box3).val[0] / ROI.area()/255;
+
         //Compare amount of color in each region
         if(b1p > b2p && b1p > b3p) {
             Imgproc.rectangle(workingMatrix, ROI, color1[1], 10);

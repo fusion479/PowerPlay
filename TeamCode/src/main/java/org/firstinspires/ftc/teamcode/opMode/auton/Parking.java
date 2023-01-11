@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opMode.auton;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -13,6 +15,9 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous (name = "Parking", group = "_Main")
 @Config
 public class Parking extends LinearOpMode {
+
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
     private SampleMecanumDrive drive;
     private SleeveVision sleeveVision = new SleeveVision();
@@ -43,11 +48,10 @@ public class Parking extends LinearOpMode {
                 .strafeRight(LATERAL_DIST)
                 .build();
 
-
+        tele.addData("detected region", sleeveVision.color());
+        tele.update();
 
         waitForStart();
-
-        telemetry.addData("detected region", sleeveVision.color());
 
         if (sleeveVision.color() == 0) {
             drive.followTrajectorySequenceAsync(middlePark);
@@ -62,7 +66,9 @@ public class Parking extends LinearOpMode {
         // TODO: MAKE THIS AN ENUM
         while(opModeIsActive() && !isStopRequested()) {
             drive.update();
-            telemetry.update();
+
+            tele.addData("detected region", sleeveVision.color());
+            tele.update();
         }
     }
 }

@@ -10,11 +10,14 @@ import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
 
 @TeleOp (name = "Main TeleOp", group = "_Main")
-@Config
+//@Config
 public class MainTeleOp extends LinearOpMode {
     Robot robot = new Robot();
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
+//    FTC dashboard is laggy
+
+//    FtcDashboard dashboard = FtcDashboard.getInstance();
+//    MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
     @Override
     public void runOpMode() throws InterruptedException {
