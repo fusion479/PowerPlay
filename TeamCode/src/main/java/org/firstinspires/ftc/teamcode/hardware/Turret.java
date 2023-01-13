@@ -21,8 +21,13 @@ public class Turret extends Mechanism{
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0, 0};
+    public static double bound = 25;
 
-    public static double incremenet = 5;
+    public static double incremenet = 4;
+
+    public static double pick = 350;
+
+    public static double score = 100;
 
 
     @Override
@@ -37,6 +42,7 @@ public class Turret extends Mechanism{
         turrs[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         turrs[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turrs[1].setDirection(DcMotorSimple.Direction.FORWARD);
+        setTargetPosition(0);
         timer.reset();
     }
 
@@ -47,7 +53,10 @@ public class Turret extends Mechanism{
         lastError[motor] = error;
         timer.reset();
         powers[motor] = Range.clip(pd - kS*Math.signum(error), -vMax, vMax);
-        turrs[motor].setPower(Range.clip(pd - kS*Math.signum(error), -vMax, vMax));
+        if(Math.abs(error) < bound) {
+            pd = 0;
+        }
+        turrs[motor].setPower(Range.clip(pd - kS * Math.signum(error), -vMax, vMax));
     }
 
     public void loop() {
@@ -98,7 +107,17 @@ public class Turret extends Mechanism{
     }
 
     public void inc(double sign) {
-        target+= Math.signum(sign)*incremenet;
+        if(Math.abs(target + Math.signum(sign)*incremenet) <= 600) {
+            target += Math.signum(sign) * incremenet;
+        }
+    }
+
+    public void pick() {
+        setTargetPosition(pick);
+    }
+
+    public void score() {
+        setTargetPosition(score);
     }
 
 

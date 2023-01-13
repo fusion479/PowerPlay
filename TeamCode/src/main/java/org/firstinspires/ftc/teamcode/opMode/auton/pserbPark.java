@@ -9,18 +9,19 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.hardware.SleeveVision;
+import org.firstinspires.ftc.teamcode.hardware.SignalSleeveWebcam;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous (name = "Parking", group = "_Main")
+@Autonomous (name = "pserbAwardWinningPark", group = "_Main")
 @Config
-public class Parking extends LinearOpMode {
+public class pserbPark extends LinearOpMode {
 
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+    public String camera = "camera";
     private SampleMecanumDrive drive;
-    private SleeveVision sleeveVision = new SleeveVision();
+    private SignalSleeveWebcam signalSleeveWebcam = new SignalSleeveWebcam(this, camera);
 
     public static double FORWARD_DIST = -30;
     public static double LATERAL_DIST = -24;
@@ -30,7 +31,7 @@ public class Parking extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
-        sleeveVision.init(hardwareMap);
+        signalSleeveWebcam.init(hardwareMap);
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(FORWARD_DIST)
@@ -48,28 +49,30 @@ public class Parking extends LinearOpMode {
                 .strafeRight(LATERAL_DIST)
                 .build();
 
-        tele.addData("detected region", sleeveVision.color());
-        tele.update();
 
         waitForStart();
-        int theGoal = sleeveVision.color();
 
-        if (theGoal == 0) {
-            drive.followTrajectorySequenceAsync(middlePark);
-        } else if (theGoal == 1) {
-            drive.followTrajectorySequenceAsync(leftPark);
-        } else if (theGoal == 2) {
-            drive.followTrajectorySequenceAsync(middlePark);
-        } else if (theGoal == 3) {
-            drive.followTrajectorySequenceAsync(rightPark);
+
+        switch (signalSleeveWebcam.side()) {
+            case ONE:
+                drive.followTrajectorySequenceAsync(leftPark);
+                break;
+            case TWO:
+                drive.followTrajectorySequenceAsync(middlePark);
+                break;
+            case THREE:
+                drive.followTrajectorySequenceAsync(rightPark);
+                break;
+            case NOT_FOUND:
+            default:
+                drive.followTrajectorySequenceAsync(middlePark);
+                break;
         }
 
-        // TODO: MAKE THIS AN ENUM
-        while(opModeIsActive() && !isStopRequested()) {
-            drive.update();
+        signalSleeveWebcam.stopStreaming();
 
-            tele.addData("detected region", sleeveVision.color());
-            tele.update();
+        while (opModeIsActive() && !isStopRequested()) {
+            drive.update();
         }
     }
 }

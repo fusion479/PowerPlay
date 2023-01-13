@@ -36,7 +36,7 @@ public class Lift extends Mechanism{
     public static double high = 1750;
 
     public static double target = 0;
-    public static double lastTarget = 0;
+    public static double lastTarget = -1;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;

@@ -34,8 +34,8 @@ public class PleaseWinBot extends Mechanism {
     public void move(Gamepad gamepad) {
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        -gamepad.left_stick_y,
-                        -gamepad.left_stick_x,
+                        gamepad.left_stick_y,
+                        gamepad.left_stick_x,
                         -gamepad.right_stick_x
                 )
         );
@@ -65,6 +65,13 @@ public class PleaseWinBot extends Mechanism {
         score.loop();
     }
     public void turr(Gamepad gamepad) {
+        if(gamepad.right_trigger > 0) {
+            turret.score();
+        }
+        if(gamepad.left_trigger > 0) {
+            turret.pick();
+        }
         turret.loop();
     }
+
 }
