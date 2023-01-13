@@ -24,6 +24,7 @@ public class ScoreFSM extends Mechanism {
     public void init(HardwareMap hwMap) {
         lift.init(hwMap);
         arm.init(hwMap);
+        scoreStates = states.down;
     }
     public void loop() {
         switch(scoreStates) {
