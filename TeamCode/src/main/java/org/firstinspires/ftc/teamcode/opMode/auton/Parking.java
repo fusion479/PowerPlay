@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.auton;
+package org.firstinspires.ftc.teamcode.opMode.Auton;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -52,14 +52,15 @@ public class Parking extends LinearOpMode {
         tele.update();
 
         waitForStart();
+        int theGoal = sleeveVision.color();
 
-        if (sleeveVision.color() == 0) {
+        if (theGoal == 0) {
             drive.followTrajectorySequenceAsync(middlePark);
-        } else if (sleeveVision.color() == 1) {
+        } else if (theGoal == 1) {
             drive.followTrajectorySequenceAsync(leftPark);
-        } else if (sleeveVision.color() == 2) {
+        } else if (theGoal == 2) {
             drive.followTrajectorySequenceAsync(middlePark);
-        } else if (sleeveVision.color() == 3) {
+        } else if (theGoal == 3) {
             drive.followTrajectorySequenceAsync(rightPark);
         }
 

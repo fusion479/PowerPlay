@@ -89,17 +89,17 @@ public class kellen extends OpenCvPipeline {
 
         //Compare amount of color in each region
         if(b1p > b2p && b1p > b3p) {
-            Imgproc.rectangle(workingMatrix, ROI, color1[1], 10);
+            Imgproc.rectangle(input, ROI, color1[1], 10);
         }else if(b2p > b1p && b2p > b3p) {
-            Imgproc.rectangle(workingMatrix, ROI, color2[1], 10);
+            Imgproc.rectangle(input, ROI, color2[1], 10);
         }else if(b3p > b2p & b3p > b1p) {
-            Imgproc.rectangle(workingMatrix, ROI, color3[1], 10);
+            Imgproc.rectangle(input, ROI, color3[1], 10);
         }
         //return the frame
         box1.release();
         box2.release();
         box3.release();
-        return workingMatrix;
+        return input;
     }
 
     public double color1percent() {

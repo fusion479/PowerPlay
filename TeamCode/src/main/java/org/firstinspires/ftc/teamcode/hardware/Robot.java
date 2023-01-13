@@ -8,9 +8,9 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public class Robot extends Mechanism {
     Turret turret = new Turret();
-    Scoring scoring = new Scoring();
-SampleMecanumDrive drive;
-    Gamepad gamepad1;
+    public Scoring scoring = new Scoring();
+    SampleMecanumDrive drive;
+    Gamepad pad;
     boolean isPressedX = false;
     boolean isPressedY = false;
     boolean isPressedB = false;
@@ -24,36 +24,37 @@ SampleMecanumDrive drive;
 
     public void init(HardwareMap hwMap, Gamepad gamepad1) {
         init(hwMap);
-        this.gamepad1 = gamepad1;
+        this.pad = gamepad1;
+        scoring.pad = gamepad1;
     }
 
     public void loop() {
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        -gamepad1.left_stick_y,
-                        -gamepad1.left_stick_x,
-                        -gamepad1.right_stick_x
+                        -pad.left_stick_y,
+                        -pad.left_stick_x,
+                        -pad.right_stick_x
                 )
         );
 
         drive.update();
         scoring.loop();
         turret.loop();
-        if(!isPressedX && gamepad1.x && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+        if(!isPressedX && pad.x) {
             scoring.setLevel(3);
         }
-        if(!isPressedY && gamepad1.y && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+        if(!isPressedY && pad.y) {
             scoring.setLevel(2);
         }
-        if(!isPressedB && gamepad1.b && scoring.scoringState == Scoring.ScoringStates.SCORE) {
+        if(!isPressedB && pad.b) {
             scoring.setLevel(1);
         }
-        if(!isPressedrB && gamepad1.right_bumper && scoring.scoringState == Scoring.ScoringStates.PREP) {
+        if(!isPressedrB && pad.right_bumper) {
             scoring.score();
         }
-        isPressedrB = gamepad1.right_bumper;
-        isPressedY = gamepad1.y;
-        isPressedX = gamepad1.x;
-        isPressedB = gamepad1.b;
+        isPressedrB = pad.right_bumper;
+        isPressedY = pad.y;
+        isPressedX = pad.x;
+        isPressedB = pad.b;
     }
 }

@@ -3,10 +3,13 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -21,21 +24,29 @@ public class Lift extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0.0005;
-    public static double kP = -0.001;
+    public static double kG = 0;
+    public static double kP = -0.0025;
     public static double kD = 0;
-    public static double bound = 0.02;
+    public static double bound = 50;
     public static double vMax = 1;
 
     //pos
-    public static double low = 630;
-    public static double mid = 1400;
-    public static double high = 2200;
+    public static double low = 300;
+    public static double mid = 1000;
+    public static double high = 1750;
 
     public static double target = 0;
+    public static double lastTarget = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
+
+
+    public static PIDCoefficients coeff = new PIDCoefficients(0.1, 0, 0);
+    public static PIDFController cont = new PIDFController(coeff, kG);
+
+    public static int mode = 0;
+
     @Override
     public void init(HardwareMap hwMap) {
         motors[0] = hwMap.get(DcMotorEx.class, "left");
@@ -57,18 +68,41 @@ public class Lift extends Mechanism{
     public void setTargetPosition(double pos) {
         target = pos;
     }
+    public void setTargetPos2(double pos) {
+        target = pos;
+        if(Math.abs(motors[0].getCurrentPosition() - target) < bound) {
+            lastTarget = target;
+        }
+    }
 
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = motors[0].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
-        if(Math.abs(error) < bound) {
+        if(Math.abs(error) < bound || lastTarget == target) {
             pd = 0;
         }
         lastError[motor] = error;
         timer.reset();
         powers[motor] = Range.clip(pd + kG, -vMax, vMax);
         motors[motor].setPower(powers[motor]);
+    }
+
+    public void rrupdate() {
+        cont.setTargetPosition(target);
+        motors[0].setPower(cont.update(motors[0].getCurrentPosition()));
+        motors[1].setPower(cont.update(motors[0].getCurrentPosition()));
+    }
+
+    public void bbupdate() {
+        double error = motors[0].getCurrentPosition() - target;
+        if(Math.abs(error) > 200) {
+            motors[0].setPower(-1*Math.signum(error));
+            motors[1].setPower(-1*Math.signum(error));
+        }else {
+            update(0);
+            update(1);
+        }
     }
 
     public void loop() {

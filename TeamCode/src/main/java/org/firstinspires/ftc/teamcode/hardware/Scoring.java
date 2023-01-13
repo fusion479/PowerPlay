@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -11,17 +12,20 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Scoring extends Mechanism {
     Lift lift = new Lift();
     Arm arm = new Arm();
-    DistanceSensor clawSense;
+    public DistanceSensor clawSense;
     ElapsedTime time = new ElapsedTime();
-    public static double distanceThreshold = 37;
+    public static double distanceThreshold = 100;
     public static int level = 0;
     public static double armDelay = 100;
+    public static double raiseDelay = 100;
+    public boolean isPressed = false;
     public enum ScoringStates {
         IDLE,
         PREP,
         SCORE
     }
     ScoringStates scoringState;
+    public Gamepad pad;
     @Override
     public void init(HardwareMap hwMap) {
         scoringState = ScoringStates.IDLE;
@@ -31,6 +35,13 @@ public class Scoring extends Mechanism {
         time.reset();
     }
 
+    public void init(HardwareMap hwMap, Gamepad game) {
+        init(hwMap);
+        pad = game;
+    }
+
+
+
     public void loop() {
         switch(scoringState) {
             case IDLE:
@@ -38,10 +49,13 @@ public class Scoring extends Mechanism {
                 arm.pick();
                 if(clawSense.getDistance(DistanceUnit.MM) <= distanceThreshold) {
                     arm.close();
-                    arm.place();
-                    scoringState = ScoringStates.PREP;
+                    if(time.milliseconds() > raiseDelay) {
+                        arm.place();
+                        scoringState = ScoringStates.PREP;
+                    }
                 } else {
                     arm.open();
+                    time.reset();
                 }
                 break;
             case PREP:
@@ -51,16 +65,19 @@ public class Scoring extends Mechanism {
                     lift.setHeight(level);
                     arm.close();
                     arm.place();
+                    time.reset();
                 }
                 break;
             case SCORE:
-                time.reset();
                 arm.open();
                 if(time.milliseconds() > armDelay) {
                     scoringState = ScoringStates.IDLE;
+                    time.reset();
                 }
                 break;
         }
+        lift.loop();
+        isPressed = pad.left_bumper;
     }
 
     public void idle() {

@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.hardware.Drivetrain;
 import org.firstinspires.ftc.teamcode.hardware.Robot;
 
@@ -25,6 +26,8 @@ public class MainTeleOp extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             robot.loop();
+            telemetry.addData("distance: ", robot.scoring.clawSense.getDistance(DistanceUnit.MM));
+            telemetry.update();
         }
     }
 }
