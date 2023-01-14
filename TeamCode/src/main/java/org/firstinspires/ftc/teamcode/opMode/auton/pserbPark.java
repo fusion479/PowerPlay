@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.Auton;
+package org.firstinspires.ftc.teamcode.opMode.auton;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
