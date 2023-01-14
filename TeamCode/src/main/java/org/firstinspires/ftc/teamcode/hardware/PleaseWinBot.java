@@ -66,10 +66,21 @@ public class PleaseWinBot extends Mechanism {
     }
     public void turr(Gamepad gamepad) {
         if(gamepad.right_trigger > 0) {
+            score.idleU();
             turret.score();
         }
         if(gamepad.left_trigger > 0) {
+            score.idleU();
             turret.pick();
+        }
+        if(gamepad.dpad_up || gamepad.dpad_down) {
+            turret.setTargetPosition(0);
+        }
+        if(gamepad.dpad_left) {
+            turret.side = 1;
+        }
+        if(gamepad.dpad_right) {
+            turret.side = -1;
         }
         turret.loop();
     }

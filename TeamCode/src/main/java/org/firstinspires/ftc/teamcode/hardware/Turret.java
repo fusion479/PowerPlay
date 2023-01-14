@@ -24,6 +24,7 @@ public class Turret extends Mechanism{
     public static double bound = 25;
 
     public static double incremenet = 4;
+    public static double side = 1;
 
     public static double pick = 350;
 
@@ -113,11 +114,11 @@ public class Turret extends Mechanism{
     }
 
     public void pick() {
-        setTargetPosition(pick);
+        setTargetPosition(side*pick);
     }
 
     public void score() {
-        setTargetPosition(score);
+        setTargetPosition(side*score);
     }
 
 

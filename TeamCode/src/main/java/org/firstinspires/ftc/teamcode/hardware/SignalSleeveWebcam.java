@@ -73,7 +73,7 @@ public class SignalSleeveWebcam extends Mechanism {
         camera.stopStreaming();
     }
 
-    private static class SideDetector extends OpenCvPipeline {
+    public static class SideDetector extends OpenCvPipeline {
         Telemetry telemetry;
         Mat mat = new Mat();
 

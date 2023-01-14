@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.hardware.SignalSleeveWebcam;
 import org.firstinspires.ftc.teamcode.util.kellen;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -47,7 +48,7 @@ public class PhoneCam extends LinearOpMode
          * (while a streaming session is in flight) *IS* supported.
          */
         colors = new kellen();
-        phoneCam.setPipeline(colors);
+        phoneCam.setPipeline(new SignalSleeveWebcam.SideDetector(telemetry));
 
         /*
          * Open the connection to the camera device. New in v1.4.0 is the ability
@@ -105,7 +106,6 @@ public class PhoneCam extends LinearOpMode
             tele.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
             tele.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
             tele.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
-            tele.addData("center color percent", colors.whichRegion());
             tele.update();
 
             /*
