@@ -33,10 +33,9 @@ public class Lift extends Mechanism{
     //pos
     public static double low = 300;
     public static double mid = 1000;
-    public static double high = 1750;
+    public static double high = 1780;
 
     public static double target = 0;
-    public static double lastTarget = -1;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
@@ -68,18 +67,12 @@ public class Lift extends Mechanism{
     public void setTargetPosition(double pos) {
         target = pos;
     }
-    public void setTargetPos2(double pos) {
-        target = pos;
-        if(Math.abs(motors[0].getCurrentPosition() - target) < bound) {
-            lastTarget = target;
-        }
-    }
 
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = motors[0].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
-        if(Math.abs(error) < bound || lastTarget == target) {
+        if(Math.abs(error) < bound) {
             pd = 0;
         }
         lastError[motor] = error;

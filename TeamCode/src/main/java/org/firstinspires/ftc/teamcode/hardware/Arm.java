@@ -19,7 +19,7 @@ public class Arm extends Mechanism{
     //CONSTANTS
     public static double initPos = 0.98;
     public static double pickPos = 0.3;
-    public static double placePos = 0.7
+    public static double placePos = 0.8;
             ;
     public static double close = 0.95;
     public static double open = 0.75;

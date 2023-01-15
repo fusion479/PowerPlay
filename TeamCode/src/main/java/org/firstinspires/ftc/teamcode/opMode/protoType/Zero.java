@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.teleOp;
+package org.firstinspires.ftc.teamcode.opMode.protoType;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,7 +14,12 @@ public class Zero extends LinearOpMode {
         doo = hardwareMap.get(Servo.class, "odoLiftF");
         waitForStart();
         while(opModeIsActive()) {
-            doo.setPosition(0);
+            if(gamepad1.a) {
+                doo.setPosition(0);
+            }
+            if(gamepad1.b) {
+                doo.setPosition(1);
+            }
         }
     }
 

@@ -33,11 +33,7 @@ public class liftTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             arm.place();
-            if(targetMode == 0) {
-                lift.setTargetPosition(target);
-            }else {
-                lift.setTargetPos2(target);
-            }
+            lift.setTargetPosition(target);
             if(loopbool == 1) {
                 manbool = 0;
                 lift.loop();

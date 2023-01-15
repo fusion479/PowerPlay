@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.teleOp;
+package org.firstinspires.ftc.teamcode.opMode.protoType;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.hardware.SignalSleeveWebcam;
 import org.firstinspires.ftc.teamcode.util.kellen;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -48,7 +47,7 @@ public class PhoneCam extends LinearOpMode
          * (while a streaming session is in flight) *IS* supported.
          */
         colors = new kellen();
-        phoneCam.setPipeline(new SignalSleeveWebcam.SideDetector(telemetry));
+        phoneCam.setPipeline(colors);
 
         /*
          * Open the connection to the camera device. New in v1.4.0 is the ability
