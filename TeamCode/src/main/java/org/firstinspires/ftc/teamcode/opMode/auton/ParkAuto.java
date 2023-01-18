@@ -18,8 +18,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "Auto" , group = "Auto")
-public class parkAuto extends LinearOpMode
+@Autonomous(name = "Auto" , group = "_Auto")
+public class ParkAuto extends LinearOpMode
 {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -35,9 +35,9 @@ public class parkAuto extends LinearOpMode
     double tagsize = 0.166;
 
     //Tag IDs (Sleeve)
-    int Left = 4;
-    int Middle = 6;
-    int Right = 12;
+    int Left = 1;
+    int Middle = 2;
+    int Right = 3;
 
     AprilTagDetection tagOfInterest = null;
 
