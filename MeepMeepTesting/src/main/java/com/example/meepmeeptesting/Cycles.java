@@ -31,13 +31,7 @@ public class Cycles {
 
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPosRedL)
-                                .lineToLinearHeading(new Pose2d(-34, -12, Math.toRadians(45)))
-                                .addDisplacementMarker(() -> {
-                                    //lift.goHigh();
-                                    //claw.open();
-                                    //lift.goBottom();
-                                })
-                                .lineToLinearHeading(new Pose2d(-56, -12, Math.toRadians(0)))
+
                                 .build()
                 );
 

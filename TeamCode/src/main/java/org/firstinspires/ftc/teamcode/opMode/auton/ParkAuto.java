@@ -23,8 +23,6 @@ public class ParkAuto extends LinearOpMode
 {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
-    public static double FORWARD_DIST = -30;
-    public static double LATERAL_DIST = -24;
 
     double fx = 578.272;
     double fy = 578.272;
@@ -61,19 +59,19 @@ public class ParkAuto extends LinearOpMode
         //Called Upon When INIT Is Pressed
         drive = new SampleMecanumDrive(hardwareMap);
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(FORWARD_DIST)
+                .forward(AutoConstants.FORWARD_DIST)
                 .waitSeconds(0.2)
-                .strafeLeft(LATERAL_DIST)
+                .strafeLeft(AutoConstants.LATERAL_DIST)
                 .build();
 
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(FORWARD_DIST)
+                .forward(AutoConstants.FORWARD_DIST)
                 .build();
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d())
-                .forward(FORWARD_DIST)
+                .forward(AutoConstants.FORWARD_DIST)
                 .waitSeconds(0.2)
-                .strafeRight(LATERAL_DIST)
+                .strafeRight(AutoConstants.LATERAL_DIST)
                 .build();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

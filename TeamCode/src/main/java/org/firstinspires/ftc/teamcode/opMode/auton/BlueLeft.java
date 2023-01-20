@@ -34,15 +34,34 @@ public class BlueLeft extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+        score.toggleClaw();
+
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.update();
+            /*
+            TODO: AUTON PLANNING
+            Scan AprilTag
+            Drive to high goal, raise slides
+            Score preload
+            Drive to stack, turn turret
+            Pick up cone
+            Drive to high goal, arm go up, turn turret, raise slides
+            Score
+            Repeat
+            Park with AprilTag position
+             */
+
 
             TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
-
+                    .lineToLinearHeading(AutoConstants.BL_PRELOAD)
+                    .addDisplacementMarker(() -> {
+                        score.highGoal();
+                        score.score();
+                    })
+                    .lineToLinearHeading(AutoConstants.BL_START)
                     .build();
         }
-
     }
 }
