@@ -54,11 +54,11 @@ public class liftTest extends LinearOpMode {
             );
             isPressed = gamepad1.a;
             tele.addData("liftpos: ", lift.getPos());
+            tele.addData("liftpos INCHES: ", lift.getPosInches());
             tele.addData("avg error: ", lift.getAvgError());
             tele.addData("target: ", target);
-            tele.addData("lift0pos: ", lift.getPos(0));
+            tele.addData("target INCHES: ", Lift.ticksToInches(target));
             tele.addData("error0: ", lift.getError(0));
-            tele.addData("lift1pos: ", lift.getPos(1));
             tele.addData("error1: ", lift.getError(1));
             tele.addData("power0: ", lift.powers[0]);
             tele.addData("power1: ", lift.powers[1]);

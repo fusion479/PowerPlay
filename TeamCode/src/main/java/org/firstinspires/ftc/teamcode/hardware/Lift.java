@@ -9,13 +9,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.util.Encoder;
 
 @Config
 public class Lift extends Mechanism{
@@ -31,6 +29,7 @@ public class Lift extends Mechanism{
     public static double vMax = 1;
 
     //pos
+    public static double bottom = 0;
     public static double low = 300;
     public static double mid = 1000;
     public static double high = 1780;
@@ -39,6 +38,9 @@ public class Lift extends Mechanism{
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
+
+    public static double PULLEY_RADIUS = 0.796975; // inches
+    public static double TICKS_PER_REV = 537.7;
 
 
     public static PIDCoefficients coeff = new PIDCoefficients(0.1, 0, 0);
@@ -62,7 +64,6 @@ public class Lift extends Mechanism{
         resetter.reset();
         timer.reset();
     }
-
 
     public void setTargetPosition(double pos) {
         target = pos;
@@ -92,7 +93,7 @@ public class Lift extends Mechanism{
         if(Math.abs(error) > 200) {
             motors[0].setPower(-1*Math.signum(error));
             motors[1].setPower(-1*Math.signum(error));
-        }else {
+        } else {
             update(0);
             update(1);
         }
@@ -101,7 +102,7 @@ public class Lift extends Mechanism{
     public void loop() {
         if(limit.isPressed() && !isReset) {
             recalibrate();
-        }else {
+        } else {
             update(0);
             update(1);
         }
@@ -125,19 +126,6 @@ public class Lift extends Mechanism{
 
     public void bottom() {
         setTargetPosition(0);
-    }
-
-    //TODO: ask kellen how to convert
-    public double inchToPos(double inches) {
-        return inches; //lol idk how to convert
-    }
-
-    public double getPos(int motor) {
-        return motors[motor].getCurrentPosition();
-    }
-
-    public double getPos() {
-        return (getPos(0) + getPos(1)) / 2;
     }
 
     public void recalibrate() {
@@ -166,6 +154,30 @@ public class Lift extends Mechanism{
 
     public double getCurrent(int motor) {
         return motors[motor].getCurrent(CurrentUnit.AMPS);
+    }
+
+    public double getPos(int motor) {
+        return motors[motor].getCurrentPosition();
+    }
+
+    public double getPos() {
+        return (getPos(0) + getPos(1)) / 2;
+    }
+
+    public double getPosInches(int motor) {
+        return ticksToInches(getPos(motor));
+    }
+
+    public double getPosInches() {
+        return (getPosInches(0) + getPosInches(1)) / 2;
+    }
+
+    public static double ticksToInches(double ticks) {
+        return PULLEY_RADIUS * Math.PI * ticks / TICKS_PER_REV;
+    }
+
+    public static double inchesToTicks(double inches) {
+        return (inches * TICKS_PER_REV) / (PULLEY_RADIUS * Math.PI);
     }
 
 }

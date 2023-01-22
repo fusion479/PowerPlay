@@ -11,7 +11,6 @@ public class LiftFSM extends Mechanism {
         bottom,
     };
     public states liftState;
-    public static double bottom = 0;
     @Override
     public void init(HardwareMap hwMap) {
         lift.init(hwMap);
@@ -29,7 +28,7 @@ public class LiftFSM extends Mechanism {
                 lift.setTargetPosition(lift.high);
                 break;
             case bottom:
-                lift.setTargetPosition(bottom);
+                lift.setTargetPosition(lift.bottom);
         }
         lift.loop();
     }
@@ -42,7 +41,6 @@ public class LiftFSM extends Mechanism {
     public void low() {
         liftState = states.low;
     }
-
     public void bottom() {
         liftState = states.bottom;
     }
