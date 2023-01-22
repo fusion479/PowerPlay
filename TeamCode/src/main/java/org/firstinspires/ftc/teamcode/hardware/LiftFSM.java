@@ -11,11 +11,13 @@ public class LiftFSM extends Mechanism {
         bottom,
     };
     public states liftState;
+
     @Override
     public void init(HardwareMap hwMap) {
         lift.init(hwMap);
         liftState = states.bottom;
     }
+
     public void loop() {
         switch(liftState) {
             case low:
@@ -32,6 +34,7 @@ public class LiftFSM extends Mechanism {
         }
         lift.loop();
     }
+
     public void high() {
         liftState = states.high;
     }

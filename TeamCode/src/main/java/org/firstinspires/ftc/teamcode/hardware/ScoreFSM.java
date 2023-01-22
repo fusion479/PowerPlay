@@ -67,6 +67,7 @@ public class ScoreFSM extends Mechanism {
                 break;
         }
         arm.loop();
+        lift.loop();
     }
 
     public boolean ready() {
