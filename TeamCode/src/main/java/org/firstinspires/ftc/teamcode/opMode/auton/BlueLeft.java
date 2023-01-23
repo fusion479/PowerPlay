@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.OdometryLift;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -21,7 +22,7 @@ public class BlueLeft extends LinearOpMode {
     public SampleMecanumDrive drive;
     public Turret turret = new Turret();
     public ScoreFSM score = new ScoreFSM();
-    public Servo odoLift;
+    public OdometryLift odoLift = new OdometryLift(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,11 +31,12 @@ public class BlueLeft extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turret.init(hardwareMap);
         score.init(hardwareMap);
-        odoLift = hardwareMap.get(Servo.class, "odoLiftF");
+        odoLift.init(hardwareMap);
         FtcDashboard dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
         score.toggleClaw();
+        odoLift.down();
 
         waitForStart();
 
@@ -52,15 +54,12 @@ public class BlueLeft extends LinearOpMode {
             Repeat
             Park with AprilTag position
              */
-
-
             TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                     .lineToLinearHeading(AutoConstants.BL_PRELOAD)
                     .addDisplacementMarker(() -> {
                         score.highGoal();
                         score.score();
                     })
-                    .lineToLinearHeading(AutoConstants.BL_START)
                     .build();
         }
     }

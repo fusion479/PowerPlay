@@ -8,7 +8,7 @@ public class AutoConstants {
     // GLOBAL
     public static double START_X = 36;
     public static double START_Y = 70.5 - (13.3858/2);
-    public static double START_HEADING = Math.toRadians(90);
+    public static double START_HEADING = Math.toRadians(0);
 
     // BASIC PARKING
 

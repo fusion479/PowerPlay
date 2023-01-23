@@ -10,60 +10,60 @@ public class ScoreFSM extends Mechanism {
     public static int liftTimer = 600;
     public static int armMod = 300;
     public enum states {
-        down,
-        idleU,
-        idleD,
-        readyH,
-        readyM,
-        readyL,
-        readyB,
-        score
+        DOWN,
+        IDLE_UP,
+        IDLE_DOWN,
+        READY_HIGH,
+        READY_MEDIUM,
+        READY_LOW,
+        READY_BOTTOM,
+        SCORE
     }
     public states scoreStates;
     @Override
     public void init(HardwareMap hwMap) {
         lift.init(hwMap);
         arm.init(hwMap);
-        scoreStates = states.down;
+        scoreStates = states.DOWN;
     }
     public void loop() {
         switch(scoreStates) {
-            case down:
+            case DOWN:
                     if(timer.milliseconds() >= liftTimer) {
                         lift.bottom();
                         if(timer.milliseconds() >= liftTimer + armMod) {
-                            scoreStates = states.idleU;
+                            scoreStates = states.IDLE_UP;
                         }
                     }
                 break;
-            case idleU:
+            case IDLE_UP:
                 arm.up();
                 lift.bottom();
                 break;
-            case idleD:
+            case IDLE_DOWN:
                 arm.down();
                 lift.bottom();
                 break;
-            case readyH:
+            case READY_HIGH:
                 arm.ready();
                 lift.high();
                 break;
-            case readyM:
+            case READY_MEDIUM:
                 arm.ready();
                 lift.mid();
                 break;
-            case readyL:
+            case READY_LOW:
                 arm.ready();
                 lift.low();
                 break;
-            case readyB:
+            case READY_BOTTOM:
                 arm.ready();
                 lift.bottom();
                 break;
-            case score:
+            case SCORE:
                 timer.reset();
                 arm.open();
-                scoreStates = states.down;
+                scoreStates = states.DOWN;
                 break;
         }
         arm.loop();
@@ -71,7 +71,7 @@ public class ScoreFSM extends Mechanism {
     }
 
     public boolean ready() {
-        return scoreStates == states.readyB || scoreStates == states.readyL || scoreStates == states.readyM || scoreStates == states.readyH;
+        return scoreStates == states.READY_BOTTOM || scoreStates == states.READY_LOW || scoreStates == states.READY_MEDIUM || scoreStates == states.READY_HIGH;
     }
 
     public void toggleClaw() {
@@ -83,21 +83,21 @@ public class ScoreFSM extends Mechanism {
     }
 
     public void toggleHigh(){
-        if(scoreStates != states.readyH) {
+        if(scoreStates != states.READY_HIGH) {
             highGoal();
         }else{
             down();
         }
     }
     public void toggleMid(){
-        if(scoreStates != states.readyM) {
+        if(scoreStates != states.READY_MEDIUM) {
             midGoal();
         }else{
             down();
         }
     }
     public void toggleLow(){
-        if(scoreStates != states.readyL) {
+        if(scoreStates != states.READY_LOW) {
             lowGoal();
         }else{
             down();
@@ -105,7 +105,7 @@ public class ScoreFSM extends Mechanism {
     }
     public void toggleIdle() {
         if(!ready()) {
-            if (scoreStates != scoreStates.idleU) {
+            if (scoreStates != states.IDLE_UP) {
                 idleU();
             } else {
                 idleD();
@@ -113,22 +113,22 @@ public class ScoreFSM extends Mechanism {
         }
     }
     public void highGoal() {
-        scoreStates = states.readyH;
+        scoreStates = states.READY_HIGH;
     }
     public void midGoal() {
-        scoreStates = states.readyM;
+        scoreStates = states.READY_MEDIUM;
     }
     public void lowGoal() {
-        scoreStates = states.readyL;
+        scoreStates = states.READY_LOW;
     }
     public void score() {
-        scoreStates = states.score;
+        scoreStates = states.SCORE;
     }
-    public void down() {scoreStates = states.down;}
+    public void down() {scoreStates = states.DOWN;}
     public void idleU() {
-        scoreStates = states.idleU;
+        scoreStates = states.IDLE_UP;
     }
     public void idleD() {
-        scoreStates = states.idleD;
+        scoreStates = states.IDLE_DOWN;
     }
 }
