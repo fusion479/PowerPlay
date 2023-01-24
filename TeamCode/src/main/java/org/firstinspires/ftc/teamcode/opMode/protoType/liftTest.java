@@ -18,7 +18,7 @@ public class liftTest extends LinearOpMode {
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     Arm arm = new Arm();
-    public static double target = 200;
+    public static double target = 0;
     public static double loopbool = 0;
     public static double manbool = 0;
     public static int targetMode = 0;
@@ -45,16 +45,17 @@ public class liftTest extends LinearOpMode {
             if(loopbool != 1 && manbool != 1) {
                 lift.setPower(0);
             }
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
-                    )
-            );
+//            drive.setWeightedDrivePower(
+//                    new Pose2d(
+//                            -gamepad1.left_stick_y,
+//                            -gamepad1.left_stick_x,
+//                            -gamepad1.right_stick_x
+//                    )
+//            );
             isPressed = gamepad1.a;
             tele.addData("liftpos: ", lift.getPos());
-            tele.addData("liftpos INCHES: ", lift.getPosInches());
+            tele.addData("leftpos: ", lift.getPos(0));
+            tele.addData("rightpos: ", lift.getPos(1));
             tele.addData("avg error: ", lift.getAvgError());
             tele.addData("target: ", target);
             tele.addData("target INCHES: ", Lift.ticksToInches(target));

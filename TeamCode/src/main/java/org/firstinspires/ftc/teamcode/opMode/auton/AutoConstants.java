@@ -12,8 +12,8 @@ public class AutoConstants {
 
     // BASIC PARKING
 
-    public static double FORWARD_DIST = -30;
-    public static double LATERAL_DIST = -24;
+    public static double FORWARD_DIST = 30;
+    public static double LATERAL_DIST = 24;
 
     // BLUE LEFT
 

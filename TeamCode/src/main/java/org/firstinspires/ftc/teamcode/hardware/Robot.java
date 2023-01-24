@@ -37,8 +37,8 @@ public class Robot extends Mechanism {
     public void move(Gamepad gamepad) {
         drive.setWeightedDrivePower(
                 new Pose2d(
-                        gamepad.left_stick_y,
-                        gamepad.left_stick_x,
+                        -gamepad.left_stick_y,
+                        -gamepad.left_stick_x,
                         -gamepad.right_stick_x
                 )
         );

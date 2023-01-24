@@ -22,7 +22,7 @@ public class Lift extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0;
+    public static double kG = 0.001;
     public static double kP = -0.0025;
     public static double kD = 0;
     public static double bound = 50;
@@ -30,9 +30,9 @@ public class Lift extends Mechanism{
 
     //pos
     public static double bottom = 0;
-    public static double low = 300;
-    public static double mid = 1000;
-    public static double high = 1780;
+    public static double low = 0;
+    public static double mid = 1050;
+    public static double high = 2200;
 
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
@@ -55,7 +55,7 @@ public class Lift extends Mechanism{
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
@@ -161,23 +161,11 @@ public class Lift extends Mechanism{
     }
 
     public double getPos() {
-        return (getPos(0) + getPos(1)) / 2;
-    }
-
-    public double getPosInches(int motor) {
-        return ticksToInches(getPos(motor));
-    }
-
-    public double getPosInches() {
-        return (getPosInches(0) + getPosInches(1)) / 2;
+        return (getPos(0));
     }
 
     public static double ticksToInches(double ticks) {
         return PULLEY_RADIUS * Math.PI * ticks / TICKS_PER_REV;
-    }
-
-    public static double inchesToTicks(double inches) {
-        return (inches * TICKS_PER_REV) / (PULLEY_RADIUS * Math.PI);
     }
 
 }
