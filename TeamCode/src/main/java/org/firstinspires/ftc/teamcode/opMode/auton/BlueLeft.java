@@ -7,10 +7,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.hardware.OdometryLift;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -25,7 +23,9 @@ public class BlueLeft extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretTicks = -220;
+    public static double turretPreload = -220;
+    public static double turretPick = 440;
+    public static double turretScore = 110;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -47,15 +47,17 @@ public class BlueLeft extends LinearOpMode {
 
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .addTemporalMarker(0, () -> {
-                    turret.setTargetPosition(turretTicks);
-                })
-                .lineToLinearHeading(AutoConstants.BL_PRELOAD)
-                .addTemporalMarker(0, () -> {
+                    turret.setTargetPosition(turretPreload);
                     score.highGoal();
                 })
+                .lineToLinearHeading(AutoConstants.BL_PRELOAD)
                 .addTemporalMarker(4, () -> {
                     score.score();
                 })
+                .addTemporalMarker(5, () -> {
+                    turret.setTargetPosition(turretPick);
+                })
+                .lineToLinearHeading(AutoConstants.BL_STACK_1)
                 .build();
 
 

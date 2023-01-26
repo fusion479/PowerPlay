@@ -8,7 +8,7 @@ public class AutoConstants {
     // GLOBAL
     public static double START_X = 36;
     public static double START_Y = 70.5 - (13.3858/2);
-    public static double START_HEADING = Math.toRadians(-90);
+    public static double START_HEADING = Math.toRadians(270);
 
     // BASIC PARKING
 
@@ -18,8 +18,8 @@ public class AutoConstants {
     // BLUE LEFT
 
     public static final double BL_PRELOAD_X = 36;
-    public static final double BL_PRELOAD_Y = 0;
-    public static final double BL_PRELOAD_HEADING = Math.toRadians(-90);
+    public static final double BL_PRELOAD_Y = 12;
+    public static final double BL_PRELOAD_HEADING = Math.toRadians(180);
 
     public static final double BL_STACK_X = 55;
     public static final double BL_STACK_Y = 12;
@@ -27,6 +27,7 @@ public class AutoConstants {
 
     public static final Pose2d BL_START = new Pose2d(START_X, START_Y, START_HEADING);
     public static final Pose2d BL_PRELOAD = new Pose2d(BL_PRELOAD_X, BL_PRELOAD_Y, BL_PRELOAD_HEADING);
-    public static final Pose2d BL_STACK = new Pose2d(BL_STACK_X, BL_STACK_Y, BL_STACK_HEADING);
+    public static final Pose2d BL_STACK_1 = new Pose2d(BL_STACK_X, BL_STACK_Y, BL_STACK_HEADING);
+    public static final Pose2d BL_STACK_2 = new Pose2d(BL_STACK_X - 1, BL_STACK_Y, BL_STACK_HEADING);
 
 }
