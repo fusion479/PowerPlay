@@ -8,7 +8,7 @@ public class AutoConstants {
     // GLOBAL
     public static double START_X = 36;
     public static double START_Y = 70.5 - (13.3858/2);
-    public static double START_HEADING = Math.toRadians(0);
+    public static double START_HEADING = Math.toRadians(-90);
 
     // BASIC PARKING
 
@@ -18,8 +18,8 @@ public class AutoConstants {
     // BLUE LEFT
 
     public static final double BL_PRELOAD_X = 36;
-    public static final double BL_PRELOAD_Y = 12;
-    public static final double BL_PRELOAD_HEADING = Math.toRadians(-135);
+    public static final double BL_PRELOAD_Y = 0;
+    public static final double BL_PRELOAD_HEADING = Math.toRadians(-90);
 
     public static final double BL_STACK_X = 55;
     public static final double BL_STACK_Y = 12;

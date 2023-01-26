@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opMode.auton;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,33 +16,52 @@ import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous
+@Autonomous(name = "Blue Left", group = "_Auto")
 @Config
 public class BlueLeft extends LinearOpMode {
 
-    public SampleMecanumDrive drive;
-    public Turret turret = new Turret();
-    public ScoreFSM score = new ScoreFSM();
-    public OdometryLift odoLift = new OdometryLift(this);
+    SampleMecanumDrive drive;
+    Turret turret;
+    ScoreFSM score;
+    FtcDashboard dashboard;
+
+    public static double turretTicks = -220;
 
     @Override
     public void runOpMode() throws InterruptedException {
         // called on init
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        turret = new Turret();
         turret.init(hardwareMap);
+        turret.setTargetPosition(0);
+
+        score = new ScoreFSM();
         score.init(hardwareMap);
-        odoLift.init(hardwareMap);
-        FtcDashboard dashboard = FtcDashboard.getInstance();
+
+        dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
 
+        drive.setPoseEstimate(AutoConstants.BL_START);
+
+        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
+                .addTemporalMarker(0, () -> {
+                    turret.setTargetPosition(turretTicks);
+                })
+                .lineToLinearHeading(AutoConstants.BL_PRELOAD)
+                .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
+                .addTemporalMarker(4, () -> {
+                    score.score();
+                })
+                .build();
+
+
         score.toggleClaw();
-        odoLift.down();
 
         waitForStart();
-
-        while (opModeIsActive() && !isStopRequested()) {
-            telemetry.update();
             /*
             TODO: AUTON PLANNING
             Scan AprilTag
@@ -54,13 +74,19 @@ public class BlueLeft extends LinearOpMode {
             Repeat
             Park with AprilTag position
              */
-            TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
-                    .lineToLinearHeading(AutoConstants.BL_PRELOAD)
-                    .addDisplacementMarker(() -> {
-                        score.highGoal();
-                        score.score();
-                    })
-                    .build();
+
+        drive.followTrajectorySequenceAsync(path);
+
+        while (!isStopRequested() && opModeIsActive()) {
+            score.loop();
+            turret.loop();
+            drive.update();
+
+            Pose2d poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.update();
         }
     }
 }
