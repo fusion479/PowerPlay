@@ -13,7 +13,7 @@ public class LiftFSM extends Mechanism {
     };
     public states liftState;
 
-    public static int customHeight = 100;
+    public static double customHeight;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -54,8 +54,8 @@ public class LiftFSM extends Mechanism {
     public void bottom() {
         liftState = states.bottom;
     }
-    public void setCustomHeight(int height) {
-        customHeight = height;
+    public void setCustomHeight(int cone) {
+        customHeight = lift.autoStack[cone];
         liftState = states.custom;
     }
 }

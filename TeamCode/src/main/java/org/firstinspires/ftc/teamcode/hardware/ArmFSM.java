@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ArmFSM extends Mechanism {
     public Arm arm = new Arm();
+    ElapsedTime timer = new ElapsedTime();
+    MultipleTelemetry telemetry = new MultipleTelemetry();
     public enum states {
         down,
         up,
@@ -27,11 +31,14 @@ public class ArmFSM extends Mechanism {
                 arm.place();
                 break;
         }
+
+        telemetry.addData("timer", timer.milliseconds());
     }
 
     public void toggleClaw() {
         arm.toggle();
     }
+
     public void toggleArm() {
         if(armStates != states.down) {
             armStates = states.down;

@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import java.util.concurrent.TimeUnit;
+
 public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
     ElapsedTime timer = new ElapsedTime();
     public static int liftTimer = 600;
     public static int armMod = 300;
-    public static int height = 100;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -39,12 +40,7 @@ public class ScoreFSM extends Mechanism {
                     }
                 break;
             case CUSTOM:
-                if(timer.milliseconds() >= liftTimer) {
-                    lift.setCustomHeight(height);
-                    if(timer.milliseconds() >= liftTimer + armMod) {
-                        scoreStates = states.IDLE_UP;
-                    }
-                }
+                arm.down();
                 break;
             case IDLE_UP:
                 arm.up();
@@ -141,8 +137,8 @@ public class ScoreFSM extends Mechanism {
     public void idleD() {
         scoreStates = states.IDLE_DOWN;
     }
-    public void customPos(int customHeight) {
-        height = customHeight;
+    public void customPos(int cone) {
+        lift.setCustomHeight(cone);
         scoreStates = states.CUSTOM;
     }
 }
