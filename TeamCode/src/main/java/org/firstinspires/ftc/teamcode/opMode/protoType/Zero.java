@@ -9,9 +9,11 @@ import org.firstinspires.ftc.teamcode.hardware.Mechanism;
 @TeleOp
 public class Zero extends LinearOpMode {
     Servo doo;
+    Servo doo2;
     @Override
     public void runOpMode() throws InterruptedException {
-        doo = hardwareMap.get(Servo.class, "odoLiftF");
+        doo = hardwareMap.get(Servo.class, "armLeft");
+        doo2 = hardwareMap.get(Servo.class, "armRight");
         waitForStart();
         while(opModeIsActive()) {
             if(gamepad1.a) {
@@ -19,6 +21,7 @@ public class Zero extends LinearOpMode {
             }
             if(gamepad1.b) {
                 doo.setPosition(1);
+                doo2.setPosition(1);
             }
         }
     }

@@ -9,6 +9,7 @@ public class ScoreFSM extends Mechanism {
     ElapsedTime timer = new ElapsedTime();
     public static int liftTimer = 600;
     public static int armMod = 300;
+    public static int height = 100;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -17,6 +18,7 @@ public class ScoreFSM extends Mechanism {
         READY_MEDIUM,
         READY_LOW,
         READY_BOTTOM,
+        CUSTOM,
         SCORE
     }
     public states scoreStates;
@@ -35,6 +37,14 @@ public class ScoreFSM extends Mechanism {
                             scoreStates = states.IDLE_UP;
                         }
                     }
+                break;
+            case CUSTOM:
+                if(timer.milliseconds() >= liftTimer) {
+                    lift.setCustomHeight(height);
+                    if(timer.milliseconds() >= liftTimer + armMod) {
+                        scoreStates = states.IDLE_UP;
+                    }
+                }
                 break;
             case IDLE_UP:
                 arm.up();
@@ -130,5 +140,9 @@ public class ScoreFSM extends Mechanism {
     }
     public void idleD() {
         scoreStates = states.IDLE_DOWN;
+    }
+    public void customPos(int customHeight) {
+        height = customHeight;
+        scoreStates = states.CUSTOM;
     }
 }

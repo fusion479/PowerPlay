@@ -30,9 +30,9 @@ public class Lift extends Mechanism{
 
     //pos
     public static double bottom = 0;
-    public static double low = 0;
-    public static double mid = 1050;
-    public static double high = 2200;
+    public static double low = 300;
+    public static double mid = 1500;
+    public static double high = 2500;
 
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
