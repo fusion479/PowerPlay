@@ -63,6 +63,7 @@ public class ArmFSM extends Mechanism {
         arm.close();
     }
 
+    public boolean hasCone() {return arm.coneInClaw();}
 
 
 }

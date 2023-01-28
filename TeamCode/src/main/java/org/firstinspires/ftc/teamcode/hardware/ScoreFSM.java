@@ -12,6 +12,8 @@ public class ScoreFSM extends Mechanism {
     ElapsedTime liftTimer = new ElapsedTime();
     ElapsedTime armTimer = new ElapsedTime();
     MultipleTelemetry tele = new MultipleTelemetry();
+
+    public boolean debug = false;
     public static int liftDelay = 300;
     public static int armDelay = 50;
     public enum states {
@@ -38,39 +40,49 @@ public class ScoreFSM extends Mechanism {
                 if(liftTimer.milliseconds() >= armDelay) {
                     scoreStates = states.IDLE_UP;
                 }
-                if(liftTimer.milliseconds() >= liftDelay) {
-                    lift.bottom();
-                }
+//                if(liftTimer.milliseconds() >= liftDelay) {  --since armDelay < liftDelay, this branch is NEVER CALLED
+//                    lift.bottom();
+//                }
                 break;
             case CUSTOM:
-                arm.down();
+                arm.down(); //lift.setTargetPosition(cone) should be moved here, it makes more sense readability wise
                 break;
             case IDLE_UP:
                 arm.up();
                 lift.bottom();
                 break;
             case IDLE_DOWN:
-                if (armTimer.milliseconds() >= armDelay) {
-                    arm.up();
-                } else {
+                if(lift.targetReached()) {
                     arm.down();
-                    lift.bottom();
-                }
+                    if(arm.hasCone()) {
+                        liftTimer.reset();          //little finnicky but should replace the armtimer
+                        scoreStates = states.DOWN;  //if you have a cone while arm is down, it uses the arm delay to send the cone up
+                    }                               //there is a possibility that all of this stupid distance sensor shit will completely destroy the loop time
+                }                                   //and lag it to hell and back
+                lift.bottom();
                 break;
             case READY_HIGH:
-                arm.ready();
+                if(lift.targetReached()) {
+                    arm.ready();
+                }
                 lift.high();
                 break;
             case READY_MEDIUM:
-                arm.ready();
+                if(lift.targetReached()) {
+                    arm.ready();
+                }
                 lift.mid();
                 break;
             case READY_LOW:
-                arm.ready();
+                if(lift.targetReached()) {
+                    arm.ready();
+                }
                 lift.low();
                 break;
             case READY_BOTTOM:
-                arm.ready();
+                if(lift.targetReached()) {
+                    arm.ready();
+                }
                 lift.bottom();
                 break;
             case SCORE:
@@ -82,10 +94,11 @@ public class ScoreFSM extends Mechanism {
         }
         arm.loop();
         lift.loop();
-
-        tele.addData("liftTimer: ", liftTimer.milliseconds());
-        tele.addData("armTimer: ", armTimer.milliseconds());
-        tele.update();
+        if(debug) { //telemetry is laggy and will hurt loop time, honestly this shouldn't really be in the class it should be in a debug teleopmode itself
+            tele.addData("liftTimer: ", liftTimer.milliseconds());
+            tele.addData("armTimer: ", armTimer.milliseconds());
+            tele.update();
+        }
     }
 
     public boolean ready() {
@@ -97,7 +110,6 @@ public class ScoreFSM extends Mechanism {
             score();
         }else {
             arm.toggleClaw();
-            armTimer.reset();
         }
     }
 
@@ -153,5 +165,8 @@ public class ScoreFSM extends Mechanism {
     public void customPos(int cone) {
         lift.setCustomHeight(cone);
         scoreStates = states.CUSTOM;
+    }
+    public void debug(boolean isTrue) {
+        debug = isTrue;
     }
 }

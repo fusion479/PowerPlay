@@ -20,7 +20,6 @@ public class Lift extends Mechanism{
     DcMotorEx motors[] = new DcMotorEx[2];
     TouchSensor limit;
     ElapsedTime timer = new ElapsedTime();
-    ElapsedTime resetter = new ElapsedTime();
     //CONSTANTS
     public static double kG = 0.001;
     public static double kP = -0.0025;
@@ -44,6 +43,7 @@ public class Lift extends Mechanism{
     public static double PULLEY_RADIUS = 0.796975; // inches
     public static double TICKS_PER_REV = 537.7;
 
+    public boolean targetReached = false;
 
     public static PIDCoefficients coeff = new PIDCoefficients(0.1, 0, 0);
     public static PIDFController cont = new PIDFController(coeff, kG);
@@ -63,7 +63,6 @@ public class Lift extends Mechanism{
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
         motors[1].setDirection(DcMotorSimple.Direction.REVERSE);
         limit = hwMap.get(TouchSensor.class, "limit");
-        resetter.reset();
         timer.reset();
     }
 
@@ -79,6 +78,9 @@ public class Lift extends Mechanism{
         double pd = kP * error + kD * (error-lastError[motor]) / time;
         if(Math.abs(error) < bound) {
             pd = 0;
+            targetReached = true;
+        }else {
+            targetReached = false;
         }
         lastError[motor] = error;
         timer.reset();
@@ -140,7 +142,6 @@ public class Lift extends Mechanism{
         target = 0;
         motors[0].setPower(0);
         motors[1].setPower(0);
-        resetter.reset();
     }
 
     public void setPower(double power) {

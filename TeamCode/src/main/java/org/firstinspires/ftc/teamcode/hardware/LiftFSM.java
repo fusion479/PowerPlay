@@ -72,4 +72,8 @@ public class LiftFSM extends Mechanism {
         }
         liftState = states.scoringLowered;
     }
+
+    public boolean targetReached() {
+        return lift.targetReached;
+    }
 }
