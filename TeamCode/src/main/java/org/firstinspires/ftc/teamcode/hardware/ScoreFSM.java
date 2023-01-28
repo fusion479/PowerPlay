@@ -1,16 +1,19 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.concurrent.TimeUnit;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
-    ElapsedTime timer = new ElapsedTime();
-    public static int liftTimer = 300;
-    public static int armMod = 50;
+    ElapsedTime liftTimer = new ElapsedTime();
+    ElapsedTime armTimer = new ElapsedTime();
+    MultipleTelemetry tele = new MultipleTelemetry();
+    public static int liftDelay = 300;
+    public static int armDelay = 50;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -32,10 +35,10 @@ public class ScoreFSM extends Mechanism {
     public void loop() {
         switch(scoreStates) {
             case DOWN:
-                if(timer.milliseconds() >= armMod) {
+                if(liftTimer.milliseconds() >= armDelay) {
                     scoreStates = states.IDLE_UP;
                 }
-                if(timer.milliseconds() >= liftTimer) {
+                if(liftTimer.milliseconds() >= liftDelay) {
                     lift.bottom();
                 }
                 break;
@@ -47,8 +50,12 @@ public class ScoreFSM extends Mechanism {
                 lift.bottom();
                 break;
             case IDLE_DOWN:
-                arm.down();
-                lift.bottom();
+                if (armTimer.milliseconds() >= armDelay) {
+                    arm.up();
+                } else {
+                    arm.down();
+                    lift.bottom();
+                }
                 break;
             case READY_HIGH:
                 arm.ready();
@@ -67,7 +74,7 @@ public class ScoreFSM extends Mechanism {
                 lift.bottom();
                 break;
             case SCORE:
-                timer.reset();
+                liftTimer.reset();
                 lift.lowerABit();
                 arm.open();
                 scoreStates = states.DOWN;
@@ -75,6 +82,10 @@ public class ScoreFSM extends Mechanism {
         }
         arm.loop();
         lift.loop();
+
+        tele.addData("liftTimer: ", liftTimer.milliseconds());
+        tele.addData("armTimer: ", armTimer.milliseconds());
+        tele.update();
     }
 
     public boolean ready() {
@@ -86,6 +97,7 @@ public class ScoreFSM extends Mechanism {
             score();
         }else {
             arm.toggleClaw();
+            armTimer.reset();
         }
     }
 

@@ -94,12 +94,12 @@ public class Arm extends Mechanism{
     }
 
     public void setPosArr(Servo[] arr, double pos) {
-        for(int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i].setPosition(pos);
         }
     }
 
-    public boolean withinDist() {
-        return distanceSensor.getDistance(DistanceUnit.MM) < distanceThreshold;
+    public boolean coneInClaw() {
+        return (distanceSensor.getDistance(DistanceUnit.MM) < distanceThreshold && !isOpen);
     }
 }

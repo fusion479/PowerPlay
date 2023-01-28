@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class ArmFSM extends Mechanism {
     public Arm arm = new Arm();
-    ElapsedTime timer = new ElapsedTime();
-    MultipleTelemetry telemetry = new MultipleTelemetry();
     public enum states {
         down,
         up,
@@ -31,8 +29,6 @@ public class ArmFSM extends Mechanism {
                 arm.place();
                 break;
         }
-
-        telemetry.addData("timer", timer.milliseconds());
     }
 
     public void toggleClaw() {

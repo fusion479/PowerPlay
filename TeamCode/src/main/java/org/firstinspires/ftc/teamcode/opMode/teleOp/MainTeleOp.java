@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Robot;
-@TeleOp(group = "_")
+@TeleOp(name = "Main", group = "_A")
 public class MainTeleOp extends LinearOpMode {
     public Robot robot = new Robot();
     @Override

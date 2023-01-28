@@ -26,7 +26,11 @@ public class BlueLeft extends LinearOpMode {
 
     public static double turretScore = 45;
     public static double turretPick = 180;
-    public static double liftAfterGrabDelay = 0.001;
+    public static double liftAfterGrabDelay = 0.0005;
+    public static double turretAfterGrabDelay = .15;
+    public static double scoreDelay = .35;
+    public static double turretAfterScoreDelay = .6;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -63,6 +67,8 @@ public class BlueLeft extends LinearOpMode {
                     score.customPos(0);
                 })
                 // END PRELOAD
+
+
                 .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.toggleClaw();
@@ -70,22 +76,22 @@ public class BlueLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
                     score.highGoal();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.21, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
                 .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(.35, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.score();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
                     score.idleD();
                     score.customPos(1);
                 })
                 .waitSeconds(.8)
-                //END CYCLE 1s
+                //END CYCLE 1
+
+
                 .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.toggleClaw();
@@ -93,90 +99,21 @@ public class BlueLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
                     score.highGoal();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.21, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
                 .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(.35, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.score();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
                     score.idleD();
                     score.customPos(2);
                 })
                 .waitSeconds(.8)
                 // END CYCLE 2
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.21, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(.35, () -> {
-                    score.score();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
-                    score.idleD();
-                    score.customPos(3);
-                })
-                .waitSeconds(.8)
-                // END CYCLE 3
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.21, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(.35, () -> {
-                    score.score();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.6, () -> {
-                    score.idleD();
-                    score.customPos(4);
-                })
-                .waitSeconds(.8)
-                // END CYCLE 4
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.21, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(.35, () -> {
-                    score.score();
-                })
-                .waitSeconds(.8)
-                // END CYCLE 5
-                .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
-                .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
-                    turret.setTargetAngle(0);
-                })
                 .build();
-
 
         score.toggleClaw();
 
@@ -205,7 +142,8 @@ public class BlueLeft extends LinearOpMode {
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
+            telemetry.addData("headingRAD", poseEstimate.getHeading());
+            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
             telemetry.update();
         }
     }
