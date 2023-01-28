@@ -9,8 +9,8 @@ public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
     ElapsedTime timer = new ElapsedTime();
-    public static int liftTimer = 600;
-    public static int armMod = 300;
+    public static int liftTimer = 300;
+    public static int armMod = 50;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -32,12 +32,12 @@ public class ScoreFSM extends Mechanism {
     public void loop() {
         switch(scoreStates) {
             case DOWN:
-                    if(timer.milliseconds() >= liftTimer) {
-                        lift.bottom();
-                        if(timer.milliseconds() >= liftTimer + armMod) {
-                            scoreStates = states.IDLE_UP;
-                        }
-                    }
+                if(timer.milliseconds() >= armMod) {
+                    scoreStates = states.IDLE_UP;
+                }
+                if(timer.milliseconds() >= liftTimer) {
+                    lift.bottom();
+                }
                 break;
             case CUSTOM:
                 arm.down();
@@ -68,6 +68,7 @@ public class ScoreFSM extends Mechanism {
                 break;
             case SCORE:
                 timer.reset();
+                lift.lowerABit();
                 arm.open();
                 scoreStates = states.DOWN;
                 break;

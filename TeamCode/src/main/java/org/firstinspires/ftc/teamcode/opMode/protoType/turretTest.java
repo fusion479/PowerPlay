@@ -14,7 +14,7 @@ public class turretTest extends LinearOpMode {
     Turret turret = new Turret();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-    public static double target = 200;
+    public static double target = 0;
     public static double loopbool = 0;
     public static double manbool = 0;
     public static double calibool = 0;

@@ -111,14 +111,8 @@ public class FSM extends LinearOpMode {
     public static int conesScored = 0;
     public static int maxCones = 1;
     //turret positions
-    public static double scorePos = 125;
+    public static double scorePos = 119;
     public static double pickPos = 410;
-    //lift positions
-    public static double cone1Pos = 200;
-    public static double cone2Pos = 200;
-    public static double cone3Pos = 200;
-    public static double cone4Pos = 200;
-    public static double cone5Pos = 200;
 
     @Override
     public void runOpMode() throws InterruptedException {

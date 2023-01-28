@@ -28,8 +28,8 @@ public class AutoConstants {
     public static double RPM_X = LPM_X;
     public static double RPR_X = LPL_X;
 
-    public static double PARK_Y = 36;
-    public static double PARK_HEADING = Math.toRadians(180);
+    public static double PARK_Y = 24;
+    public static double PARK_HEADING = Math.toRadians(270);
 
     // BASIC PARKING
 
@@ -42,7 +42,7 @@ public class AutoConstants {
     public static double BL_SCORE_Y = 4;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 55;
+    public static double BL_STACK_X = 54.9;
     public static double BL_STACK_Y = 12;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 
