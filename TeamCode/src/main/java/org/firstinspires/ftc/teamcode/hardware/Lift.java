@@ -33,8 +33,6 @@ public class Lift extends Mechanism{
     public static double mid = 1500;
     public static double high = 2450;
 
-    public static double autoStack[] = {600, 400, 300, 150, 0};
-
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
@@ -69,8 +67,6 @@ public class Lift extends Mechanism{
     public void setTargetPosition(double pos) {
         target = pos;
     }
-
-    // cone stack lift positions: 700, 500, 300, 150, 0
 
     public void update(int motor) {
         double time = timer.milliseconds();

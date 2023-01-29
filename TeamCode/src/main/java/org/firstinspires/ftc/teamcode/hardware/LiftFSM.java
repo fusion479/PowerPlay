@@ -58,8 +58,8 @@ public class LiftFSM extends Mechanism {
     public void bottom() {
         liftState = states.bottom;
     }
-    public void setCustomHeight(int cone) {
-        customHeight = lift.autoStack[cone];
+    public void setTargetPosition(double pos) {
+        lift.setTargetPosition(pos);
         liftState = states.custom;
     }
     public void lowerABit() {
