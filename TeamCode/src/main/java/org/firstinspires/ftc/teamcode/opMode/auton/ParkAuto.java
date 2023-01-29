@@ -18,7 +18,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "Auto" , group = "_Auto")
+@Autonomous(name = "Parking" , group = "_Auto")
 public class ParkAuto extends LinearOpMode
 {
     OpenCvCamera camera;

@@ -15,9 +15,9 @@ import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 
-@Autonomous(name = "Blue Left", group = "_Auto")
+@Autonomous(name = "Left", group = "_Auto")
 @Config
-public class BlueLeft extends LinearOpMode {
+public class LeftSide extends LinearOpMode {
 
     SampleMecanumDrive drive;
     Turret turret;
@@ -64,7 +64,7 @@ public class BlueLeft extends LinearOpMode {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
                     score.idleD();
-                    score.customPos(0);
+                    score.setTargetPosition(0);
                 })
                 // END PRELOAD
 
@@ -86,7 +86,7 @@ public class BlueLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                     score.idleD();
-                    score.customPos(1);
+                    score.setTargetPosition(1);
                 })
                 .waitSeconds(.8)
                 //END CYCLE 1
@@ -109,7 +109,7 @@ public class BlueLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                     score.idleD();
-                    score.customPos(2);
+                    score.setTargetPosition(2);
                 })
                 .waitSeconds(.8)
                 // END CYCLE 2

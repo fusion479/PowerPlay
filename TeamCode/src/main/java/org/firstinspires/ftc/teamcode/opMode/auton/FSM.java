@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,7 +25,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "FSMAuto", group = "_Auto")
+@Autonomous(name = "APOOP", group = "_Auto")
 @Config
 public class FSM extends LinearOpMode {
 
@@ -37,12 +38,12 @@ public class FSM extends LinearOpMode {
     double cy = 221.506;
 
     // UNITS ARE METERS
-    double tagsize = 0.166;
+    double tagSize = 0.166;
 
     //Tag IDs (Sleeve)
-    int Left = 1;
-    int Middle = 2;
-    int Right = 3;
+    final int LEFT = 1;
+    final int MIDDLE = 2;
+    final int RIGHT = 3;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -51,17 +52,15 @@ public class FSM extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    ElapsedTime time = new ElapsedTime();
+    ElapsedTime timer = new ElapsedTime();
 
     private enum AutoState {
         PRELOAD_DRIVE,
-        SCORE,
         STACK_DRIVE,
         STACK_PICK,
         POLE_DRIVE,
         SCORING,
         PARK,
-        IDLE,
     }
     AutoState autoState = AutoState.PRELOAD_DRIVE;
 
@@ -70,7 +69,7 @@ public class FSM extends LinearOpMode {
             .build();
 
     TrajectorySequence toStack = drive.trajectorySequenceBuilder(preload.end())
-            .lineToLinearHeading(AutoConstants.BL_STACK_1)
+            .lineToLinearHeading(AutoConstants.BL_STACK)
             .build();
 
     TrajectorySequence toPole = drive.trajectorySequenceBuilder(toStack.end())
@@ -78,24 +77,44 @@ public class FSM extends LinearOpMode {
             .build();
 
     TrajectorySequence leftPark = drive.trajectorySequenceBuilder(toPole.end())
-            .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
             .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
+            .back(12)
             .build();
 
     TrajectorySequence middlePark = drive.trajectorySequenceBuilder(toPole.end())
             .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
+            .back(12)
             .build();
 
     TrajectorySequence rightPark = drive.trajectorySequenceBuilder(toPole.end())
-            .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
             .lineToLinearHeading(AutoConstants.BL_PARK_RIGHT)
+            .back(12)
             .build();
 
-    private Thread scoreThread;
+    private Thread preScoreThread;
+    private Thread pickThread;
 
-    public Runnable scoreT = () -> {
+    public Runnable preScore = () -> {
         try {
-            Thread.sleep(200);
+            Thread.sleep(50);
+            score.highGoal();
+            Thread.sleep(100);
+            turret.setTargetAngle(turretScoreAngle);
+            Thread.sleep(600);
+            score.score();
+            conesScored++;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    };
+
+    public Runnable pick = () -> {
+        try {
+            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[conesScored - 1]);
+            Thread.sleep(600);
+            turret.setTargetAngle(turretPickAngle);
+            Thread.sleep(700);
+            score.toggleClaw();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -110,16 +129,19 @@ public class FSM extends LinearOpMode {
     //cone counting
     public static int conesScored = 0;
     public static int maxCones = 1;
-    //turret positions
-    public static double scorePos = 119;
-    public static double pickPos = 410;
+
+    // turret positions
+    public static double turretScoreAngle = 45;
+    public static double turretPickAngle = 180;
+
+    public static int postScoreDelay = 300;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagSize, fx, fy, cx, cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -136,6 +158,8 @@ public class FSM extends LinearOpMode {
 
             }
         });
+
+        preScoreThread = new Thread(preScore);
 
         drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -160,7 +184,7 @@ public class FSM extends LinearOpMode {
                 boolean tagFound = false;
 
                 for(AprilTagDetection tag : currentDetections) {
-                    if(tag.id == Left || tag.id == Middle || tag.id == Right) {
+                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT) {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
@@ -198,8 +222,9 @@ public class FSM extends LinearOpMode {
             sleep(20);
         }
 
-        //INIT AND STARTED
         score.toggleClaw();
+
+        //INIT AND STARTED
         waitForStart();
 
         if(tagOfInterest != null) {
@@ -212,61 +237,99 @@ public class FSM extends LinearOpMode {
         }
 
         while(!isStopRequested() && opModeIsActive()) {
-            if(conesScored >= maxCones) {
-                autoState = AutoState.PARK;
-            }
+
+            /*
+            START PRELOAD
+            slides up, turret turn, drive to pole
+            score
+            slides down (arm back)
+            turret turn
+            drive to stack
+            pick up
+            slides up
+            turret turn
+            drive to pole
+            score
+            etc
+             */
+
             switch(autoState) {
                 case PRELOAD_DRIVE:
                     if(!drive.isBusy()) {
-                        //path here
-                        turret.setTargetPosition(scorePos);
+                        drive.followTrajectorySequenceAsync(preload);
+                        turret.setTargetPosition(turretScoreAngle);
                         score.highGoal();
+                        timer.reset();
                         autoState = AutoState.SCORING;
                     }
                     break;
                 case STACK_PICK:
                     if(!drive.isBusy()) {
-                        //score.stepDown(height) - define this stuff later
-                        score.toggleClaw();
                         autoState = AutoState.POLE_DRIVE;
                     }
                     break;
                 case STACK_DRIVE:
-                    if(!drive.isBusy()) {
+                    if (conesScored > maxCones) {
+                        autoState = AutoState.PARK;
+                    } else if (!drive.isBusy()) {
                         drive.followTrajectorySequenceAsync(toStack);
-                        turret.setTargetPosition(pickPos);
+                        runThread(pickThread);
                         autoState = AutoState.STACK_PICK;
                     }
                     break;
                 case POLE_DRIVE:
-                    if(!drive.isBusy()) {
-                        //path here
-                        turret.setTargetPosition(scorePos);
-                        score.highGoal();
+                    if (!drive.isBusy()) {
+                        drive.followTrajectorySequenceAsync(toPole);
+                        runThread(preScoreThread);
+                        timer.reset();
                         autoState = AutoState.SCORING;
                     }
                     break;
                 case SCORING:
                     if(!drive.isBusy()) {
-                        score.score();
-                        autoState = AutoState.STACK_DRIVE;
+                        if(timer.milliseconds() >= postScoreDelay) {
+                            autoState = AutoState.STACK_DRIVE;
+                        }
                     }
                     break;
                 case PARK:
                     if(!drive.isBusy()) {
-                        if (tagOfInterest.id == Left) {
-                            drive.followTrajectorySequenceAsync(leftPark);
-                        } else if (tagOfInterest.id == Right) {
-                            drive.followTrajectorySequenceAsync(rightPark);
-                        } else {
-                            drive.followTrajectorySequenceAsync(middlePark);
+                        turret.setTargetAngle(0);
+                        score.idleU();
+                        switch (tagOfInterest.id) {
+                            case LEFT:
+                                drive.followTrajectorySequenceAsync(leftPark);
+                                break;
+                            case RIGHT:
+                                drive.followTrajectorySequenceAsync(rightPark);
+                                break;
+                            case MIDDLE:
+                                drive.followTrajectorySequenceAsync(middlePark);
+                                break;
+                            default:
+                                drive.followTrajectorySequenceAsync(middlePark);
+                                break;
                         }
                     }
                     break;
-                case IDLE:
-                    //me when i am
-                    break;
             }
+
+            score.loop();
+            turret.loop();
+            drive.update();
+
+            Pose2d poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("cones scored", conesScored);
+            telemetry.addData("state", autoState);
+            telemetry.addData("timer", timer.milliseconds());
+            telemetry.addData("preScoreThreadAlive", preScoreThread.isAlive());
+            telemetry.addData("pickThreadAlive", pickThread.isAlive());
+            telemetry.addData("detected AprilTag", tagOfInterest.id);
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
+            telemetry.addData("headingRAD", poseEstimate.getHeading());
+            telemetry.update();
         }
     }
 

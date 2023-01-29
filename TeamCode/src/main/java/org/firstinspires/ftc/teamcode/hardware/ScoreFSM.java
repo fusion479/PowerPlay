@@ -4,8 +4,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
@@ -162,8 +160,8 @@ public class ScoreFSM extends Mechanism {
     public void idleD() {
         scoreStates = states.IDLE_DOWN;
     }
-    public void customPos(int cone) {
-        lift.setCustomHeight(cone);
+    public void setTargetPosition(double pos) {
+        lift.setTargetPosition(pos);
         scoreStates = states.CUSTOM;
     }
     public void debug(boolean isTrue) {
