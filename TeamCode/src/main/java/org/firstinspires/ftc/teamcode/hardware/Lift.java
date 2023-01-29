@@ -149,6 +149,10 @@ public class Lift extends Mechanism{
         motors[1].setPower(power);
     }
 
+    public void setPower(int motor, double power) {
+        motors[motor].setPower(power);
+    }
+
     public double getAvgError() {
         return ((target-getPos(0)) + (target-getPos(1))) / 2;
     }

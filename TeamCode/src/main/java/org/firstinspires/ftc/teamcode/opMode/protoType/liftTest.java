@@ -23,6 +23,7 @@ public class liftTest extends LinearOpMode {
     public static double manbool = 0;
     public static int targetMode = 0;
     public boolean isPressed = false;
+    public static double power = 0.01;
     SampleMecanumDrive drive;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,6 +45,18 @@ public class liftTest extends LinearOpMode {
             }
             if(loopbool != 1 && manbool != 1) {
                 lift.setPower(0);
+            }
+            if(gamepad1.dpad_right && gamepad1.a) {
+                lift.setPower(0, power);
+            }
+            if(gamepad1.dpad_left && gamepad1.a) {
+                lift.setPower(1, power);
+            }
+            if(gamepad1.dpad_right && gamepad1.b) {
+                lift.setPower(0, -power);
+            }
+            if(gamepad1.dpad_left && gamepad1.b) {
+                lift.setPower(1, -power);
             }
 //            drive.setWeightedDrivePower(
 //                    new Pose2d(
