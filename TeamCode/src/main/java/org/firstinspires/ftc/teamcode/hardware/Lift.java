@@ -5,6 +5,9 @@ package org.firstinspires.ftc.teamcode.hardware;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -34,19 +37,26 @@ public class Lift extends Mechanism{
     public static double high = 2450;
 
     public static double target = 0;
+    public static double lastTarget = target;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
 
     public static double PULLEY_RADIUS = 0.796975; // inches
-    public static double TICKS_PER_REV = 537.7;
+    public static double TICKS_PER_REV = 141.1; // TPR of 1150rpm is 141.1
 
     public boolean targetReached = false;
 
+    //roadrunner specific things
     public static PIDCoefficients coeff = new PIDCoefficients(0.1, 0, 0);
     public static PIDFController cont = new PIDFController(coeff, kG);
+    public static MotionProfile profile;
+    public static ElapsedTime profileTimer;
+    public static int MAX_VEL = 60;
+    public static int MAX_ACCEL = 60;
+    public static int MAX_JERK = 100; //lol, said the scorpion, lmao
+    public static boolean rrActive = false;
 
-    public static int mode = 0;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -66,6 +76,17 @@ public class Lift extends Mechanism{
 
     public void setTargetPosition(double pos) {
         target = pos;
+        if(rrActive && target != lastTarget) {
+            profile = MotionProfileGenerator.generateSimpleMotionProfile(
+                    new MotionState(lastTarget, 0, 0),
+                    new MotionState(target, 0, 0),
+                    MAX_VEL,
+                    MAX_ACCEL
+
+            );
+            profileTimer.reset();
+            lastTarget = target;
+        }
     }
 
     public void update(int motor) {
@@ -99,6 +120,16 @@ public class Lift extends Mechanism{
             update(0);
             update(1);
         }
+    }
+
+    public void profiledUpdate() {
+        MotionState state = profile.get(profileTimer.seconds());
+        cont.setTargetPosition(state.getX());
+        cont.setTargetVelocity(state.getV());
+        cont.setTargetAcceleration(state.getA());
+        double power = cont.update(motors[0].getCurrentPosition());
+        motors[0].setPower(power);
+        motors[1].setPower(power);
     }
 
     public void loop() {
@@ -136,6 +167,7 @@ public class Lift extends Mechanism{
         motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         target = 0;
+        lastTarget = 0;
         motors[0].setPower(0);
         motors[1].setPower(0);
     }
