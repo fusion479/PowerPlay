@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.protoType;
-
-import android.graphics.Paint;
+package org.firstinspires.ftc.teamcode.opMode.prototype;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,7 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.SleeveVision;
 
 
 @TeleOp (group = "prototype")
-public class camtest extends LinearOpMode {
+public class CamTest extends LinearOpMode {
     SleeveVision vision = new SleeveVision();
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
 

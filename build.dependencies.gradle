@@ -26,4 +26,5 @@ dependencies {
     implementation 'org.openftc:apriltag:1.1.1'
 
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.6'
+    implementation 'com.github.Fission310:FissionLib:1.2.0-beta'
 }

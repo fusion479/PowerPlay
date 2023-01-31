@@ -6,12 +6,12 @@ public class LiftFSM extends Mechanism {
     public Lift lift = new Lift();
     public static double lowerAmount = 475;
     public enum states {
-        low,
-        mid,
-        high,
-        bottom,
-        custom,
-        scoringLowered,
+        LOW,
+        MID,
+        HIGH,
+        BOTTOM,
+        CUSTOM,
+        SCORING_LOWERED,
     };
     public states liftState;
 
@@ -20,57 +20,57 @@ public class LiftFSM extends Mechanism {
     @Override
     public void init(HardwareMap hwMap) {
         lift.init(hwMap);
-        liftState = states.bottom;
+        liftState = states.BOTTOM;
     }
 
     public void loop() {
         switch(liftState) {
-            case low:
-                lift.setTargetPosition(lift.low);
+            case LOW:
+                lift.setTargetPosition(Lift.low);
                 break;
-            case mid:
-                lift.setTargetPosition(lift.mid);
+            case MID:
+                lift.setTargetPosition(Lift.mid);
                 break;
-            case high:
-                lift.setTargetPosition(lift.high);
+            case HIGH:
+                lift.setTargetPosition(Lift.high);
                 break;
-            case bottom:
-                lift.setTargetPosition(lift.bottom);
+            case BOTTOM:
+                lift.setTargetPosition(Lift.bottom);
                 break;
-            case custom:
+            case CUSTOM:
                 lift.setTargetPosition(customHeight);
                 break;
-            case scoringLowered:
+            case SCORING_LOWERED:
                 break;
         }
         lift.loop();
     }
 
     public void high() {
-        liftState = states.high;
+        liftState = states.HIGH;
     }
     public void mid() {
-        liftState = states.mid;
+        liftState = states.MID;
     }
     public void low() {
-        liftState = states.low;
+        liftState = states.LOW;
     }
     public void bottom() {
-        liftState = states.bottom;
+        liftState = states.BOTTOM;
     }
     public void setTargetPosition(double pos) {
         lift.setTargetPosition(pos);
-        liftState = states.custom;
+        liftState = states.CUSTOM;
     }
     public void lowerABit() {
-        if (liftState == states.high) {
+        if (liftState == states.HIGH) {
             lift.setTargetPosition(Lift.high - lowerAmount);
-        } else if (liftState == states.mid) {
+        } else if (liftState == states.MID) {
             lift.setTargetPosition(Lift.mid - lowerAmount);
-        } else if (liftState == states.low) {
+        } else if (liftState == states.LOW) {
             lift.setTargetPosition(Lift.low - lowerAmount);
         }
-        liftState = states.scoringLowered;
+        liftState = states.SCORING_LOWERED;
     }
 
     public boolean targetReached() {

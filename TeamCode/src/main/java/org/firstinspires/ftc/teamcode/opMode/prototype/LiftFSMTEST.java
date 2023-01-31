@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.opMode.protoType;
+package org.firstinspires.ftc.teamcode.opMode.prototype;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.LiftFSM;
 @TeleOp
-public class liftFSMTEST extends LinearOpMode {
+public class LiftFSMTEST extends LinearOpMode {
 
     public LiftFSM lift = new LiftFSM();
 
