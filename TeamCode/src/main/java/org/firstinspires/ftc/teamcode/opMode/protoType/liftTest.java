@@ -46,17 +46,13 @@ public class liftTest extends LinearOpMode {
             if(loopbool != 1 && manbool != 1) {
                 lift.setPower(0);
             }
-            if(gamepad1.dpad_right && gamepad1.a) {
+            if(gamepad1.dpad_right) {
                 lift.setPower(0, power);
-            }
-            if(gamepad1.dpad_left && gamepad1.a) {
                 lift.setPower(1, power);
             }
-            if(gamepad1.dpad_right && gamepad1.b) {
-                lift.setPower(0, -power);
-            }
-            if(gamepad1.dpad_left && gamepad1.b) {
-                lift.setPower(1, -power);
+            if(gamepad1.dpad_left) {
+                lift.setPower(1, power);
+                lift.setPower(0, power);
             }
 //            drive.setWeightedDrivePower(
 //                    new Pose2d(
