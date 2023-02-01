@@ -48,13 +48,14 @@ public class Lift extends Mechanism{
     public boolean targetReached = false;
 
     //roadrunner specific things
-    public static PIDCoefficients coeff = new PIDCoefficients(0.1, 0, 0);
+    public static PIDCoefficients coeff = new PIDCoefficients(kP, 0, 0);
     public static PIDFController cont = new PIDFController(coeff, kG);
     public static MotionProfile profile;
     public static ElapsedTime profileTimer;
     public static int MAX_VEL = 60;
     public static int MAX_ACCEL = 60;
     public static int MAX_JERK = 100; //lol, said the scorpion, lmao
+    public static boolean profileActive = false;
     public static boolean rrActive = false;
 
 
@@ -76,7 +77,7 @@ public class Lift extends Mechanism{
 
     public void setTargetPosition(double pos) {
         target = pos;
-        if(rrActive && target != lastTarget) {
+        if(profileActive && target != lastTarget) {
             profile = MotionProfileGenerator.generateSimpleMotionProfile(
                     new MotionState(lastTarget, 0, 0),
                     new MotionState(target, 0, 0),
@@ -136,8 +137,15 @@ public class Lift extends Mechanism{
         if(limit.isPressed() && !isReset) {
             recalibrate();
         } else {
-            update(0);
-            update(1);
+            if(rrActive) {
+                rrupdate();
+            }
+            if(profileActive) {
+                profiledUpdate();
+            } else {
+                update(0);
+                update(1);
+            }
         }
         isReset = limit.isPressed();
     }
