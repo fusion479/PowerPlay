@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode.opMode.protoType;
+package org.firstinspires.ftc.teamcode.opMode.prototype;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.Arm;
 @Config
 @TeleOp
-public class armTest extends LinearOpMode {
+public class ArmTest extends LinearOpMode {
     public static double pos = 0;
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());

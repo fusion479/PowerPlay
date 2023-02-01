@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.opMode.protoType;
+package org.firstinspires.ftc.teamcode.opMode.prototype;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.ArmFSM;
 @TeleOp
-public class armFSMTEST extends LinearOpMode {
+public class ArmFSMTest extends LinearOpMode {
 
     public ArmFSM arm = new ArmFSM();
     public boolean isPressed = false;
