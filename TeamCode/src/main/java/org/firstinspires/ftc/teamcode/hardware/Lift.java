@@ -65,7 +65,7 @@ public class Lift extends Mechanism{
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
