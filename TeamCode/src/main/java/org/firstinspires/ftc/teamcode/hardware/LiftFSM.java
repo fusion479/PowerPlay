@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LiftFSM extends Mechanism {
     public Lift lift = new Lift();
-    public static double lowerAmount = 475;
+    public static double lowerAmount = 50;
     public enum states {
         LOW,
         MID,
@@ -74,6 +74,6 @@ public class LiftFSM extends Mechanism {
     }
 
     public boolean targetReached() {
-        return lift.targetReached;
+        return lift.isReached();
     }
 }

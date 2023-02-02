@@ -37,8 +37,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     private Encoder leftEncoder, rightEncoder, frontEncoder;
     // x: 50/49.466272502353554 + 50/49.68096645210301 + 50/49.2869229175432 + 50/49.41976823851759 + 50/49.39283574196898
     // y: 50/49.6626437095775 + 50/49.59460500834778 + 50/49.58689479143788 + 50/49.44851181207158 + 50/49.33879937319335
-    public static double X_MULTIPLIER = 1.01114253754715;
-    public static double Y_MULTIPLIER = 1.009570415206362;
+    public static double X_MULTIPLIER = 1;
+    public static double Y_MULTIPLIER = 1;
 
 
     public StandardTrackingWheelLocalizer(HardwareMap hardwareMap) {

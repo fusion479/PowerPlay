@@ -13,8 +13,8 @@ public class Turret extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
     public static double kP = -0.00175;
-    public static double kD = -0.004;
-    public static double kS = 0;
+    public static double kD = 0;
+    public static double kS = 0.17;
     public static double vMax = 1;
     public static double tpd = 2.296875; //encoder res * gear ratio / 360 degrees = ticks per degree
 
@@ -36,11 +36,11 @@ public class Turret extends Mechanism{
         turrs[0] = hwMap.get(DcMotorEx.class, "turr1");
         turrs[1] = hwMap.get(DcMotorEx.class, "turr2");
         turrs[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turrs[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turrs[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turrs[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turrs[0].setDirection(DcMotorSimple.Direction.FORWARD);
         turrs[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turrs[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turrs[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turrs[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         turrs[1].setDirection(DcMotorSimple.Direction.FORWARD);
         setTargetPosition(0);
@@ -93,8 +93,8 @@ public class Turret extends Mechanism{
     public void recalibrate() {
         turrs[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         turrs[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turrs[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        turrs[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turrs[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        turrs[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         target = 0;
         turrs[0].setPower(0);
         turrs[1].setPower(0);

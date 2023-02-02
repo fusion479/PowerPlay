@@ -24,17 +24,17 @@ public class Lift extends Mechanism{
     TouchSensor limit;
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
-    public static double kG = 0.001;
-    public static double kP = -0.0025;
+    public static double kG = -0.3;
+    public static double kP = 0.006;
     public static double kD = 0;
     public static double bound = 50;
     public static double vMax = 1;
 
     //pos
     public static double bottom = 0;
-    public static double low = 300;
-    public static double mid = 1500;
-    public static double high = 2450;
+    public static double low = 0;
+    public static double mid = 350;
+    public static double high = 650;
 
     public static double target = 0;
     public static double lastTarget = target;
@@ -45,7 +45,6 @@ public class Lift extends Mechanism{
     public static double PULLEY_RADIUS = 0.796975; // inches
     public static double TICKS_PER_REV = 141.1; // TPR of 1150rpm is 141.1
 
-    public boolean targetReached = false;
 
     //roadrunner specific things
     public static PIDCoefficients coeff = new PIDCoefficients(kP, 0, 0);
@@ -65,8 +64,8 @@ public class Lift extends Mechanism{
         motors[1] = hwMap.get(DcMotorEx.class, "right");
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motors[0].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[1].setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motors[0].setDirection(DcMotorSimple.Direction.FORWARD);
@@ -86,23 +85,26 @@ public class Lift extends Mechanism{
 
             );
             profileTimer.reset();
-            lastTarget = target;
         }
+        lastTarget = target;
     }
 
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = motors[0].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time;
+        if(getPos() > 300) {
+            pd += kG;
+        }
         if(Math.abs(error) < bound) {
-            pd = 0;
-            targetReached = true;
-        }else {
-            targetReached = false;
+            pd = kG;
+            if(target == 0) {
+                pd = 0;
+            }
         }
         lastError[motor] = error;
         timer.reset();
-        powers[motor] = Range.clip(pd + kG, -vMax, vMax);
+        powers[motor] = Range.clip(pd, -vMax, vMax);
         motors[motor].setPower(powers[motor]);
     }
 
@@ -172,8 +174,8 @@ public class Lift extends Mechanism{
     public void recalibrate() {
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motors[1].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motors[0].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motors[1].setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motors[0].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motors[1].setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         target = 0;
         lastTarget = 0;
         motors[0].setPower(0);
@@ -211,6 +213,10 @@ public class Lift extends Mechanism{
 
     public static double ticksToInches(double ticks) {
         return PULLEY_RADIUS * Math.PI * ticks / TICKS_PER_REV;
+    }
+
+    public boolean isReached() {
+        return (Math.abs(getPos()-target) < bound) && lastTarget == target;
     }
 
 }

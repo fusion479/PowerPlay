@@ -14,13 +14,17 @@ public class POCFollower extends LinearOpMode {
 }
 
 class Localizer extends Mechanism {
+    //pose
+    public double[] pose = new double[3];
+    public double[] lastPos = new double[3];
+
     //motors will act as our encoders
     DcMotor left;
     DcMotor right;
     DcMotor front;
-    double LEFT = 1;
-    double RIGHT = 2;
-    double FRONT = 3;
+    int LEFT = 1;
+    int RIGHT = 2;
+    int FRONT = 3;
 
     //encoder stats
     final double TICKS_PER_REV = 8192; //through bore tpr
@@ -40,9 +44,13 @@ class Localizer extends Mechanism {
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        front.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void loop() {
+
     }
 
     public double getAngularDisplacement(int encoder) {
@@ -59,6 +67,19 @@ class Localizer extends Mechanism {
         return del_theta;
     }
 
+    public void computePose() {
+        double del_theta1 = getAngularDisplacement(LEFT);
+        double del_theta2 = getAngularDisplacement(RIGHT);
+        double del_theta3 = getAngularDisplacement(FRONT);
+
+        double del_x = WHEEL_RADIUS/2 * (del_theta1 + del_theta2);
+        double del_y = WHEEL_RADIUS * (x_0/(2*y_0)*(del_theta1 - del_theta2) + del_theta3);
+        double del_heading = WHEEL_RADIUS/(2*y_0) * (del_theta2-del_theta1);
+
+        pose[0]+=del_x;
+        pose[1]+=del_y;
+        pose[2]+=del_heading;
+    }
 
 
 

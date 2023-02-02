@@ -19,7 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Arm extends Mechanism{
     Servo left, right;
     Servo claw;
-    DistanceSensor distanceSensor;
     //CONSTANTS
     public static double initPos = 0.98;
     public static double pickPos = 0.25;
@@ -37,7 +36,6 @@ public class Arm extends Mechanism{
         claw = hwMap.get(Servo.class, "claw");
         left = hwMap.get(Servo.class, "armLeft");
         right = hwMap.get(Servo.class, "armRight");
-        distanceSensor = hwMap.get(DistanceSensor.class, "distanceSensor");
         resetArm();
         open();
     }
@@ -99,7 +97,4 @@ public class Arm extends Mechanism{
         }
     }
 
-    public boolean coneInClaw() {
-        return (distanceSensor.getDistance(DistanceUnit.MM) < distanceThreshold && !isOpen);
-    }
 }

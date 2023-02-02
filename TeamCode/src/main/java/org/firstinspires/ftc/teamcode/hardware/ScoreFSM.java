@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+@Config
 public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
@@ -13,7 +14,6 @@ public class ScoreFSM extends Mechanism {
 
     public boolean debug = false;
     public static int liftDelay = 300;
-    public static int armDelay = 50;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -35,7 +35,7 @@ public class ScoreFSM extends Mechanism {
     public void loop() {
         switch(scoreStates) {
             case DOWN:
-                if(liftTimer.milliseconds() >= armDelay) {
+                if(liftTimer.milliseconds() >= liftDelay) {
                     scoreStates = states.IDLE_UP;
                 }
 //                if(liftTimer.milliseconds() >= liftDelay) {  --since armDelay < liftDelay, this branch is NEVER CALLED
@@ -50,38 +50,34 @@ public class ScoreFSM extends Mechanism {
                 lift.bottom();
                 break;
             case IDLE_DOWN:
+                lift.bottom();
                 if(lift.targetReached()) {
                     arm.down();
-                    if(arm.hasCone()) {
-                        liftTimer.reset();          //little finnicky but should replace the armtimer
-                        scoreStates = states.DOWN;  //if you have a cone while arm is down, it uses the arm delay to send the cone up
-                    }                               //there is a possibility that all of this stupid distance sensor shit will completely destroy the loop time
-                }                                   //and lag it to hell and back
-                lift.bottom();
+                }
                 break;
             case READY_HIGH:
+                lift.high();
                 if(lift.targetReached()) {
                     arm.ready();
                 }
-                lift.high();
                 break;
             case READY_MEDIUM:
+                lift.mid();
                 if(lift.targetReached()) {
                     arm.ready();
                 }
-                lift.mid();
                 break;
             case READY_LOW:
+                lift.low();
                 if(lift.targetReached()) {
                     arm.ready();
                 }
-                lift.low();
                 break;
             case READY_BOTTOM:
+                lift.bottom();
                 if(lift.targetReached()) {
                     arm.ready();
                 }
-                lift.bottom();
                 break;
             case SCORE:
                 liftTimer.reset();

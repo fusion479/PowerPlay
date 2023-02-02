@@ -41,6 +41,8 @@ public class ScoreFSMTest extends LinearOpMode {
             isPressedy = gamepad1.y;
             isPressedx = gamepad1.x;
             score.loop();
+            telemetry.addData("isreached", score.lift.targetReached());
+            telemetry.update();
         }
     }
 }
