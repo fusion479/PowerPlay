@@ -59,7 +59,7 @@ public class LiftFSM extends Mechanism {
         liftState = states.BOTTOM;
     }
     public void setTargetPosition(double pos) {
-        lift.setTargetPosition(pos);
+        customHeight = pos;
         liftState = states.CUSTOM;
     }
     public void lowerABit() {

@@ -14,6 +14,7 @@ public class ScoreFSM extends Mechanism {
 
     public boolean debug = false;
     public static int liftDelay = 300;
+    public double customPos = 0;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -43,7 +44,8 @@ public class ScoreFSM extends Mechanism {
 //                }
                 break;
             case CUSTOM:
-                arm.down(); //lift.setTargetPosition(cone) should be moved here, it makes more sense readability wise
+                lift.setTargetPosition(customPos);
+                arm.down();
                 break;
             case IDLE_UP:
                 arm.up();
@@ -157,7 +159,7 @@ public class ScoreFSM extends Mechanism {
         scoreStates = states.IDLE_DOWN;
     }
     public void setTargetPosition(double pos) {
-        lift.setTargetPosition(pos);
+        customPos = pos;
         scoreStates = states.CUSTOM;
     }
     public void debug(boolean isTrue) {

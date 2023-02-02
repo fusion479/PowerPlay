@@ -32,7 +32,7 @@ public class LiftTest extends LinearOpMode {
         arm.close();
         waitForStart();
         while(opModeIsActive()) {
-            arm.place();
+            arm.pick();
             lift.setTargetPosition(target);
             if(loopbool == 1) {
                 manbool = 0;

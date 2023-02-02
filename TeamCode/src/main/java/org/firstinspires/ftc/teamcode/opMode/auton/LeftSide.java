@@ -26,10 +26,11 @@ public class LeftSide extends LinearOpMode {
 
     public static double turretScore = 45;
     public static double turretPick = 180;
-    public static double liftAfterGrabDelay = 0.0005;
-    public static double turretAfterGrabDelay = .15;
+    public static double liftAfterGrabDelay = 0.2;
+    public static double turretAfterGrabDelay = .25;
     public static double scoreDelay = .35;
     public static double turretAfterScoreDelay = .6;
+    public static double slidesAfterScoreDelay = 1.0;
 
 
     @Override
@@ -59,12 +60,12 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.score();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.02, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(slidesAfterScoreDelay, () -> {
                     score.idleD();
-                    score.setTargetPosition(0);
+                    score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
                 // END PRELOAD
 
@@ -85,34 +86,13 @@ public class LeftSide extends LinearOpMode {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(slidesAfterScoreDelay, () -> {
                     score.idleD();
-                    score.setTargetPosition(1);
+                    score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
                 .waitSeconds(.8)
                 //END CYCLE 1
-
-
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36, 12))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.score();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                    score.idleD();
-                    score.setTargetPosition(2);
-                })
-                .waitSeconds(.8)
-                // END CYCLE 2
                 .build();
 
         score.toggleClaw();
