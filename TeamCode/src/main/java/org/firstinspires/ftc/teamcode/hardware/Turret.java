@@ -12,16 +12,16 @@ public class Turret extends Mechanism{
     DcMotorEx turrs[] = new DcMotorEx[2];
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
-    public static double kP = -0.00175;
+    public static double kP = -0.0016;
     public static double kD = 0;
-    public static double kS = 0.17;
+    public static double kS = 0.2;
     public static double vMax = 1;
     public static double tpd = 2.296875; //encoder res * gear ratio / 360 degrees = ticks per degree
 
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0, 0};
-    public static double bound = 10; //error bound for turret
+    public static double bound = 5; //error bound for turret
 
     public static double incremenet = 4;
     public static double side = 1;
@@ -29,6 +29,8 @@ public class Turret extends Mechanism{
     public static double pick = 350;
 
     public static double score = 100;
+
+    public static boolean isPicking = false;
 
 
     @Override
@@ -50,14 +52,14 @@ public class Turret extends Mechanism{
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = turrs[motor].getCurrentPosition() - target;
-        double pd = kP * error + kD * (error-lastError[motor]) / time;
+        double pd = kP * error + kD * (error-lastError[motor]) / time - kS*Math.signum(error);
         lastError[motor] = error;
         timer.reset();
-        powers[motor] = Range.clip(pd - kS*Math.signum(error), -vMax, vMax);
+        powers[motor] = Range.clip(pd, -vMax, vMax);
         if(Math.abs(error) < bound) {
             pd = 0;
         }
-        turrs[motor].setPower(Range.clip(pd - kS * Math.signum(error), -vMax, vMax));
+        turrs[motor].setPower(Range.clip(pd, -vMax, vMax));
     }
 
     public void loop() {
@@ -115,10 +117,35 @@ public class Turret extends Mechanism{
 
     public void pick() {
         setTargetPosition(side*pick);
+        isPicking = true;
     }
 
     public void score() {
         setTargetPosition(side*score);
+        isPicking = false;
+    }
+
+    public void toggleTurret() {
+        if(isPicking) {
+            score();
+        }else {
+            pick();
+        }
+    }
+
+    public void center() {
+        setTargetPosition(0);
+        isPicking = false;
+    }
+
+    public void down() {
+        setTargetPosition(side*413);
+        isPicking = false;
+    }
+
+    public void sideways() {
+        setTargetPosition(side*207);
+        isPicking = false;
     }
 
 

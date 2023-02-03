@@ -13,10 +13,18 @@ public class POCFollower extends LinearOpMode {
     }
 }
 
+class Follower extends Mechanism {
+
+    @Override
+    public void init(HardwareMap hwMap) {
+
+    }
+}
+
 class Localizer extends Mechanism {
     //pose
     public double[] pose = new double[3];
-    public double[] lastPos = new double[3];
+    public double[] lastThetas = new double[3];
 
     //motors will act as our encoders
     DcMotor left;
@@ -49,10 +57,6 @@ class Localizer extends Mechanism {
         front.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void loop() {
-
-    }
-
     public double getAngularDisplacement(int encoder) {
         double del_theta = 0;
         if(encoder == LEFT) {
@@ -68,9 +72,9 @@ class Localizer extends Mechanism {
     }
 
     public void computePose() {
-        double del_theta1 = getAngularDisplacement(LEFT);
-        double del_theta2 = getAngularDisplacement(RIGHT);
-        double del_theta3 = getAngularDisplacement(FRONT);
+        double del_theta1 = getAngularDisplacement(LEFT) - lastThetas[0];
+        double del_theta2 = getAngularDisplacement(RIGHT) - lastThetas[1];
+        double del_theta3 = getAngularDisplacement(FRONT) - lastThetas[2];
 
         double del_x = WHEEL_RADIUS/2 * (del_theta1 + del_theta2);
         double del_y = WHEEL_RADIUS * (x_0/(2*y_0)*(del_theta1 - del_theta2) + del_theta3);
@@ -79,7 +83,23 @@ class Localizer extends Mechanism {
         pose[0]+=del_x;
         pose[1]+=del_y;
         pose[2]+=del_heading;
+        lastThetas[0] += del_theta1;
+        lastThetas[1] += del_theta2;
+        lastThetas[2] += del_theta3;
     }
+
+    public double getX() {
+        return pose[0];
+    }
+
+    public double getY() {
+        return pose[1];
+    }
+
+    public double getHeading() {
+        return pose[3];
+    }
+
 
 
 

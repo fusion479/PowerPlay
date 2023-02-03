@@ -20,6 +20,8 @@ public class Robot extends Mechanism {
     public boolean isPresseda = false;
     public boolean isPressedRB = false;
     public boolean isPressedLB = false;
+    public boolean isPressedRT = false;
+    public boolean isPressedLT = false;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -68,21 +70,30 @@ public class Robot extends Mechanism {
         score.loop();
     }
     public void turr(Gamepad gamepad) {
-        if(gamepad.right_trigger > 0) {
-            turret.score();
+        if(!isPressedRT && gamepad.right_trigger >=0.75) {
+            turret.side = -1;
+            turret.toggleTurret();
         }
-        if(gamepad.left_trigger > 0) {
-            turret.pick();
+        if(!isPressedLT && gamepad.left_trigger >= 0.75) {
+            turret.side = 1;
+            turret.toggleTurret();
         }
-        if(gamepad.dpad_up || gamepad.dpad_down) {
-            turret.setTargetPosition(0);
+        if(gamepad.dpad_up) {
+            turret.center();
+        }
+        if(gamepad.dpad_down) {
+            turret.down();
         }
         if(gamepad.dpad_left) {
             turret.side = 1;
+            turret.sideways();
         }
         if(gamepad.dpad_right) {
             turret.side = -1;
+            turret.sideways();
         }
+        isPressedLT = gamepad.left_trigger >= 0.75;
+        isPressedRT = gamepad.right_trigger >= 0.75;
         turret.loop();
     }
 
