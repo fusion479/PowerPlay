@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opMode.auton;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 @Config
 public class AutoConstants {
@@ -39,16 +40,16 @@ public class AutoConstants {
     // BLUE LEFT
 
     public static double BL_SCORE_X = 36;
-    public static double BL_SCORE_Y = 12;
+    public static double BL_SCORE_Y = 10;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 54.9;
+    public static double BL_STACK_X = 54;
     public static double BL_STACK_Y = 12;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 
     public static final Pose2d BL_START = new Pose2d(START_X, START_Y, START_HEADING);
     public static final Pose2d BL_SCORE = new Pose2d(BL_SCORE_X, BL_SCORE_Y, BL_SCORE_HEADING);
-    public static final Pose2d BL_STACK = new Pose2d(BL_STACK_X, BL_STACK_Y, BL_STACK_HEADING);
+    public static final Vector2d BL_STACK = new Vector2d(BL_STACK_X, BL_STACK_Y);
     public static final Pose2d BL_PARK_LEFT = new Pose2d(LPL_X, PARK_Y, PARK_HEADING);
     public static final Pose2d BL_PARK_MIDDLE = new Pose2d(LPM_X, PARK_Y, PARK_HEADING);
     public static final Pose2d BL_PARK_RIGHT = new Pose2d(LPR_X, PARK_Y, PARK_HEADING);

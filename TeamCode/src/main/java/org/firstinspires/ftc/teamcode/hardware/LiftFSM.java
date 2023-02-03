@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Config
 public class LiftFSM extends Mechanism {
     public Lift lift = new Lift();
-    public static double lowerAmount = 50;
+    public static double lowerAmount = 125;
     public enum states {
         LOW,
         MID,

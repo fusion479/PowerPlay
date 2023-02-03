@@ -9,11 +9,12 @@ public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
     ElapsedTime liftTimer = new ElapsedTime();
-    ElapsedTime armTimer = new ElapsedTime();
+    ElapsedTime clawTimer = new ElapsedTime();
     MultipleTelemetry tele = new MultipleTelemetry();
 
     public boolean debug = false;
     public static int liftDelay = 300;
+    public static int clawDelay = 150;
     public double customPos = 0;
     public enum states {
         DOWN,
@@ -84,15 +85,17 @@ public class ScoreFSM extends Mechanism {
             case SCORE:
                 liftTimer.reset();
                 lift.lowerABit();
-                arm.open();
-                scoreStates = states.DOWN;
+                if (clawTimer.milliseconds() >= clawDelay) {
+                    arm.open();
+                    scoreStates = states.DOWN;
+                }
                 break;
         }
         arm.loop();
         lift.loop();
         if(debug) { //telemetry is laggy and will hurt loop time, honestly this shouldn't really be in the class it should be in a debug teleopmode itself
             tele.addData("liftTimer: ", liftTimer.milliseconds());
-            tele.addData("armTimer: ", armTimer.milliseconds());
+            tele.addData("armTimer: ", clawTimer.milliseconds());
             tele.update();
         }
     }
@@ -149,6 +152,7 @@ public class ScoreFSM extends Mechanism {
         scoreStates = states.READY_LOW;
     }
     public void score() {
+        clawTimer.reset();
         scoreStates = states.SCORE;
     }
     public void down() {scoreStates = states.DOWN;}

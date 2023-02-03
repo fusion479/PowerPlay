@@ -21,7 +21,7 @@ public class Turret extends Mechanism{
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0, 0};
-    public static double bound = 10; //error bound for turret
+    public static double bound = 5; //error bound for turret
 
     public static double incremenet = 4;
     public static double side = 1;
