@@ -9,11 +9,13 @@ public class ScoreFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
     ElapsedTime liftTimer = new ElapsedTime();
-    ElapsedTime armTimer = new ElapsedTime();
+    ElapsedTime clawTimer = new ElapsedTime();
     MultipleTelemetry tele = new MultipleTelemetry();
 
     public boolean debug = false;
     public static int liftDelay = 300;
+    public static int clawDelay = 150;
+    public double customPos = 0;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -43,7 +45,8 @@ public class ScoreFSM extends Mechanism {
 //                }
                 break;
             case CUSTOM:
-                arm.down(); //lift.setTargetPosition(cone) should be moved here, it makes more sense readability wise
+                lift.setTargetPosition(customPos);
+                arm.down();
                 break;
             case IDLE_UP:
                 arm.up();
@@ -82,15 +85,17 @@ public class ScoreFSM extends Mechanism {
             case SCORE:
                 liftTimer.reset();
                 lift.lowerABit();
-                arm.open();
-                scoreStates = states.DOWN;
+                if (clawTimer.milliseconds() >= clawDelay) {
+                    arm.open();
+                    scoreStates = states.DOWN;
+                }
                 break;
         }
         arm.loop();
         lift.loop();
         if(debug) { //telemetry is laggy and will hurt loop time, honestly this shouldn't really be in the class it should be in a debug teleopmode itself
             tele.addData("liftTimer: ", liftTimer.milliseconds());
-            tele.addData("armTimer: ", armTimer.milliseconds());
+            tele.addData("armTimer: ", clawTimer.milliseconds());
             tele.update();
         }
     }
@@ -147,6 +152,7 @@ public class ScoreFSM extends Mechanism {
         scoreStates = states.READY_LOW;
     }
     public void score() {
+        clawTimer.reset();
         scoreStates = states.SCORE;
     }
     public void down() {scoreStates = states.DOWN;}
@@ -157,7 +163,7 @@ public class ScoreFSM extends Mechanism {
         scoreStates = states.IDLE_DOWN;
     }
     public void setTargetPosition(double pos) {
-        lift.setTargetPosition(pos);
+        customPos = pos;
         scoreStates = states.CUSTOM;
     }
     public void debug(boolean isTrue) {

@@ -69,7 +69,7 @@ public class FSM extends LinearOpMode {
             .build();
 
     TrajectorySequence toStack = drive.trajectorySequenceBuilder(preload.end())
-            .lineToLinearHeading(AutoConstants.BL_STACK)
+            .lineTo(AutoConstants.BL_STACK)
             .build();
 
     TrajectorySequence toPole = drive.trajectorySequenceBuilder(toStack.end())

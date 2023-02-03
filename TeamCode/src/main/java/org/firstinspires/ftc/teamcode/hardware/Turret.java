@@ -52,7 +52,7 @@ public class Turret extends Mechanism{
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = turrs[motor].getCurrentPosition() - target;
-        double pd = kP * error + kD * (error-lastError[motor]) / time - kS*Math.signum(error);
+        double pd = kP * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
         lastError[motor] = error;
         timer.reset();
         powers[motor] = Range.clip(pd, -vMax, vMax);
