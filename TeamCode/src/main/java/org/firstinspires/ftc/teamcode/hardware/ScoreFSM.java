@@ -84,7 +84,6 @@ public class ScoreFSM extends Mechanism {
                 break;
             case SCORE:
                 liftTimer.reset();
-                lift.lowerABit();
                 if (clawTimer.milliseconds() >= clawDelay) {
                     arm.open();
                     scoreStates = states.DOWN;
