@@ -110,7 +110,7 @@ public class FSM extends LinearOpMode {
 
     public Runnable pick = () -> {
         try {
-            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[conesScored - 1]);
+            score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[conesScored - 1]);
             Thread.sleep(600);
             turret.setTargetAngle(turretPickAngle);
             Thread.sleep(700);

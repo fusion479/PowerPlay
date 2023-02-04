@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class LiftFSM extends Mechanism {
     public Lift lift = new Lift();
     public static double lowerAmount = 125;
+    public boolean isAuto = false;
+    public static double autoHigh = 650;
     public enum states {
         LOW,
         MID,
@@ -34,7 +36,11 @@ public class LiftFSM extends Mechanism {
                 lift.setTargetPosition(Lift.mid);
                 break;
             case HIGH:
-                lift.setTargetPosition(Lift.high);
+                if(isAuto) {
+                    lift.setTargetPosition(autoHigh);
+                }else {
+                    lift.setTargetPosition(Lift.high);
+                }
                 break;
             case BOTTOM:
                 lift.setTargetPosition(Lift.bottom);

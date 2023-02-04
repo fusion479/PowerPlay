@@ -64,7 +64,7 @@ public class Bruh extends LinearOpMode {
                 })
                 .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
                     score.idleD();
-                    score.setTargetPosition(0);
+                    score.autoScore(0);
                 })
                 // END PRELOAD
 
@@ -87,7 +87,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                     score.idleD();
-                    score.setTargetPosition(1);
+                    score.autoScore(1);
                 })
                 .waitSeconds(.8)
                 //END CYCLE 1
@@ -111,7 +111,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                     score.idleD();
-                    score.setTargetPosition(2);
+                    score.autoScore(2);
                 })
                 .waitSeconds(.8)
                 // END CYCLE 2

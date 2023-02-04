@@ -15,6 +15,7 @@ public class ScoreFSM extends Mechanism {
     public boolean debug = false;
     public static int liftDelay = 300;
     public static int clawDelay = 150;
+    public static int autoArmDownDelay = 400;
     public double customPos = 0;
     public enum states {
         DOWN,
@@ -24,7 +25,7 @@ public class ScoreFSM extends Mechanism {
         READY_MEDIUM,
         READY_LOW,
         READY_BOTTOM,
-        CUSTOM,
+        AUTO_PICK,
         SCORE
     }
     public states scoreStates;
@@ -38,15 +39,23 @@ public class ScoreFSM extends Mechanism {
         switch(scoreStates) {
             case DOWN:
                 if(liftTimer.milliseconds() >= liftDelay) {
-                    scoreStates = states.IDLE_UP;
+                    if(lift.isAuto) {
+                        clawTimer.reset();
+                        scoreStates = states.AUTO_PICK;
+                    } else {
+                        scoreStates = states.IDLE_UP;
+                    }
                 }
 //                if(liftTimer.milliseconds() >= liftDelay) {  --since armDelay < liftDelay, this branch is NEVER CALLED
 //                    lift.bottom();
 //                }
                 break;
-            case CUSTOM:
+            case AUTO_PICK:
                 lift.setTargetPosition(customPos);
-                arm.down();
+                arm.up();
+                if(clawTimer.milliseconds() >= autoArmDownDelay) {
+                    arm.down();
+                }
                 break;
             case IDLE_UP:
                 arm.up();
@@ -161,9 +170,14 @@ public class ScoreFSM extends Mechanism {
     public void idleD() {
         scoreStates = states.IDLE_DOWN;
     }
+    public void autoScore(double pos) {
+        clawTimer.reset();
+        customPos = pos;
+        scoreStates = states.SCORE;
+    }
+
     public void setTargetPosition(double pos) {
         customPos = pos;
-        scoreStates = states.CUSTOM;
     }
     public void debug(boolean isTrue) {
         debug = isTrue;
