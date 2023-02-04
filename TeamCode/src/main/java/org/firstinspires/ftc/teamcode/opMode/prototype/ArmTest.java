@@ -40,6 +40,9 @@ public class ArmTest extends LinearOpMode {
                 arm.left(1-pos);
             }
             isPressed = gamepad1.a;
+
+            tele.addData("clawopen", arm.isOpen);
+            tele.update();
         }
     }
 }

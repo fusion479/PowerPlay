@@ -39,11 +39,11 @@ public class AutoConstants {
 
     // BLUE LEFT
 
-    public static double BL_SCORE_X = 36;
+    public static double BL_SCORE_X = 33;
     public static double BL_SCORE_Y = 10;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 54;
+    public static double BL_STACK_X = 53;
     public static double BL_STACK_Y = 12;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 

@@ -71,12 +71,20 @@ public class Robot extends Mechanism {
     }
     public void turr(Gamepad gamepad) {
         if(!isPressedRT && gamepad.right_trigger >=0.75) {
-            turret.side = -1;
-            turret.toggleTurret();
+            if(turret.side == 1) {
+                turret.side = -1;
+                turret.score();
+            }else {
+                turret.toggleTurret();
+            }
         }
         if(!isPressedLT && gamepad.left_trigger >= 0.75) {
-            turret.side = 1;
-            turret.toggleTurret();
+            if(turret.side == -1) {
+                turret.side = 1;
+                turret.score();
+            }else {
+                turret.toggleTurret();
+            }
         }
         if(gamepad.dpad_up) {
             turret.center();

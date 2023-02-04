@@ -26,11 +26,11 @@ public class LeftSide extends LinearOpMode {
 
     public static double turretScore = 45;
     public static double turretPick = 183;
-    public static double liftAfterGrabDelay = 0.2;
+    public static double liftAfterGrabDelay = 0.05;
     public static double turretAfterGrabDelay = .25;
-    public static double scoreDelay = .35;
-    public static double turretAfterScoreDelay = .3;
-    public static double slidesAfterScoreDelay = .6;
+    public static double scoreDelay = .15;
+    public static double turretAfterScoreDelay = .40;
+    public static double slidesAfterScoreDelay = .55;
 
 
     @Override
@@ -60,14 +60,14 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.score();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay - .075, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay - .125, () -> {
                     turret.setTargetAngle(turretPick);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(slidesAfterScoreDelay -.075, () -> {
                     score.idleD();
                     score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
-                .waitSeconds(.8)
+                .waitSeconds(.2)
                 // END PRELOAD
 
 
