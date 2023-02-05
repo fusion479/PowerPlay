@@ -55,15 +55,24 @@ public class LiftFSM extends Mechanism {
     }
 
     public void high() {
+        if(liftState != states.HIGH) {
+            lift.isTargetReached = false;
+        }
         liftState = states.HIGH;
     }
     public void mid() {
+        if(liftState != states.MID) {
+            lift.isTargetReached = false;
+        }
         liftState = states.MID;
     }
     public void low() {
         liftState = states.LOW;
     }
     public void bottom() {
+        if(liftState != states.BOTTOM) {
+            lift.isTargetReached = false;
+        }
         liftState = states.BOTTOM;
     }
     public void setTargetPosition(double pos) {

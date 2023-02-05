@@ -41,6 +41,7 @@ public class Lift extends Mechanism{
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
+    public boolean isTargetReached = false;
 
     public static double PULLEY_RADIUS = 0.796975; // inches
     public static double TICKS_PER_REV = 141.1; // TPR of 1150rpm is 141.1
@@ -86,7 +87,6 @@ public class Lift extends Mechanism{
             );
             profileTimer.reset();
         }
-        lastTarget = target;
     }
 
     public void update(int motor) {
@@ -101,6 +101,7 @@ public class Lift extends Mechanism{
             if(target == 0) {
                 pd = 0;
             }
+            isTargetReached = true;
         }
         lastError[motor] = error;
         timer.reset();
@@ -216,7 +217,7 @@ public class Lift extends Mechanism{
     }
 
     public boolean isReached() {
-        return (Math.abs(getPos()-target) < bound) && lastTarget == target;
+        return isTargetReached;
     }
 
 }
