@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Arm;
 @Config
-@TeleOp
+@TeleOp (group = "debug")
 public class ArmTest extends LinearOpMode {
     public static double pos = 0;
     FtcDashboard dashboard = FtcDashboard.getInstance();

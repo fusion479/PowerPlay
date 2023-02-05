@@ -37,7 +37,7 @@ public class AutoConstants {
     public static double FORWARD_DIST = 30;
     public static double LATERAL_DIST = 24;
 
-    // BLUE LEFT
+    // LEFT SIDE
 
     public static double BL_SCORE_X = 33;
     public static double BL_SCORE_Y = 10.6;
@@ -54,4 +54,22 @@ public class AutoConstants {
     public static final Pose2d BL_PARK_LEFT = new Pose2d(LPL_X, PARK_Y, PARK_HEADING);
     public static final Pose2d BL_PARK_MIDDLE = new Pose2d(LPM_X, PARK_Y, PARK_HEADING);
     public static final Pose2d BL_PARK_RIGHT = new Pose2d(LPR_X, PARK_Y, PARK_HEADING);
+
+
+    // RIGHT SIDE
+    public static double BR_SCORE_X = -34;
+    public static double BR_SCORE_Y = 10.6;
+    public static double BR_SCORE_HEADING = Math.toRadians(0);
+
+    public static double BR_STACK_X = -54;
+    public static double BR_STACK_Y = 12;
+    public static double BR_STACK_HEADING = Math.toRadians(0);
+
+    public static final Pose2d BR_START = new Pose2d(-START_X, START_Y, START_HEADING);
+    public static final Pose2d BR_SCORE = new Pose2d(-BR_SCORE_X, BR_SCORE_Y, BR_SCORE_HEADING);
+    public static final Vector2d BR_STACK = new Vector2d(-BR_STACK_X, BR_STACK_Y);
+    public static final Pose2d BR_PARK_LEFT = new Pose2d(RPL_X, PARK_Y, PARK_HEADING);
+    public static final Pose2d BR_PARK_MIDDLE = new Pose2d(RPM_X, PARK_Y, PARK_HEADING);
+    public static final Pose2d BR_PARK_RIGHT = new Pose2d(RPR_X, PARK_Y, PARK_HEADING);
+
 }

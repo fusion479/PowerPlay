@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.SleeveVision;
 
 
-@TeleOp (group = "prototype")
+@TeleOp (group = "debug")
 public class CamTest extends LinearOpMode {
     SleeveVision vision = new SleeveVision();
     private final FtcDashboard dashboard = FtcDashboard.getInstance();

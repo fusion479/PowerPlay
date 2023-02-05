@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Arm;
 import org.firstinspires.ftc.teamcode.hardware.Lift;
 
-@TeleOp
+@TeleOp (group = "debug")
 @Config
 public class LiftTest extends LinearOpMode {
     Lift lift = new Lift();
