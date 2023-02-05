@@ -16,6 +16,7 @@ public class ScoreFSM extends Mechanism {
     public static int liftDelay = 300;
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 400;
+    public static int armRaiseDelay = 200;
     public double customPos = 0;
     public enum states {
         DOWN,
@@ -64,7 +65,11 @@ public class ScoreFSM extends Mechanism {
             case IDLE_DOWN:
                 lift.bottom();
                 if(lift.targetReached()) {
-                    arm.down();
+                    if(!arm.arm.isOpen && clawTimer.milliseconds() > armRaiseDelay) {
+                        arm.up();
+                    }else {
+                        arm.down();
+                    }
                 }
                 break;
             case READY_HIGH:
@@ -117,6 +122,7 @@ public class ScoreFSM extends Mechanism {
             score();
         }else {
             arm.toggleClaw();
+            clawTimer.reset();
         }
     }
 
