@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 
-@TeleOp
+@TeleOp (group = "debug")
 public class ScoreFSMTest extends LinearOpMode {
 
     public ScoreFSM score = new ScoreFSM();

@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 
-@TeleOp
+@TeleOp (group = "debug")
 @Config
-public class turretTest extends LinearOpMode {
+public class TurretTest extends LinearOpMode {
     Turret turret = new Turret();
     FtcDashboard dashboard = FtcDashboard.getInstance();
     MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());

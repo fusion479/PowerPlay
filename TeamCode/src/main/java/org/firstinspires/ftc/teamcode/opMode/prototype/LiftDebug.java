@@ -1,12 +1,11 @@
-package org.firstinspires.ftc.teamcode.opMode.protoType;
+package org.firstinspires.ftc.teamcode.opMode.prototype;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@TeleOp (group = "prototype")
-public class liftDebug extends LinearOpMode {
+@TeleOp (group = "debug")
+public class LiftDebug extends LinearOpMode {
     DcMotor right, left;
 
     @Override

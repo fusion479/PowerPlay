@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.hardware.ArmFSM;
-@TeleOp
+@TeleOp (group = "debug")
 public class ArmFSMTest extends LinearOpMode {
 
     public ArmFSM arm = new ArmFSM();
