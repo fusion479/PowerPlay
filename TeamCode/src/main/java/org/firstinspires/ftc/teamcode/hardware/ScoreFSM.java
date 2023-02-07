@@ -52,7 +52,6 @@ public class ScoreFSM extends Mechanism {
                 break;
             case AUTO_PICK:
                 lift.setTargetPosition(customPos);
-                arm.up();
                 if(clawTimer.milliseconds() >= autoArmDownDelay) {
                     arm.down();
                 }

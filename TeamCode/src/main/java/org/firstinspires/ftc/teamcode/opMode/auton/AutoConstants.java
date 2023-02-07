@@ -40,11 +40,11 @@ public class AutoConstants {
     // BLUE LEFT
 
     public static double BL_SCORE_X = 33;
-    public static double BL_SCORE_Y = 10.6;
+    public static double BL_SCORE_Y = 10;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 54;
-    public static double BL_STACK_Y = 12;
+    public static double BL_STACK_X = 52.6;
+    public static double BL_STACK_Y = 10;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 
     public static final Pose2d BL_START = new Pose2d(START_X, START_Y, START_HEADING);
