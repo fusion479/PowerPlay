@@ -44,6 +44,7 @@ public class ScoreFSM extends Mechanism {
                         clawTimer.reset();
                         scoreStates = states.AUTO_PICK;
                     } else {
+                        lift.bottom();
                         scoreStates = states.IDLE_UP;
                     }
                 }
@@ -60,7 +61,6 @@ public class ScoreFSM extends Mechanism {
                 break;
             case IDLE_UP:
                 arm.up();
-                lift.bottom();
                 break;
             case IDLE_DOWN:
                 lift.bottom();

@@ -119,10 +119,12 @@ public class LeftSide extends LinearOpMode {
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(45);
-                    score.highGoal();
                 })
                 .lineToLinearHeading(new Pose2d(34.5, 10.6, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(0.4, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(.075, () -> {
@@ -332,20 +334,7 @@ public class LeftSide extends LinearOpMode {
             turret.loop();
             drive.update();
 //
-//            switch (tagOfInterest.id) {
-//                case LEFT:
-//                    drive.followTrajectorySequenceAsync(leftPark);
-//                    break;
-//                case RIGHT:
-//                    drive.followTrajectorySequenceAsync(rightPark);
-//                    break;
-//                case MIDDLE:
-//                    drive.followTrajectorySequenceAsync(middlePark);
-//                    break;
-//                default:
-//                    drive.followTrajectorySequenceAsync(middlePark);
-//                    break;
-//            }
+
 
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());

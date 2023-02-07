@@ -71,6 +71,7 @@ public class Bruh extends LinearOpMode {
     public static double liftALittleAfterGrabDelay = 0;
     public static double liftAfterGrabDelay = 0.5;
     public static double turretAfterGrabDelay = 0.1;
+    public static double armRaiseDelay = 0.2;
     public static double scoreDelay = 0.2;
     public static double turretAfterScoreDelay = -0.25;
     public static double slidesAfterScoreDelay = 0.75;
@@ -116,6 +117,8 @@ public class Bruh extends LinearOpMode {
 
         drive.setPoseEstimate(AutoConstants.BL_START);
 
+        TrajectorySequence truePark;
+
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .lineTo(new Vector2d(34.5, 10.6))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -125,7 +128,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
                     score.highGoal();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(0.5, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
                 .waitSeconds(.8)
@@ -142,13 +145,16 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScoreAngle);
                 })
+                .UNSTABLE_addTemporalMarkerOffset(armRaiseDelay, () -> {
+                    score.idleU();
+                })
                 .lineTo(new Vector2d(36, 10))
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -165,13 +171,16 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScoreAngle);
                 })
+                .UNSTABLE_addTemporalMarkerOffset(armRaiseDelay, () -> {
+                    score.idleU();
+                })
                 .lineTo(new Vector2d(36, 10))
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -241,7 +250,6 @@ public class Bruh extends LinearOpMode {
 
         score.toggleClaw();
 
-        waitForStart();
 
         if(tagOfInterest != null) {
             telemetry.addLine("Tag snapshot:\n");
