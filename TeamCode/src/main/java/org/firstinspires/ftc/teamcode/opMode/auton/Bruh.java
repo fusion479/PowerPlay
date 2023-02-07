@@ -25,9 +25,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "Left", group = "_Auto")
+@Autonomous(name = "Bruh", group = "_Auto")
 @Config
-public class LeftSide extends LinearOpMode {
+public class Bruh extends LinearOpMode {
             /*
             TODO: AUTON PLANNING
             Scan AprilTag
@@ -67,12 +67,12 @@ public class LeftSide extends LinearOpMode {
     public static double turretScoreAngle = 47;
     public static double turretPickAngle = 183;
 
-    public static double grabDelay = -0.3;
+    public static double grabDelay = -0.1;
     public static double liftALittleAfterGrabDelay = 0;
-    public static double liftAfterGrabDelay = 0.25;
+    public static double liftAfterGrabDelay = 0.5;
     public static double turretAfterGrabDelay = 0.1;
     public static double scoreDelay = 0.2;
-    public static double turretAfterScoreDelay = 0.75;
+    public static double turretAfterScoreDelay = -0.25;
     public static double slidesAfterScoreDelay = 0.75;
     public static double liftHeightMod = 200;
 
@@ -117,22 +117,25 @@ public class LeftSide extends LinearOpMode {
         drive.setPoseEstimate(AutoConstants.BL_START);
 
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
-                .addTemporalMarker(0, () -> {
+                .lineTo(new Vector2d(34.5, 10.6))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     turret.setTargetAngle(45);
+                })
+                .turn(Math.toRadians(-90))
+                .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(34.5, 10.6, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(.075, () -> {
-                    turret.setTargetAngle(turretPickAngle);
                 })
                 .waitSeconds(.8)
                 // END PRELOAD
 
 
                 .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPickAngle);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -149,13 +152,13 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPickAngle);
-                })
                 .waitSeconds(.8)
                 // END CYCLE 1
 
                 .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPickAngle);
+                })
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -168,87 +171,11 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScoreAngle);
                 })
-                .lineTo(new Vector2d(35, 10))
+                .lineTo(new Vector2d(36, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPickAngle);
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
                 .waitSeconds(.8)
-                //END CYCLE 2
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScoreAngle);
-                })
-                .lineTo(new Vector2d(35, 10))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPickAngle);
-                })
-                .waitSeconds(.8)
-                //END CYCLE 3
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(49);
-                })
-                .lineTo(new Vector2d(34, 10))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPickAngle);
-                })
-                .waitSeconds(.8)
-                //END CYCLE 4
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(49);
-                })
-                .lineTo(new Vector2d(34, 10))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.score();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(0);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(slidesAfterScoreDelay, () -> {
-                    score.idleD();
-                })
-                .waitSeconds(.8)
-                //END CYCLE 5
                 .build();
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
@@ -331,21 +258,6 @@ public class LeftSide extends LinearOpMode {
             score.loop();
             turret.loop();
             drive.update();
-//
-//            switch (tagOfInterest.id) {
-//                case LEFT:
-//                    drive.followTrajectorySequenceAsync(leftPark);
-//                    break;
-//                case RIGHT:
-//                    drive.followTrajectorySequenceAsync(rightPark);
-//                    break;
-//                case MIDDLE:
-//                    drive.followTrajectorySequenceAsync(middlePark);
-//                    break;
-//                default:
-//                    drive.followTrajectorySequenceAsync(middlePark);
-//                    break;
-//            }
 
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.addData("x", poseEstimate.getX());
