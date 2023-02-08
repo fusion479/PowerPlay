@@ -24,12 +24,17 @@ public class Bruh extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 45;
-    public static double turretPick = 180;
-    public static double liftAfterGrabDelay = 0.0005;
-    public static double turretAfterGrabDelay = .15;
-    public static double scoreDelay = .35;
-    public static double turretAfterScoreDelay = .6;
+    public static double turretScore = 90;
+    public static double turretPick = 183;
+
+    public static double grabDelay = -0.3;
+    public static double liftALittleAfterGrabDelay = -.01;
+    public static double liftAfterGrabDelay = 0.45;
+    public static double turretAfterGrabDelay = 0.15;
+    public static double scoreDelay = 0.2;
+    public static double turretAfterScoreDelay = 1.05;
+    public static double slidesAfterScoreDelay = 0.75;
+    public static double liftHeightMod = 200;
 
 
     @Override
@@ -44,6 +49,7 @@ public class Bruh extends LinearOpMode {
 
         score = new ScoreFSM();
         score.init(hardwareMap);
+        score.lift.isAuto = true;
 
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
@@ -52,26 +58,28 @@ public class Bruh extends LinearOpMode {
 
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .addTemporalMarker(0, () -> {
-                    turret.setTargetAngle(turretScore);
+                    turret.setTargetAngle(45);
+                })
+                .addTemporalMarker(.8, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(36, 12, drive.getPoseEstimate().getHeading()+Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(33, 10, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.score();
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.02, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(.2, () -> {
-                    score.idleD();
-                    score.autoScore(0);
-                })
+                .waitSeconds(.8)
                 // END PRELOAD
 
 
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
                     score.highGoal();
@@ -79,23 +87,22 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .waitSeconds(1)
-                .lineTo(new Vector2d(36, 12))
+                .lineTo(new Vector2d(48, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.score();
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
-                    score.idleD();
-                    score.autoScore(1);
                 })
                 .waitSeconds(.8)
-                //END CYCLE 1
+                // END CYCLE 1
 
-
-                .lineTo(new Vector2d(AutoConstants.BL_STACK_X, 12))
-                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
                     score.highGoal();
@@ -103,18 +110,66 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .waitSeconds(1)
-                .lineTo(new Vector2d(36, 12))
+                .lineTo(new Vector2d(48, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.score();
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
-                    score.idleD();
-                    score.autoScore(2);
                 })
                 .waitSeconds(.8)
-                // END CYCLE 2
+                //END CYCLE 2
+
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
+                    score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
+                    turret.setTargetAngle(turretScore);
+                })
+                .lineTo(new Vector2d(32.45, 10))
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPick);
+                })
+                .waitSeconds(.8)
+                //END CYCLE 3
+
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
+                    score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
+                    turret.setTargetAngle(turretScore);
+                })
+                .lineTo(new Vector2d(48, 10))
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPick);
+                })
+                .waitSeconds(.8)
+                //END CYCLE 4
+                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
+                    score.down();
+                    turret.setTargetAngle(0);
+                    score.idleU();
+                })
                 .build();
 
         score.toggleClaw();

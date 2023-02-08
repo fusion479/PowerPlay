@@ -92,10 +92,18 @@ public class ScoreFSM extends Mechanism {
                 break;
             case SCORE:
                 liftTimer.reset();
-                if (clawTimer.milliseconds() >= clawDelay) {
-                    arm.open();
-                    scoreStates = states.DOWN;
+                if (lift.isAuto) {
+                    arm.down();
+                    if(clawTimer.milliseconds() >= 400) {
+                        arm.open();
+                    }
+                } else {
+                    if (clawTimer.milliseconds() >= clawDelay) {
+                        arm.open();
+                        scoreStates = states.DOWN;
+                    }
                 }
+
                 break;
         }
         arm.loop();
