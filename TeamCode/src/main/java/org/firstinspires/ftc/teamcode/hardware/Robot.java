@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-
+@Config
 public class Robot extends Mechanism {
     public SampleMecanumDrive drive;
     public Turret turret = new Turret();
@@ -22,6 +23,7 @@ public class Robot extends Mechanism {
     public boolean isPressedLB = false;
     public boolean isPressedRT = false;
     public boolean isPressedLT = false;
+    public static boolean isAuto = false;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -30,6 +32,7 @@ public class Robot extends Mechanism {
         turret.init(hwMap);
         score.init(hwMap);
         odoLift = hwMap.get(Servo.class, "odoLiftF");
+        score.lift.isAuto = isAuto;
     }
     public void run(Gamepad gamepad) {
         move(gamepad);

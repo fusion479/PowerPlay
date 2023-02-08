@@ -23,6 +23,7 @@ public class Arm extends Mechanism{
     public static double initPos = 0.98;
     public static double pickPos = 0.25;
     public static double placePos = 0.7;
+    public static double autoPos = 0.5;
             ;
     public static double close = 0.545;
     public static double open = 0.32;
@@ -55,6 +56,11 @@ public class Arm extends Mechanism{
     public void place() {
         left.setPosition(placePos);
         right.setPosition(1-placePos);
+    }
+
+    public void autoDunk() {
+        left.setPosition(autoPos);
+        right.setPosition(1-autoPos);
     }
 
     public void open() {

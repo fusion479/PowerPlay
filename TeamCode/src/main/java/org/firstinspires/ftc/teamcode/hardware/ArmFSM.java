@@ -10,6 +10,7 @@ public class ArmFSM extends Mechanism {
         down,
         up,
         ready,
+        autoDunk,
     }
     public states armStates;
     @Override
@@ -27,6 +28,9 @@ public class ArmFSM extends Mechanism {
                 break;
             case ready:
                 arm.place();
+                break;
+            case autoDunk:
+                arm.autoDunk();
                 break;
         }
     }
@@ -53,6 +57,10 @@ public class ArmFSM extends Mechanism {
 
     public void down() {
         armStates = states.down;
+    }
+
+    public void autoDunk() {
+        armStates = states.autoDunk;
     }
 
     public void open() {

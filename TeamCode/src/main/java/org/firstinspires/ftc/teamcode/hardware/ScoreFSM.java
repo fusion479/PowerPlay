@@ -14,9 +14,11 @@ public class ScoreFSM extends Mechanism {
 
     public boolean debug = false;
     public static int liftDelay = 300;
+    public static int autoLiftDelay = 500;
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 400;
     public static int armRaiseDelay = 200;
+    public static int armDunkDelay = 100;
     public double customPos = 0;
     public enum states {
         DOWN,
@@ -39,14 +41,15 @@ public class ScoreFSM extends Mechanism {
     public void loop() {
         switch(scoreStates) {
             case DOWN:
-                if(liftTimer.milliseconds() >= liftDelay) {
-                    if(lift.isAuto) {
-                        clawTimer.reset();
-                        scoreStates = states.AUTO_PICK;
-                    } else {
-                        lift.bottom();
-                        scoreStates = states.IDLE_UP;
+                if(lift.isAuto) {
+                    if(lift.isAuto && liftTimer.milliseconds() >= autoLiftDelay) {
+                    clawTimer.reset();
+                    arm.open();
+                    scoreStates = states.AUTO_PICK;
                     }
+                }else if(liftTimer.milliseconds() >= liftDelay) {
+                    lift.bottom();
+                    scoreStates = states.IDLE_UP;
                 }
 //                if(liftTimer.milliseconds() >= liftDelay) {  --since armDelay < liftDelay, this branch is NEVER CALLED
 //                    lift.bottom();
@@ -65,40 +68,47 @@ public class ScoreFSM extends Mechanism {
             case IDLE_DOWN:
                 lift.bottom();
                 if(lift.targetReached()) {
-                    if(!arm.arm.isOpen && clawTimer.milliseconds() > armRaiseDelay) {
-                        arm.up();
-                    }else {
-                        arm.down();
-                    }
+                    arm.down();
                 }
                 break;
             case READY_HIGH:
                 lift.high();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_MEDIUM:
                 lift.mid();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_LOW:
                 lift.low();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_BOTTOM:
                 lift.bottom();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case SCORE:
                 liftTimer.reset();
-                if (clawTimer.milliseconds() >= clawDelay) {
+                if(lift.isAuto) {
+                    arm.autoDunk();
+                    scoreStates = states.DOWN;
+                }else if (clawTimer.milliseconds() >= clawDelay) {
                     arm.open();
                     scoreStates = states.DOWN;
                 }
@@ -122,7 +132,6 @@ public class ScoreFSM extends Mechanism {
             score();
         }else {
             arm.toggleClaw();
-            clawTimer.reset();
         }
     }
 
@@ -166,7 +175,6 @@ public class ScoreFSM extends Mechanism {
         scoreStates = states.READY_LOW;
     }
     public void score() {
-        clawTimer.reset();
         scoreStates = states.SCORE;
     }
     public void down() {scoreStates = states.DOWN;}
