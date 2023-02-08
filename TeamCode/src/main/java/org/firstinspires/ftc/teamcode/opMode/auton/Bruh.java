@@ -24,7 +24,7 @@ public class Bruh extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 90;
+    public static double turretScore = 45;
     public static double turretPick = 183;
 
     public static double grabDelay = -0.3;
@@ -60,10 +60,10 @@ public class Bruh extends LinearOpMode {
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(45);
                 })
-                .addTemporalMarker(.8, () -> {
+                .addTemporalMarker(1.4, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(33, 10, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(37.5, 12, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -87,7 +87,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(48, 10))
+                .lineTo(new Vector2d(37.5, 12))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -110,7 +110,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(48, 10))
+                .lineTo(new Vector2d(37.5, 12))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -133,7 +133,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(32.45, 10))
+                .lineTo(new Vector2d(37.5, 12))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -156,7 +156,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(48, 10))
+                .lineTo(new Vector2d(37.5, 12))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
