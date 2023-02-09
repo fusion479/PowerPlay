@@ -18,7 +18,7 @@ public class AutoConstants {
     public static double START_Y = 70.5 - (13.3858/2);
     public static double START_HEADING = Math.toRadians(270);
 
-    public static double[] STACK_SLIDES_POSITIONS = {170, 140, 95, 45, 0};
+    public static double[] STACK_SLIDES_POSITIONS = {160, 130, 70, 30, 0};
 
     // LEFT PARKING VALUES
     public static double LPL_X = 12;
@@ -40,11 +40,11 @@ public class AutoConstants {
     // BLUE LEFT
 
     public static double BL_SCORE_X = 33;
-    public static double BL_SCORE_Y = 10;
+    public static double BL_SCORE_Y = 12;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 52.6;
-    public static double BL_STACK_Y = 10;
+    public static double BL_STACK_X = 51.5;
+    public static double BL_STACK_Y = 12;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 
     public static final Pose2d BL_START = new Pose2d(START_X, START_Y, START_HEADING);

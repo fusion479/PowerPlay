@@ -46,9 +46,6 @@ public class ScoreFSM extends Mechanism {
                         scoreStates = states.IDLE_UP;
                     }
                 }
-//                if(liftTimer.milliseconds() >= liftDelay) {  --since armDelay < liftDelay, this branch is NEVER CALLED
-//                    lift.bottom();
-//                }
                 break;
             case AUTO_PICK:
                 lift.setTargetPosition(customPos);
@@ -91,15 +88,18 @@ public class ScoreFSM extends Mechanism {
                 }
                 break;
             case SCORE:
-                liftTimer.reset();
                 if (lift.isAuto) {
                     arm.down();
                     if(clawTimer.milliseconds() >= 400) {
                         arm.open();
+                        liftTimer.reset();
+                        scoreStates = states.DOWN;
                     }
                 } else {
+                    lift.lowerABit();
                     if (clawTimer.milliseconds() >= clawDelay) {
                         arm.open();
+                        liftTimer.reset();
                         scoreStates = states.DOWN;
                     }
                 }

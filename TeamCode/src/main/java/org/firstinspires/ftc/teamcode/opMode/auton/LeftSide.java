@@ -24,7 +24,7 @@ public class LeftSide extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 47;
+    public static double turretScore = 45;
     public static double turretPick = 183;
 
     public static double grabDelay = -0.3;
@@ -63,7 +63,7 @@ public class LeftSide extends LinearOpMode {
                 .addTemporalMarker(.8, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(33, 10, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(37.5, 10, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -87,7 +87,7 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(32.6, 10))
+                .lineTo(new Vector2d(37.5, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -110,7 +110,7 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(32.6, 10))
+                .lineTo(new Vector2d(37.5, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -133,7 +133,7 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(32.45, 10))
+                .lineTo(new Vector2d(37.5, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -156,7 +156,7 @@ public class LeftSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(32.3, 10))
+                .lineTo(new Vector2d(37.5, 10))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
