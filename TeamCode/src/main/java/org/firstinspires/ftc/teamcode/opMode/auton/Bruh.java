@@ -59,10 +59,11 @@ public class Bruh extends LinearOpMode {
     public static double liftALittleAfterGrabDelay = -.01;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
-    public static double scoreDelay = 0.2;
+    public static double scoreDelay = 0;
     public static double turretAfterScoreDelay = .85;
     public static double slidesAfterScoreDelay = 0.75;
     public static double liftHeightMod = 175;
+    public static double cycleDelay = .625;
 
     public static boolean isParked = false;
 
@@ -90,7 +91,7 @@ public class Bruh extends LinearOpMode {
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(45);
                 })
-                .addTemporalMarker(2.5, () -> {
+                .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
                 .lineToLinearHeading(new Pose2d(37.5, 12, Math.toRadians(180)))
@@ -100,7 +101,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .waitSeconds(.8)
+                .waitSeconds(cycleDelay)
                 // END PRELOAD
 
 
@@ -124,7 +125,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .waitSeconds(.8)
+                .waitSeconds(cycleDelay)
                 // END CYCLE 1
 
                 .lineTo(AutoConstants.BL_STACK)
@@ -147,7 +148,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .waitSeconds(.8)
+                .waitSeconds(cycleDelay)
                 //END CYCLE 2
 
                 .lineTo(AutoConstants.BL_STACK)
@@ -170,7 +171,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
                 })
-                .waitSeconds(.8)
+                .waitSeconds(cycleDelay)
                 //END CYCLE 3
 
                 .lineTo(AutoConstants.BL_STACK)
@@ -186,17 +187,44 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36, 10.8))
+                .lineTo(new Vector2d(36, 10.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
-                .waitSeconds(.8)
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPick);
+                })
+                .waitSeconds(cycleDelay)
+                // END CYCLE 4
+
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
+                    score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
+                    turret.setTargetAngle(turretScore);
+                })
+                .lineTo(new Vector2d(36, 10.3))
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
+                })
+                .waitSeconds(cycleDelay)
                 //END CYCLE 4
                 .UNSTABLE_addTemporalMarkerOffset(3, () -> {
                     score.down();
                     turret.setTargetAngle(0);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(4, () -> {
                     score.idleU();
                 })
+                .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
+                .back(12)
                 .build();
 
 //        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
