@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,9 +26,9 @@ public class Lift extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
     public static double kG = -0.3;
-    public static double kP = 0.006;
+    public static double kP = 0.008;
     public static double kD = 0;
-    public static double bound = 50;
+    public static double bound = 20;
     public static double vMax = 1;
 
     //pos
@@ -41,6 +42,7 @@ public class Lift extends Mechanism{
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0,0};
     public boolean isReset = true;
+    public boolean isReached = false;
 
     public static double PULLEY_RADIUS = 0.796975; // inches
     public static double TICKS_PER_REV = 141.1; // TPR of 1150rpm is 141.1
@@ -60,6 +62,9 @@ public class Lift extends Mechanism{
 
     @Override
     public void init(HardwareMap hwMap) {
+        for (LynxModule module : hwMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
         motors[0] = hwMap.get(DcMotorEx.class, "left");
         motors[1] = hwMap.get(DcMotorEx.class, "right");
         motors[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,6 +80,9 @@ public class Lift extends Mechanism{
     }
 
     public void setTargetPosition(double pos) {
+        if(target != pos) {
+            isReached = false;
+        }
         target = pos;
         if(profileActive && target != lastTarget) {
             profile = MotionProfileGenerator.generateSimpleMotionProfile(
@@ -92,15 +100,13 @@ public class Lift extends Mechanism{
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = motors[0].getCurrentPosition() - target;
-        double pd = kP * error + kD * (error-lastError[motor]) / time;
-        if(getPos() > 300) {
-            pd += kG;
-        }
+        double pd = kP * error + kD * (error-lastError[motor]) / time + kG;
         if(Math.abs(error) < bound) {
             pd = kG;
             if(target == 0) {
                 pd = 0;
             }
+            isReached = true;
         }
         lastError[motor] = error;
         timer.reset();
@@ -119,7 +125,7 @@ public class Lift extends Mechanism{
         if(Math.abs(error) > 200) {
             motors[0].setPower(-1*Math.signum(error));
             motors[1].setPower(-1*Math.signum(error));
-        } else {
+        } else if(!isReached){
             update(0);
             update(1);
         }
@@ -144,7 +150,7 @@ public class Lift extends Mechanism{
             }
             if(profileActive) {
                 profiledUpdate();
-            } else {
+            } else if(!isReached) {
                 update(0);
                 update(1);
             }

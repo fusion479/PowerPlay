@@ -31,6 +31,8 @@ public class Arm extends Mechanism{
 
     public boolean isOpen = false;
     public boolean isUp = false;
+    public boolean isPlacing = false;
+
     @Override
     public void init(HardwareMap hwMap) {
         claw = hwMap.get(Servo.class, "claw");
@@ -42,19 +44,20 @@ public class Arm extends Mechanism{
 
     public void resetArm() {
         left.setPosition(initPos);
-        right.setPosition(1-initPos);
+        right.setPosition(1 - initPos);
         isUp = true;
     }
 
     public void pick() {
         left.setPosition(pickPos);
-        right.setPosition(1-pickPos);
+        right.setPosition(1 - pickPos);
         isUp = false;
     }
 
     public void place() {
         left.setPosition(placePos);
-        right.setPosition(1-placePos);
+        right.setPosition(1 - placePos);
+        isUp = false;
     }
 
     public void open() {

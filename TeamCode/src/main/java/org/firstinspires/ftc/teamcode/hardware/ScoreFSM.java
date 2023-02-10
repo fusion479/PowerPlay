@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Config
@@ -28,6 +31,7 @@ public class ScoreFSM extends Mechanism {
         AUTO_PICK,
         SCORE
     }
+
     public states scoreStates;
     @Override
     public void init(HardwareMap hwMap) {
@@ -35,6 +39,7 @@ public class ScoreFSM extends Mechanism {
         arm.init(hwMap);
         scoreStates = states.DOWN;
     }
+
     public void loop() {
         switch(scoreStates) {
             case DOWN:
@@ -68,25 +73,33 @@ public class ScoreFSM extends Mechanism {
                 break;
             case READY_HIGH:
                 lift.high();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_MEDIUM:
                 lift.mid();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_LOW:
                 lift.low();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
             case READY_BOTTOM:
                 lift.bottom();
-                if(lift.targetReached()) {
+                if(lift.isAuto) {
+                    arm.up();
+                }else if(lift.targetReached()) {
                     arm.ready();
                 }
                 break;
@@ -96,6 +109,7 @@ public class ScoreFSM extends Mechanism {
                     arm.down();
                     if(clawTimer.milliseconds() >= 400) {
                         arm.open();
+                        scoreStates = states.DOWN;
                     }
                 } else {
                     if (clawTimer.milliseconds() >= clawDelay) {

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -35,6 +36,9 @@ public class Turret extends Mechanism{
 
     @Override
     public void init(HardwareMap hwMap) {
+        for (LynxModule module : hwMap.getAll(LynxModule.class)) {
+            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
+        }
         turrs[0] = hwMap.get(DcMotorEx.class, "turr1");
         turrs[1] = hwMap.get(DcMotorEx.class, "turr2");
         turrs[0].setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
