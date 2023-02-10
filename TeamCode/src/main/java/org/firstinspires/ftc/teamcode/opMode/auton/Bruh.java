@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.opMode.auton;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -9,15 +11,41 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.util.AprilTagDetectionPipeline;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
+import java.util.ArrayList;
 
 
 @Autonomous(name = "Bruh", group = "_Auto")
 @Config
 public class Bruh extends LinearOpMode {
+
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+
+    //Tag IDs (Sleeve)
+    final int LEFT = 1;
+    final int MIDDLE = 2;
+    final int RIGHT = 3;
+
+    AprilTagDetection tagOfInterest = null;
 
     SampleMecanumDrive drive;
     Turret turret;
@@ -25,16 +53,18 @@ public class Bruh extends LinearOpMode {
     FtcDashboard dashboard;
 
     public static double turretScore = 45;
-    public static double turretPick = 183;
+    public static double turretPick = 180;
 
     public static double grabDelay = -0.3;
     public static double liftALittleAfterGrabDelay = -.01;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = 0.2;
-    public static double turretAfterScoreDelay = 1.05;
+    public static double turretAfterScoreDelay = .85;
     public static double slidesAfterScoreDelay = 0.75;
-    public static double liftHeightMod = 200;
+    public static double liftHeightMod = 175;
+
+    public static boolean isParked = false;
 
 
     @Override
@@ -60,7 +90,7 @@ public class Bruh extends LinearOpMode {
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(45);
                 })
-                .addTemporalMarker(1.4, () -> {
+                .addTemporalMarker(2.5, () -> {
                     score.highGoal();
                 })
                 .lineToLinearHeading(new Pose2d(37.5, 12, Math.toRadians(180)))
@@ -87,7 +117,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(37.5, 12))
+                .lineTo(new Vector2d(36.5, 11.7))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -110,7 +140,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(37.5, 12))
+                .lineTo(new Vector2d(36.3, 11.4))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -133,7 +163,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(37.5, 12))
+                .lineTo(new Vector2d(36.3, 11.1))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -156,12 +186,9 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(37.5, 12))
+                .lineTo(new Vector2d(36, 10.8))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
                 })
                 .waitSeconds(.8)
                 //END CYCLE 4
@@ -172,9 +199,118 @@ public class Bruh extends LinearOpMode {
                 })
                 .build();
 
+//        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
+//                .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
+//                .back(12)
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                    isParked = true;
+//                })
+//                .build();
+//
+//        TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
+//                .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
+//                .back(12)
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                    isParked = true;
+//                })
+//                .build();
+//
+//        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
+//                .lineToLinearHeading(AutoConstants.BL_PARK_RIGHT)
+//                .back(12)
+//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+//                    isParked = true;
+//                })
+//                .build();
+
+
+
         score.toggleClaw();
 
-        waitForStart();
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(800,600, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+
+        telemetry.setMsTransmissionInterval(50);
+
+        /*
+         * The INIT-loop:
+         * This REPLACES waitForStart!
+         */
+        while (!isStarted() && !isStopRequested())
+        {
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if(currentDetections.size() != 0)
+            {
+                boolean tagFound = false;
+
+                for(AprilTagDetection tag : currentDetections)
+                {
+                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                }
+
+                if(tagFound)
+                {
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    tagToTelemetry(tagOfInterest);
+                }
+                else
+                {
+                    telemetry.addLine("Don't see tag of interest :(");
+
+                    if(tagOfInterest == null)
+                    {
+                        telemetry.addLine("(The tag has never been seen)");
+                    }
+                    else
+                    {
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        tagToTelemetry(tagOfInterest);
+                    }
+                }
+
+            }
+            else
+            {
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if(tagOfInterest == null)
+                {
+                    telemetry.addLine("(The tag has never been seen)");
+                }
+                else
+                {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+
+            }
+
+            telemetry.update();
+            sleep(20);
+        }
             /*
             TODO: AUTON PLANNING
             Scan AprilTag
@@ -190,18 +326,37 @@ public class Bruh extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(path);
 
-
         while (!isStopRequested() && opModeIsActive()) {
             score.loop();
             turret.loop();
             drive.update();
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("headingRAD", poseEstimate.getHeading());
-            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
+//            if(!drive.isBusy() && !isParked) {
+//                if (tagOfInterest == null) {
+//                    drive.followTrajectorySequenceAsync(middlePark);
+//                } else if (tagOfInterest.id == LEFT) {
+//                        drive.followTrajectorySequenceAsync(leftPark);
+//                    } else if (tagOfInterest.id == RIGHT) {
+//                        drive.followTrajectorySequenceAsync(rightPark);
+//                    } else {
+//                       drive.followTrajectorySequenceAsync(middlePark);
+//                    }
+//                }
+//                isParked = true;
+            }
+
+//            Pose2d poseEstimate = drive.getPoseEstimate();
+//            telemetry.addData("x", poseEstimate.getX());
+//            telemetry.addData("y", poseEstimate.getY());
+//            telemetry.addData("headingRAD", poseEstimate.getHeading());
+//            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
             telemetry.update();
         }
+
+
+    @SuppressLint("DefaultLocale")
+    void tagToTelemetry(AprilTagDetection detection)
+    {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
     }
 }
