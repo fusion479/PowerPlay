@@ -75,6 +75,11 @@ public class SampleMecanumDrive extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
+    double pastv = 0;
+    double pastv1 = 0;
+    double pastv2 = 0;
+    double pastv3 = 0;
+
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -289,10 +294,22 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        if(pastv != v) {
+            leftFront.setPower(v);
+            pastv = v;
+        }
+        if(pastv1 != v1) {
+            leftRear.setPower(v1);
+            pastv1 = v1;
+        }
+        if(pastv2 != v2) {
+            rightRear.setPower(v2);
+            pastv2 = v2;
+        }
+        if(pastv3 != v3) {
+            rightFront.setPower(v3);
+            pastv3 = v3;
+        }
     }
 
     @Override

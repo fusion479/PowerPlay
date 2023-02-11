@@ -22,7 +22,7 @@ public class Turret extends Mechanism{
     public static double target = 0;
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0, 0};
-    public static double bound = 5; //error bound for turret
+    public static double bound = 2; //error bound for turret
 
     public static double incremenet = 4;
     public static double side = 1;
@@ -59,11 +59,11 @@ public class Turret extends Mechanism{
         double pd = kP * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
         lastError[motor] = error;
         timer.reset();
-        powers[motor] = Range.clip(pd, -vMax, vMax);
         if(Math.abs(error) < bound) {
             pd = 0;
         }
         turrs[motor].setPower(Range.clip(pd, -vMax, vMax));
+        powers[motor] = Range.clip(pd, -vMax, vMax);
     }
 
     public void loop() {

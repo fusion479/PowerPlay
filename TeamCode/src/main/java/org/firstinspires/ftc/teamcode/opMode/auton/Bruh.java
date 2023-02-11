@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
@@ -29,6 +30,10 @@ import java.util.ArrayList;
 @Config
 public class Bruh extends LinearOpMode {
 
+    ElapsedTime timer = new ElapsedTime();
+    double lastTime = 0;
+    double currentTime = 0;
+
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -41,9 +46,9 @@ public class Bruh extends LinearOpMode {
     double tagsize = 0.166;
 
     //Tag IDs (Sleeve)
-    final int LEFT = 1;
-    final int MIDDLE = 2;
-    final int RIGHT = 3;
+    final int Left = 1;
+    final int Middle = 2;
+    final int Right = 3;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -52,7 +57,7 @@ public class Bruh extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 45;
+    public static double turretScore = 40;
     public static double turretPick = 180;
 
     public static double grabDelay = -0.3;
@@ -60,7 +65,7 @@ public class Bruh extends LinearOpMode {
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = 0;
-    public static double turretAfterScoreDelay = .85;
+    public static double turretAfterScoreDelay = .8;
     public static double slidesAfterScoreDelay = 0.75;
     public static double liftHeightMod = 175;
     public static double cycleDelay = .625;
@@ -82,13 +87,11 @@ public class Bruh extends LinearOpMode {
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-
         drive.setPoseEstimate(AutoConstants.BL_START);
 
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .addTemporalMarker(0, () -> {
+                    score.idleU();
                     turret.setTargetAngle(45);
                 })
                 .addTemporalMarker(2.4, () -> {
@@ -118,7 +121,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.5, 11.7))
+                .lineTo(new Vector2d(36.9, 11.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -141,7 +144,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.3, 11.4))
+                .lineTo(new Vector2d(36.8, 11.3))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -164,7 +167,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.3, 11.1))
+                .lineTo(new Vector2d(36.8, 11))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -178,7 +181,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
@@ -187,7 +190,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36, 10.6))
+                .lineTo(new Vector2d(36.4, 10.8))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -197,11 +200,11 @@ public class Bruh extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CYCLE 4
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(new Vector2d(52.9, 12))
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
@@ -210,46 +213,34 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36, 10.3))
+                .lineTo(new Vector2d(36.2, 10.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
-                .waitSeconds(cycleDelay)
-                //END CYCLE 4
-                .UNSTABLE_addTemporalMarkerOffset(3, () -> {
-                    score.down();
-                    turret.setTargetAngle(0);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(4, () -> {
-                    score.idleU();
-                })
-                .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
-                .back(12)
+                //END CYCLE 5
                 .build();
 
-//        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
+
+        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
+                .lineToLinearHeading(new Pose2d(36.2 + 24, 10.6, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    isParked = true;
+                })
+                .build();
+
+        TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
+                .turn(90)
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    isParked = true;
+                })
+                .build();
 //
-//        TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
-//
-//        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_RIGHT)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
+        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
+                .lineToLinearHeading(new Pose2d(36.2 - 24, 10.6, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    isParked = true;
+                })
+                .build();
 
 
 
@@ -260,6 +251,7 @@ public class Bruh extends LinearOpMode {
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
         camera.setPipeline(aprilTagDetectionPipeline);
+
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -291,7 +283,7 @@ public class Bruh extends LinearOpMode {
 
                 for(AprilTagDetection tag : currentDetections)
                 {
-                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT)
+                    if(tag.id == Left || tag.id == Middle || tag.id == Right)
                     {
                         tagOfInterest = tag;
                         tagFound = true;
@@ -351,14 +343,34 @@ public class Bruh extends LinearOpMode {
             Repeat
             Park with AprilTag position
              */
-
         drive.followTrajectorySequenceAsync(path);
-
+        camera.stopStreaming();
+        lastTime = timer.milliseconds();
         while (!isStopRequested() && opModeIsActive()) {
             score.loop();
             turret.loop();
             drive.update();
+            currentTime = timer.milliseconds();
+            telemetry.addLine("looptime: " + (currentTime-lastTime));
+            telemetry.addLine("cycle: " + score.autoCounter);
+            if(score.autoCounter == 7 && tagOfInterest != null) {
+                if (tagOfInterest.id == Left) {
+                    //Left Code
+                    drive.followTrajectorySequenceAsync(leftPark);
 
+                } else if (tagOfInterest.id == Right) {
+                    //Right Code
+                    drive.followTrajectorySequenceAsync(rightPark);
+                } else {
+                    drive.followTrajectorySequenceAsync(middlePark);
+                }
+                score.autoCounter++;
+            }
+            if(tagOfInterest == null && score.autoCounter == 7) {
+                drive.followTrajectorySequenceAsync(middlePark);
+            }
+            lastTime = currentTime;
+            telemetry.update();
 //            if(!drive.isBusy() && !isParked) {
 //                if (tagOfInterest == null) {
 //                    drive.followTrajectorySequenceAsync(middlePark);
@@ -378,7 +390,6 @@ public class Bruh extends LinearOpMode {
 //            telemetry.addData("y", poseEstimate.getY());
 //            telemetry.addData("headingRAD", poseEstimate.getHeading());
 //            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
-            telemetry.update();
         }
 
 

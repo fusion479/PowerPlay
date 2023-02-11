@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
@@ -23,6 +24,9 @@ public class LeftSide extends LinearOpMode {
     Turret turret;
     ScoreFSM score;
     FtcDashboard dashboard;
+    ElapsedTime timer = new ElapsedTime();
+    double lastTime = 0;
+    double currentTime = 0;
 
     public static double turretScore = 45;
     public static double turretPick = 183;
@@ -190,17 +194,14 @@ public class LeftSide extends LinearOpMode {
 
         drive.followTrajectorySequenceAsync(path);
 
-
+        lastTime = timer.milliseconds();
         while (!isStopRequested() && opModeIsActive()) {
             score.loop();
             turret.loop();
             drive.update();
-
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("headingRAD", poseEstimate.getHeading());
-            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
+            currentTime = timer.milliseconds();
+            telemetry.addLine("looptime: " + (currentTime-lastTime));
+            lastTime = currentTime;
             telemetry.update();
         }
     }

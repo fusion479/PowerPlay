@@ -18,8 +18,9 @@ public class ScoreFSM extends Mechanism {
     public boolean debug = false;
     public static int liftDelay = 300;
     public static int clawDelay = 150;
-    public static int autoArmDownDelay = 400;
+    public static int autoArmDownDelay = 700;
     public double customPos = 0;
+    public double autoCounter = 0;
     public enum states {
         DOWN,
         IDLE_UP,
@@ -45,7 +46,9 @@ public class ScoreFSM extends Mechanism {
             case DOWN:
                 if(liftTimer.milliseconds() >= liftDelay) {
                     if(lift.isAuto) {
+                        arm.up();
                         clawTimer.reset();
+                        autoCounter++;
                         scoreStates = states.AUTO_PICK;
                     } else {
                         scoreStates = states.IDLE_UP;
@@ -54,7 +57,7 @@ public class ScoreFSM extends Mechanism {
                 break;
             case AUTO_PICK:
                 lift.setTargetPosition(customPos);
-                if(clawTimer.milliseconds() >= autoArmDownDelay) {
+                if((clawTimer.milliseconds() >= autoArmDownDelay) && (autoCounter < 7)) {
                     arm.down();
                 }
                 break;

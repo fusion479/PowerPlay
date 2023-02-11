@@ -25,17 +25,18 @@ public class Lift extends Mechanism{
     TouchSensor limit;
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
-    public static double kG = -0.3;
+    public static double kG = -0.2;
     public static double kP = 0.008;
     public static double kD = 0;
+    public static double kLow = -0.1;
     public static double bound = 20;
     public static double vMax = 1;
 
     //pos
     public static double bottom = 0;
-    public static double low = 125;
-    public static double mid = 350;
-    public static double high = 625;
+    public static double low = 0;
+    public static double mid = 325;
+    public static double high = 600;
 
     public static double target = 0;
     public static double lastTarget = target;
@@ -103,6 +104,9 @@ public class Lift extends Mechanism{
         double pd = kP * error + kD * (error-lastError[motor]) / time + kG;
         if(Math.abs(error) < bound) {
             pd = kG;
+            if(target <= 300) {
+                pd = kLow;
+            }
             if(target == 0) {
                 pd = 0;
             }
@@ -110,8 +114,11 @@ public class Lift extends Mechanism{
         }
         lastError[motor] = error;
         timer.reset();
-        powers[motor] = Range.clip(pd, -vMax, vMax);
-        motors[motor].setPower(powers[motor]);
+        if(pd != powers[motor]) {
+            powers[motor] = Range.clip(pd, -vMax, vMax);
+            motors[motor].setPower(powers[motor]);
+        }
+
     }
 
     public void rrupdate() {
@@ -125,7 +132,7 @@ public class Lift extends Mechanism{
         if(Math.abs(error) > 200) {
             motors[0].setPower(-1*Math.signum(error));
             motors[1].setPower(-1*Math.signum(error));
-        } else if(!isReached){
+        } else{
             update(0);
             update(1);
         }
