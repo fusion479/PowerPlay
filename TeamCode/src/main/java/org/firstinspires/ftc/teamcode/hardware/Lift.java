@@ -35,7 +35,7 @@ public class Lift extends Mechanism{
     //pos
     public static double bottom = 0;
     public static double low = 0;
-    public static double mid = 325;
+    public static double mid = 315;
     public static double high = 600;
 
     public static double target = 0;

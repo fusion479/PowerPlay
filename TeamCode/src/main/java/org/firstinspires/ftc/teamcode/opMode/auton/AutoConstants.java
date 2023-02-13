@@ -43,7 +43,7 @@ public class AutoConstants {
     public static double BL_SCORE_Y = 12;
     public static double BL_SCORE_HEADING = Math.toRadians(180);
 
-    public static double BL_STACK_X = 52.6;
+    public static double BL_STACK_X = 46; //53.8
     public static double BL_STACK_Y = 12;
     public static double BL_STACK_HEADING = Math.toRadians(180);
 

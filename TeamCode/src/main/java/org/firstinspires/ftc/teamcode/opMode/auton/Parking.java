@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.util.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.openftc.apriltag.AprilTagDetection;
@@ -51,6 +52,7 @@ public class Parking extends LinearOpMode
     DcMotor backLeft; //Initialize Motor BL
 
     SampleMecanumDrive drive;
+    ScoreFSM score = new ScoreFSM();
 
 
     @Override
@@ -58,6 +60,7 @@ public class Parking extends LinearOpMode
     {
         //Called Upon When INIT Is Pressed
         drive = new SampleMecanumDrive(hardwareMap);
+        score.init(hardwareMap);
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d())
                 .forward(AutoConstants.FORWARD_DIST)
                 .waitSeconds(0.2)
@@ -73,6 +76,7 @@ public class Parking extends LinearOpMode
                 .waitSeconds(0.2)
                 .strafeRight(AutoConstants.LATERAL_DIST)
                 .build();
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);

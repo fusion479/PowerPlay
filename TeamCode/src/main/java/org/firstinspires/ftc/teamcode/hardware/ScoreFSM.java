@@ -16,6 +16,8 @@ public class ScoreFSM extends Mechanism {
     MultipleTelemetry tele = new MultipleTelemetry();
 
     public boolean debug = false;
+    public boolean isOpen = false;
+
     public static int liftDelay = 300;
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 700;
@@ -36,9 +38,11 @@ public class ScoreFSM extends Mechanism {
     public states scoreStates;
     @Override
     public void init(HardwareMap hwMap) {
+        arm.arm.isOpen = isOpen;
         lift.init(hwMap);
         arm.init(hwMap);
         scoreStates = states.DOWN;
+        autoCounter = 0;
     }
 
     public void loop() {
@@ -67,9 +71,7 @@ public class ScoreFSM extends Mechanism {
                 break;
             case IDLE_DOWN:
                 lift.bottom();
-                if(lift.targetReached()) {
-                    arm.down();
-                }
+                arm.down();
                 break;
             case READY_HIGH:
                 lift.high();
@@ -166,10 +168,10 @@ public class ScoreFSM extends Mechanism {
     }
     public void toggleIdle() {
         if(!ready()) {
-            if (scoreStates != states.IDLE_UP) {
-                idleU();
-            } else {
+            if (scoreStates == states.IDLE_UP) {
                 idleD();
+            } else {
+                idleU();
             }
         }
     }

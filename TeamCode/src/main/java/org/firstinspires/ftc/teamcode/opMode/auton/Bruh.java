@@ -26,7 +26,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "Bruh", group = "_Auto")
+@Autonomous(name = "6 Cone Left (Bruh)", group = "_Auto")
 @Config
 public class Bruh extends LinearOpMode {
 
@@ -224,6 +224,7 @@ public class Bruh extends LinearOpMode {
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
                 .lineToLinearHeading(new Pose2d(36.2 + 24, 10.6, Math.toRadians(270)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
                     isParked = true;
                 })
                 .build();
@@ -231,6 +232,7 @@ public class Bruh extends LinearOpMode {
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
                 .turn(90)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
                     isParked = true;
                 })
                 .build();
@@ -238,13 +240,11 @@ public class Bruh extends LinearOpMode {
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
                 .lineToLinearHeading(new Pose2d(36.2 - 24, 10.6, Math.toRadians(270)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
                     isParked = true;
                 })
                 .build();
 
-
-
-        score.toggleClaw();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
@@ -268,6 +268,7 @@ public class Bruh extends LinearOpMode {
         });
 
         telemetry.setMsTransmissionInterval(50);
+        score.autoCounter = 0;
 
         /*
          * The INIT-loop:

@@ -21,7 +21,7 @@ public class Arm extends Mechanism{
     Servo claw;
     //CONSTANTS
     public static double initPos = 0.87;
-    public static double pickPos = 0.22;
+    public static double pickPos = 0.17;
     public static double placePos = 0.7;
             ;
     public static double close = 0.545;
@@ -39,7 +39,7 @@ public class Arm extends Mechanism{
         left = hwMap.get(Servo.class, "armLeft");
         right = hwMap.get(Servo.class, "armRight");
         resetArm();
-        open();
+        close();
     }
 
     public void resetArm() {
@@ -98,6 +98,10 @@ public class Arm extends Mechanism{
         for (int i = 0; i < arr.length; i++) {
             arr[i].setPosition(pos);
         }
+    }
+
+    public void setOpen(boolean bool) {
+        isOpen = bool;
     }
 
 }

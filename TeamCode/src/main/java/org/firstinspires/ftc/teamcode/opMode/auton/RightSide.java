@@ -26,7 +26,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "Right", group = "_Auto")
+@Autonomous(name = "Preload Right", group = "_Auto")
 @Config
 public class RightSide extends LinearOpMode {
 
@@ -46,9 +46,9 @@ public class RightSide extends LinearOpMode {
     double tagsize = 0.166;
 
     //Tag IDs (Sleeve)
-    final int LEFT = 1;
-    final int MIDDLE = 2;
-    final int RIGHT = 3;
+    final int Left = 1;
+    final int Middle = 2;
+    final int Right = 3;
 
     AprilTagDetection tagOfInterest = null;
 
@@ -57,7 +57,7 @@ public class RightSide extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 45;
+    public static double turretScore = 40;
     public static double turretPick = 180;
 
     public static double grabDelay = -0.3;
@@ -87,21 +87,19 @@ public class RightSide extends LinearOpMode {
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-
         drive.setPoseEstimate(AutoConstants.BL_START);
 
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
                 .addTemporalMarker(0, () -> {
-                    turret.setTargetAngle(45);
+                    score.idleU();
+                    turret.setTargetAngle(-45);
                 })
                 .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
                 .lineToLinearHeading(new Pose2d(37.5, 12, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(turretPick);
@@ -123,7 +121,7 @@ public class RightSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.5, 11.6))
+                .lineTo(new Vector2d(36.9, 11.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -146,7 +144,7 @@ public class RightSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.3, 11.3))
+                .lineTo(new Vector2d(36.8, 11.3))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -169,7 +167,7 @@ public class RightSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.3, 11))
+                .lineTo(new Vector2d(36.8, 11))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -192,7 +190,7 @@ public class RightSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36, 10.8))
+                .lineTo(new Vector2d(36.4, 10.8))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -202,7 +200,7 @@ public class RightSide extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CYCLE 4
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(new Vector2d(52.9, 12))
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -215,40 +213,38 @@ public class RightSide extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36, 10.6))
+                .lineTo(new Vector2d(36.2, 10.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
                 //END CYCLE 5
                 .build();
 
-//        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_LEFT)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
+
+        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
+                .lineToLinearHeading(new Pose2d(36.2 + 24, 10.6, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
+                    isParked = true;
+                })
+                .build();
+
+        TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
+                .lineToLinearHeading(new Pose2d(36.2, 10.6, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
+                    isParked = true;
+                })
+                .build();
 //
-//        TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_MIDDLE)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
-//
-//        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
-//                .lineToLinearHeading(AutoConstants.BL_PARK_RIGHT)
-//                .back(12)
-//                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
-//                    isParked = true;
-//                })
-//                .build();
+        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
+                .lineToLinearHeading(new Pose2d(36.2 - 22, 10.6, Math.toRadians(270)))
+                .UNSTABLE_addTemporalMarkerOffset(0, () -> {
+                    turret.setTargetAngle(0);
+                    isParked = true;
+                })
+                .build();
 
-
-
-        score.toggleClaw();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "camera"), cameraMonitorViewId);
@@ -272,6 +268,7 @@ public class RightSide extends LinearOpMode {
         });
 
         telemetry.setMsTransmissionInterval(50);
+        score.autoCounter = 5;
 
         /*
          * The INIT-loop:
@@ -287,7 +284,7 @@ public class RightSide extends LinearOpMode {
 
                 for(AprilTagDetection tag : currentDetections)
                 {
-                    if(tag.id == LEFT || tag.id == MIDDLE || tag.id == RIGHT)
+                    if(tag.id == Left || tag.id == Middle || tag.id == Right)
                     {
                         tagOfInterest = tag;
                         tagFound = true;
@@ -347,7 +344,6 @@ public class RightSide extends LinearOpMode {
             Repeat
             Park with AprilTag position
              */
-
         drive.followTrajectorySequenceAsync(path);
         camera.stopStreaming();
         lastTime = timer.milliseconds();
@@ -357,6 +353,23 @@ public class RightSide extends LinearOpMode {
             drive.update();
             currentTime = timer.milliseconds();
             telemetry.addLine("looptime: " + (currentTime-lastTime));
+            telemetry.addLine("cycle: " + score.autoCounter);
+            if(score.autoCounter == 7 && tagOfInterest != null) {
+                if (tagOfInterest.id == Left) {
+                    //Left Code
+                    drive.followTrajectorySequenceAsync(leftPark);
+
+                } else if (tagOfInterest.id == Right) {
+                    //Right Code
+                    drive.followTrajectorySequenceAsync(rightPark);
+                } else {
+                    drive.followTrajectorySequenceAsync(middlePark);
+                }
+                score.autoCounter++;
+            }
+            if(tagOfInterest == null && score.autoCounter == 7) {
+                drive.followTrajectorySequenceAsync(middlePark);
+            }
             lastTime = currentTime;
             telemetry.update();
 //            if(!drive.isBusy() && !isParked) {

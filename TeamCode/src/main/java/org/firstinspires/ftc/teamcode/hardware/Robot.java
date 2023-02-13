@@ -29,6 +29,7 @@ public class Robot extends Mechanism {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         turret.init(hwMap);
         score.init(hwMap);
+        score.lift.isAuto = false;
         odoLift = hwMap.get(Servo.class, "odoLiftF");
     }
     public void run(Gamepad gamepad) {
