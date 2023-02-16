@@ -106,118 +106,6 @@ public class LeftSide extends LinearOpMode {
                 })
                 .waitSeconds(cycleDelay)
                 // END PRELOAD
-
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36.9, 11.6))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .waitSeconds(cycleDelay)
-                // END CYCLE 1
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36.8, 11.3))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .waitSeconds(cycleDelay)
-                //END CYCLE 2
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36.8, 11))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .waitSeconds(cycleDelay)
-                //END CYCLE 3
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36.4, 10.8))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .waitSeconds(cycleDelay)
-                // END CYCLE 4
-
-                .lineTo(new Vector2d(52.9, 12))
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(36.2, 10.6))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                //END CYCLE 5
                 .build();
 
 
@@ -252,77 +140,59 @@ public class LeftSide extends LinearOpMode {
 
         camera.setPipeline(aprilTagDetectionPipeline);
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(800,600, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                camera.startStreaming(800, 600, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
 
             }
         });
 
         telemetry.setMsTransmissionInterval(50);
-        score.autoCounter = 5;
+        score.autoCounter = 0;
 
         /*
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-            if(currentDetections.size() != 0)
-            {
+            if (currentDetections.size() != 0) {
                 boolean tagFound = false;
 
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id == Left || tag.id == Middle || tag.id == Right)
-                    {
+                for (AprilTagDetection tag : currentDetections) {
+                    if (tag.id == Left || tag.id == Middle || tag.id == Right) {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
                     }
                 }
 
-                if(tagFound)
-                {
+                if (tagFound) {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
-                    if(tagOfInterest == null)
-                    {
+                    if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
+                    } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 telemetry.addLine("Don't see tag of interest :(");
 
-                if(tagOfInterest == null)
-                {
+                if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
                 }
@@ -352,9 +222,9 @@ public class LeftSide extends LinearOpMode {
             turret.loop();
             drive.update();
             currentTime = timer.milliseconds();
-            telemetry.addLine("looptime: " + (currentTime-lastTime));
+            telemetry.addLine("looptime: " + (currentTime - lastTime));
             telemetry.addLine("cycle: " + score.autoCounter);
-            if(score.autoCounter == 7 && tagOfInterest != null) {
+            if (score.autoCounter == 2 && tagOfInterest != null) {
                 if (tagOfInterest.id == Left) {
                     //Left Code
                     drive.followTrajectorySequenceAsync(leftPark);
@@ -367,7 +237,7 @@ public class LeftSide extends LinearOpMode {
                 }
                 score.autoCounter++;
             }
-            if(tagOfInterest == null && score.autoCounter == 7) {
+            if (tagOfInterest == null && score.autoCounter == 2) {
                 drive.followTrajectorySequenceAsync(middlePark);
             }
             lastTime = currentTime;
@@ -395,8 +265,7 @@ public class LeftSide extends LinearOpMode {
 
 
     @SuppressLint("DefaultLocale")
-    void tagToTelemetry(AprilTagDetection detection)
-    {
+    void tagToTelemetry(AprilTagDetection detection) {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
     }
 }

@@ -25,9 +25,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "APOOP", group = "_Auto")
+@Autonomous(name = "Auto FSM Test", group = "dev")
 @Config
 public class FSM extends LinearOpMode {
+
+    boolean isParked = false;
 
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -293,7 +295,7 @@ public class FSM extends LinearOpMode {
                     }
                     break;
                 case PARK:
-                    if(!drive.isBusy()) {
+                    if(!drive.isBusy() && !isParked) {
                         turret.setTargetAngle(0);
                         score.idleU();
                         switch (tagOfInterest.id) {
@@ -310,6 +312,7 @@ public class FSM extends LinearOpMode {
                                 drive.followTrajectorySequenceAsync(middlePark);
                                 break;
                         }
+                        isParked = true;
                     }
                     break;
             }

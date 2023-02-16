@@ -72,7 +72,6 @@ public class Bruh extends LinearOpMode {
 
     public static boolean isParked = false;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         // called on init
@@ -252,17 +251,14 @@ public class Bruh extends LinearOpMode {
 
         camera.setPipeline(aprilTagDetectionPipeline);
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
-                camera.startStreaming(800,600, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                camera.startStreaming(800, 600, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
 
             }
         });
@@ -274,55 +270,40 @@ public class Bruh extends LinearOpMode {
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
-            if(currentDetections.size() != 0)
-            {
+            if (currentDetections.size() != 0) {
                 boolean tagFound = false;
 
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id == Left || tag.id == Middle || tag.id == Right)
-                    {
+                for (AprilTagDetection tag : currentDetections) {
+                    if (tag.id == Left || tag.id == Middle || tag.id == Right) {
                         tagOfInterest = tag;
                         tagFound = true;
                         break;
                     }
                 }
 
-                if(tagFound)
-                {
+                if (tagFound) {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
                     tagToTelemetry(tagOfInterest);
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("Don't see tag of interest :(");
 
-                    if(tagOfInterest == null)
-                    {
+                    if (tagOfInterest == null) {
                         telemetry.addLine("(The tag has never been seen)");
-                    }
-                    else
-                    {
+                    } else {
                         telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                         tagToTelemetry(tagOfInterest);
                     }
                 }
 
-            }
-            else
-            {
+            } else {
                 telemetry.addLine("Don't see tag of interest :(");
 
-                if(tagOfInterest == null)
-                {
+                if (tagOfInterest == null) {
                     telemetry.addLine("(The tag has never been seen)");
-                }
-                else
-                {
+                } else {
                     telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
                     tagToTelemetry(tagOfInterest);
                 }
@@ -344,59 +325,41 @@ public class Bruh extends LinearOpMode {
             Repeat
             Park with AprilTag position
              */
-        drive.followTrajectorySequenceAsync(path);
+
         camera.stopStreaming();
+        drive.followTrajectorySequenceAsync(path);
+
         lastTime = timer.milliseconds();
+
         while (!isStopRequested() && opModeIsActive()) {
             score.loop();
             turret.loop();
             drive.update();
             currentTime = timer.milliseconds();
-            telemetry.addLine("looptime: " + (currentTime-lastTime));
+            telemetry.addLine("looptime: " + (currentTime - lastTime));
             telemetry.addLine("cycle: " + score.autoCounter);
-            if(score.autoCounter == 7 && tagOfInterest != null) {
-                if (tagOfInterest.id == Left) {
+            if(score.autoCounter == 7) {
+                if (tagOfInterest == null) {
+                    drive.followTrajectorySequence(middlePark);
+                } else if (tagOfInterest.id == Left) {
                     //Left Code
-                    drive.followTrajectorySequenceAsync(leftPark);
-
+                    drive.followTrajectorySequence(leftPark);
                 } else if (tagOfInterest.id == Right) {
                     //Right Code
-                    drive.followTrajectorySequenceAsync(rightPark);
+                    drive.followTrajectorySequence(rightPark);
                 } else {
-                    drive.followTrajectorySequenceAsync(middlePark);
+                    //Middle Code
+                    drive.followTrajectorySequence(middlePark);
                 }
-                score.autoCounter++;
-            }
-            if(tagOfInterest == null && score.autoCounter == 7) {
-                drive.followTrajectorySequenceAsync(middlePark);
             }
             lastTime = currentTime;
             telemetry.update();
-//            if(!drive.isBusy() && !isParked) {
-//                if (tagOfInterest == null) {
-//                    drive.followTrajectorySequenceAsync(middlePark);
-//                } else if (tagOfInterest.id == LEFT) {
-//                        drive.followTrajectorySequenceAsync(leftPark);
-//                    } else if (tagOfInterest.id == RIGHT) {
-//                        drive.followTrajectorySequenceAsync(rightPark);
-//                    } else {
-//                       drive.followTrajectorySequenceAsync(middlePark);
-//                    }
-//                }
-//                isParked = true;
-            }
-
-//            Pose2d poseEstimate = drive.getPoseEstimate();
-//            telemetry.addData("x", poseEstimate.getX());
-//            telemetry.addData("y", poseEstimate.getY());
-//            telemetry.addData("headingRAD", poseEstimate.getHeading());
-//            telemetry.addData("headingDEG", poseEstimate.getHeading() * 180 / Math.PI);
         }
+    }
 
 
     @SuppressLint("DefaultLocale")
-    void tagToTelemetry(AprilTagDetection detection)
-    {
+    void tagToTelemetry(AprilTagDetection detection) {
         telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
     }
 }

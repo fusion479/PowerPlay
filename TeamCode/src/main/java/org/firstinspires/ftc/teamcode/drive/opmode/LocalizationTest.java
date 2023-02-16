@@ -27,12 +27,6 @@ public class LocalizationTest extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         ElapsedTime timer = new ElapsedTime();
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        Turret turret = new Turret();
-        Lift lift = new Lift();
-        turret.init(hardwareMap);
-        lift.init(hardwareMap);
-        lift.setTargetPosition(500);
-        turret.setTargetPosition(0);
         waitForStart();
         double lastTime = timer.milliseconds();
         while (!isStopRequested()) {
@@ -47,8 +41,6 @@ public class LocalizationTest extends LinearOpMode {
             telemetry.addData("loop: ", curr-lastTime);
             lastTime = curr;
             drive.update();
-            turret.loop();
-            lift.loop();
             Pose2d poseEstimate = drive.getPoseEstimate();
             telemetry.update();
         }
