@@ -101,7 +101,7 @@ public class Lift extends Mechanism{
     public void update(int motor) {
         double time = timer.milliseconds();
         double error = motors[0].getCurrentPosition() - target;
-        double pd = kP * error + kD * (error-lastError[motor]) / time + kG;
+        double pd = Range.clip(kP * error + kD * (error-lastError[motor]) / time + kG, -vMax, vMax);
         if(Math.abs(error) < bound) {
             pd = kG;
             if(target <= 300) {
@@ -115,7 +115,7 @@ public class Lift extends Mechanism{
         lastError[motor] = error;
         timer.reset();
         if(pd != powers[motor]) {
-            powers[motor] = Range.clip(pd, -vMax, vMax);
+            powers[motor] = pd;
             motors[motor].setPower(powers[motor]);
         }
 
@@ -157,7 +157,7 @@ public class Lift extends Mechanism{
             }
             if(profileActive) {
                 profiledUpdate();
-            } else if(!isReached) {
+            } else {
                 update(0);
                 update(1);
             }

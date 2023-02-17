@@ -229,7 +229,7 @@ public class Bruh extends LinearOpMode {
                 .build();
 
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
-                .turn(90)
+                .turn(Math.toRadians(90))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     turret.setTargetAngle(0);
                     isParked = true;
