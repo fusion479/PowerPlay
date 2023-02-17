@@ -26,9 +26,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "6 Cone Left (Bruh)", group = "_Auto")
+@Autonomous(name = "6 Cone Left No Park", group = "_Auto")
 @Config
-public class Bruh extends LinearOpMode {
+public class SixCone extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -57,11 +57,11 @@ public class Bruh extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 40;
+    public static double turretScore = 45;
     public static double turretPick = 180;
 
     public static double grabDelay = -0.3;
-    public static double liftALittleAfterGrabDelay = -.01;
+    public static double liftALittleAfterGrabDelay = 0;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = 0;
@@ -96,7 +96,7 @@ public class Bruh extends LinearOpMode {
                 .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(37.5, 12, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(37.6, 12, Math.toRadians(180)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -111,7 +111,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .03, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
@@ -120,7 +120,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.9, 11.6))
+                .lineTo(new Vector2d(37.1, 11.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -143,7 +143,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.8, 11.3))
+                .lineTo(new Vector2d(37, 11.3))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -166,7 +166,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.8, 11))
+                .lineTo(new Vector2d(37, 11))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -189,7 +189,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.4, 10.8))
+                .lineTo(new Vector2d(36.6, 10.8))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -199,7 +199,7 @@ public class Bruh extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CYCLE 4
 
-                .lineTo(new Vector2d(52.9, 12))
+                .lineTo(AutoConstants.BL_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -212,7 +212,7 @@ public class Bruh extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(turretScore);
                 })
-                .lineTo(new Vector2d(36.2, 10.6))
+                .lineTo(new Vector2d(36.6, 10.6))
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -224,7 +224,6 @@ public class Bruh extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(36.2 + 24, 10.6, Math.toRadians(270)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     turret.setTargetAngle(0);
-                    isParked = true;
                 })
                 .build();
 
@@ -232,7 +231,6 @@ public class Bruh extends LinearOpMode {
                 .turn(Math.toRadians(90))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     turret.setTargetAngle(0);
-                    isParked = true;
                 })
                 .build();
 //
@@ -240,7 +238,6 @@ public class Bruh extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(36.2 - 24, 10.6, Math.toRadians(270)))
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     turret.setTargetAngle(0);
-                    isParked = true;
                 })
                 .build();
 
@@ -338,18 +335,22 @@ public class Bruh extends LinearOpMode {
             currentTime = timer.milliseconds();
             telemetry.addLine("looptime: " + (currentTime - lastTime));
             telemetry.addLine("cycle: " + score.autoCounter);
-            if(score.autoCounter == 7) {
+            if(score.autoCounter == 7 && !isParked) {
                 if (tagOfInterest == null) {
                     drive.followTrajectorySequence(middlePark);
+                    isParked = true;
                 } else if (tagOfInterest.id == Left) {
                     //Left Code
                     drive.followTrajectorySequence(leftPark);
+                    isParked = true;
                 } else if (tagOfInterest.id == Right) {
                     //Right Code
                     drive.followTrajectorySequence(rightPark);
+                    isParked = true;
                 } else {
                     //Middle Code
                     drive.followTrajectorySequence(middlePark);
+                    isParked = true;
                 }
             }
             lastTime = currentTime;

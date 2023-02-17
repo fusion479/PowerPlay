@@ -1,19 +1,8 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
-import android.os.UserManager;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Config
 public class Arm extends Mechanism{
@@ -23,6 +12,7 @@ public class Arm extends Mechanism{
     public static double initPos = 0.87;
     public static double pickPos = 0.17;
     public static double placePos = 0.7;
+    public static double autoReady = 0.5;
             ;
     public static double close = 0.545;
     public static double open = 0.32;
@@ -58,6 +48,11 @@ public class Arm extends Mechanism{
         left.setPosition(placePos);
         right.setPosition(1 - placePos);
         isUp = false;
+    }
+
+    public void armReady() {
+        left.setPosition(autoReady);
+        right.setPosition(1-autoReady);
     }
 
     public void open() {
