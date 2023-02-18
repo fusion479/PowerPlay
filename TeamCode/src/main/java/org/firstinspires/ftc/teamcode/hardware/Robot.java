@@ -68,11 +68,10 @@ public class Robot extends Mechanism {
         isPresseda = gamepad.a;
         isPressedy = gamepad.y;
         isPressedx = gamepad.x;
-        score.commit = gamepad.right_bumper;
         score.loop();
     }
     public void turr(Gamepad gamepad) {
-        if(score.scoreStates != ScoreFSM.states.IDLE_UP) {
+        if(score.scoreStates != ScoreFSM.states.IDLE_DOWN) {
             if (!isPressedRT && gamepad.right_trigger >= 0.75) {
                 if (turret.side == 1) {
                     turret.side = -1;

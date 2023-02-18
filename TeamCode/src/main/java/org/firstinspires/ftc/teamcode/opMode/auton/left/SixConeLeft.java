@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumFaster;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.opMode.auton.AutoConstants;
@@ -53,7 +54,7 @@ public class SixConeLeft extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
-    SampleMecanumDrive drive;
+    SampleMecanumFaster drive;
     Turret turret;
     ScoreFSM score;
     FtcDashboard dashboard;
@@ -77,7 +78,7 @@ public class SixConeLeft extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         // called on init
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumFaster(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         turret = new Turret();

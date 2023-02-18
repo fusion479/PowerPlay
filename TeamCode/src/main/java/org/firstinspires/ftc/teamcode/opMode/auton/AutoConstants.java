@@ -33,9 +33,9 @@ public class AutoConstants {
     public static double LPM_X = 36;
     public static double LPR_X = 60;
     // RIGHT PARKING VALUES
-    public static double RPL_X = LPR_X;
-    public static double RPM_X = LPM_X;
-    public static double RPR_X = LPL_X;
+    public static double RPL_X = -LPR_X;
+    public static double RPM_X = -LPM_X;
+    public static double RPR_X = -LPL_X;
 
     public static double PARK_Y = 12;
     public static double PARK_HEADING = Math.toRadians(270);
@@ -61,11 +61,11 @@ public class AutoConstants {
 
     public static double R_SCORE_X = -37.4;
     public static double R_SCORE_Y = 12;
-    public static double R_SCORE_HEADING = Math.toRadians(180);
+    public static double R_SCORE_HEADING = Math.toRadians(-10);
 
     public static double R_STACK_X = -54.5;
     public static double R_STACK_Y = 12;
-    public static double R_STACK_HEADING = Math.toRadians(180);
+    public static double R_STACK_HEADING = Math.toRadians(0);
 
     public static final Pose2d R_START = new Pose2d(-START_X, START_Y, START_HEADING);
     public static final Pose2d R_SCORE_POSE = new Pose2d(R_SCORE_X, R_SCORE_Y, R_SCORE_HEADING);
