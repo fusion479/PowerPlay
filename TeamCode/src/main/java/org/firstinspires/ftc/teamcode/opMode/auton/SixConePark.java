@@ -29,9 +29,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "5 Cone Left Yes Park", group = "_Auto")
+@Autonomous(name = "6 Cone Left Yes Park", group = "_Auto")
 @Config
-public class FiveConePark extends LinearOpMode {
+public class SixConePark extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -63,15 +63,15 @@ public class FiveConePark extends LinearOpMode {
     public static double turretScore = 45;
     public static double turretPick = 180;
 
-    public static double grabDelay = -0.3;
-    public static double liftALittleAfterGrabDelay = 0.02;
+    public static double grabDelay = -0.5;
+    public static double liftALittleAfterGrabDelay = -.13;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = 0;
     public static double turretAfterScoreDelay = .8;
     public static double slidesAfterScoreDelay = 0.75;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .625;
+    public static double cycleDelay = .46;
 
     public static boolean isParked = false;
 
@@ -199,6 +199,30 @@ public class FiveConePark extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(turretPick);
+                })
+                .waitSeconds(cycleDelay)
+                // END CYCLE 4
+
+                .lineTo(AutoConstants.BL_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
+                    score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
+                    turret.setTargetAngle(turretScore);
+                })
+                .lineTo(new Vector2d(37.4, 12))
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
+                })
+                //END CYCLE 5
                 .build();
 
 
@@ -329,7 +353,7 @@ public class FiveConePark extends LinearOpMode {
             currentTime = timer.milliseconds();
             telemetry.addLine("looptime: " + (currentTime - lastTime));
             telemetry.addLine("cycle: " + score.autoCounter);
-            if(score.autoCounter == 6) {
+            if(score.autoCounter == 7) {
                 if (tagOfInterest == null) {
                     drive.followTrajectorySequenceAsync(middlePark);
                     isParked = true;
