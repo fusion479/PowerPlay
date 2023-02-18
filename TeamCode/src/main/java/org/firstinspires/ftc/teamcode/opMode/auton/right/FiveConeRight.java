@@ -1,13 +1,10 @@
-package org.firstinspires.ftc.teamcode.opMode.auton;
+package org.firstinspires.ftc.teamcode.opMode.auton.right;
 
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.profile.VelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
+import org.firstinspires.ftc.teamcode.opMode.auton.AutoConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.util.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
@@ -28,10 +26,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
+// DO NOT TOUCH, IT WORKS!!!
 
-@Autonomous(name = "6 Cone Left Yes Park", group = "_Auto")
+@Autonomous(name = "5 Cone Right", group = "_Auto")
 @Config
-public class SixConePark extends LinearOpMode {
+public class FiveConeRight extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -60,23 +59,21 @@ public class SixConePark extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static double turretScore = 45;
-    public static double turretPick = 180;
+    public static final double TURRET_SCORE_ANG = -45;
+    public static final double TURRET_PICK_ANG = -180;
 
-    public static double grabDelay = -0.5;
-    public static double liftALittleAfterGrabDelay = -.13;
+    public static double grabDelay = -0.3;
+    public static double liftALittleAfterGrabDelay = 0.02;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = 0;
     public static double turretAfterScoreDelay = .8;
-    public static double slidesAfterScoreDelay = 0.75;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .46;
+    public static double cycleDelay = .625;
+
+    public static final int maxCones = 5;
 
     public static boolean isParked = false;
-
-    private static final TrajectoryVelocityConstraint parkVel = SampleMecanumDrive.getVelocityConstraint(45, 5.578780276476597, 13.91);
-    private static final TrajectoryAccelerationConstraint parkAccel = SampleMecanumDrive.getAccelerationConstraint(45);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -92,28 +89,28 @@ public class SixConePark extends LinearOpMode {
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        drive.setPoseEstimate(AutoConstants.BL_START);
+        drive.setPoseEstimate(AutoConstants.R_START);
 
-        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
+        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.R_START)
                 .addTemporalMarker(0, () -> {
                     score.idleU();
-                    turret.setTargetAngle(45);
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
                 .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(new Pose2d(37.4, 12, Math.toRadians(180)))
+                .lineToLinearHeading(AutoConstants.R_SCORE_POSE)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
+                    turret.setTargetAngle(TURRET_PICK_ANG);
                 })
                 .waitSeconds(cycleDelay)
-                // END PRELOAD
+                // END CONE 1 (PRELOAD)
 
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -124,19 +121,19 @@ public class SixConePark extends LinearOpMode {
                     score.highGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(new Vector2d(37.4, 12))
+                .lineTo(AutoConstants.R_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
+                    turret.setTargetAngle(TURRET_PICK_ANG);
                 })
                 .waitSeconds(cycleDelay)
-                // END CYCLE 1
+                // END CONE 2
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -147,19 +144,19 @@ public class SixConePark extends LinearOpMode {
                     score.highGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(new Vector2d(37.4, 12))
+                .lineTo(AutoConstants.R_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
+                    turret.setTargetAngle(TURRET_PICK_ANG);
                 })
                 .waitSeconds(cycleDelay)
-                //END CYCLE 2
+                //END CONE 3
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -170,19 +167,19 @@ public class SixConePark extends LinearOpMode {
                     score.highGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(new Vector2d(37.4, 12))
+                .lineTo(AutoConstants.R_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
+                    turret.setTargetAngle(TURRET_PICK_ANG);
                 })
                 .waitSeconds(cycleDelay)
-                //END CYCLE 3
+                //END CONE 4
 
-                .lineTo(AutoConstants.BL_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -193,69 +190,46 @@ public class SixConePark extends LinearOpMode {
                     score.highGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(new Vector2d(37.4, 12))
+                .lineTo(AutoConstants.R_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(turretPick);
-                })
-                .waitSeconds(cycleDelay)
-                // END CYCLE 4
-
-                .lineTo(AutoConstants.BL_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(turretScore);
-                })
-                .lineTo(new Vector2d(37.4, 12))
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                //END CYCLE 5
+                // END CONE 5
                 .build();
 
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
-                .setVelConstraint(parkVel)
-                .setAccelConstraint(parkAccel)
+                .setVelConstraint(AutoConstants.PARK_VEL)
+                .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(new Pose2d(36.2 + 24, 10.6, Math.toRadians(270)))
+                .lineToLinearHeading(AutoConstants.R_PARK_LEFT)
                 .back(12)
                 .build();
 
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
-                .setVelConstraint(parkVel)
-                .setAccelConstraint(parkAccel)
+                .setVelConstraint(AutoConstants.PARK_VEL)
+                .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(new Pose2d(36.2, 10.6, Math.toRadians(270)))
+                .lineToLinearHeading(AutoConstants.R_PARK_MIDDLE)
                 .back(12)
                 .build();
 //
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
-                .setVelConstraint(parkVel)
-                .setAccelConstraint(parkAccel)
+                .setVelConstraint(AutoConstants.PARK_VEL)
+                .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(new Pose2d(36.2 - 24, 10.6, Math.toRadians(270)))
+                .lineToLinearHeading(AutoConstants.R_PARK_RIGHT)
                 .back(12)
                 .build();
 
@@ -328,18 +302,6 @@ public class SixConePark extends LinearOpMode {
             telemetry.update();
             sleep(20);
         }
-            /*
-            TODO: AUTON PLANNING
-            Scan AprilTag
-            Drive to high goal, raise slides
-            Score preload
-            Drive to stack, turn turret
-            Pick up cone
-            Drive to high goal, arm go up, turn turret, raise slides
-            Score
-            Repeat
-            Park with AprilTag position
-             */
 
         camera.stopStreaming();
         drive.followTrajectorySequenceAsync(path);
@@ -353,7 +315,7 @@ public class SixConePark extends LinearOpMode {
             currentTime = timer.milliseconds();
             telemetry.addLine("looptime: " + (currentTime - lastTime));
             telemetry.addLine("cycle: " + score.autoCounter);
-            if(score.autoCounter == 7) {
+            if(score.autoCounter == maxCones + 1) {
                 if (tagOfInterest == null) {
                     drive.followTrajectorySequenceAsync(middlePark);
                     isParked = true;

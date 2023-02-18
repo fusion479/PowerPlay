@@ -67,7 +67,7 @@ public class FSM extends LinearOpMode {
     AutoState autoState = AutoState.PRELOAD_DRIVE;
 
     TrajectorySequence preload = drive.trajectorySequenceBuilder(AutoConstants.BL_START)
-            .lineToLinearHeading(AutoConstants.BL_SCORE)
+            .lineToLinearHeading(AutoConstants.BL_SCORE_POSE)
             .build();
 
     TrajectorySequence toStack = drive.trajectorySequenceBuilder(preload.end())
@@ -75,7 +75,7 @@ public class FSM extends LinearOpMode {
             .build();
 
     TrajectorySequence toPole = drive.trajectorySequenceBuilder(toStack.end())
-            .lineToLinearHeading(AutoConstants.BL_SCORE)
+            .lineToLinearHeading(AutoConstants.BL_SCORE_POSE)
             .build();
 
     TrajectorySequence leftPark = drive.trajectorySequenceBuilder(toPole.end())

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.teleOp;
+package org.firstinspires.ftc.teamcode.opMode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,7 +19,7 @@ public class Reset extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()) {
-            lift.setPower(gamepad1.right_stick_y);
+            lift.setPower(gamepad1.right_stick_x);
             turret.setPower(gamepad1.left_stick_x * .3);
         }
     }
