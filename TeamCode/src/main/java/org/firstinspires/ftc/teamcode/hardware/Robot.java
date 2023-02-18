@@ -68,38 +68,41 @@ public class Robot extends Mechanism {
         isPresseda = gamepad.a;
         isPressedy = gamepad.y;
         isPressedx = gamepad.x;
+        score.commit = gamepad.right_bumper;
         score.loop();
     }
     public void turr(Gamepad gamepad) {
-        if(!isPressedRT && gamepad.right_trigger >=0.75) {
-            if(turret.side == 1) {
-                turret.side = -1;
-                turret.score();
-            }else {
-                turret.toggleTurret();
+        if(score.scoreStates != ScoreFSM.states.IDLE_UP) {
+            if (!isPressedRT && gamepad.right_trigger >= 0.75) {
+                if (turret.side == 1) {
+                    turret.side = -1;
+                    turret.score();
+                } else {
+                    turret.toggleTurret();
+                }
             }
-        }
-        if(!isPressedLT && gamepad.left_trigger >= 0.75) {
-            if(turret.side == -1) {
+            if (!isPressedLT && gamepad.left_trigger >= 0.75) {
+                if (turret.side == -1) {
+                    turret.side = 1;
+                    turret.score();
+                } else {
+                    turret.toggleTurret();
+                }
+            }
+            if (gamepad.dpad_up) {
+                turret.center();
+            }
+            if (gamepad.dpad_down) {
+                turret.down();
+            }
+            if (gamepad.dpad_left) {
                 turret.side = 1;
-                turret.score();
-            }else {
-                turret.toggleTurret();
+                turret.sideways();
             }
-        }
-        if(gamepad.dpad_up) {
-            turret.center();
-        }
-        if(gamepad.dpad_down) {
-            turret.down();
-        }
-        if(gamepad.dpad_left) {
-            turret.side = 1;
-            turret.sideways();
-        }
-        if(gamepad.dpad_right) {
-            turret.side = -1;
-            turret.sideways();
+            if (gamepad.dpad_right) {
+                turret.side = -1;
+                turret.sideways();
+            }
         }
         isPressedLT = gamepad.left_trigger >= 0.75;
         isPressedRT = gamepad.right_trigger >= 0.75;

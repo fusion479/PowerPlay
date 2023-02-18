@@ -17,10 +17,12 @@ public class ScoreFSM extends Mechanism {
 
     public boolean debug = false;
     public boolean isOpen = false;
+    public boolean commit = false;
 
     public static int liftDelay = 300;
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 700;
+    public static int clawRaiseDelay = 400;
     public double customPos = 0;
     public double autoCounter = 0;
     public enum states {
@@ -36,6 +38,8 @@ public class ScoreFSM extends Mechanism {
     }
 
     public states scoreStates;
+    public states lastState;
+
     @Override
     public void init(HardwareMap hwMap) {
         arm.arm.isOpen = isOpen;
@@ -72,6 +76,13 @@ public class ScoreFSM extends Mechanism {
             case IDLE_DOWN:
                 lift.bottom();
                 arm.down();
+                if(!arm.arm.isOpen) {
+                    if(clawTimer.milliseconds() >= clawRaiseDelay && commit) {
+                        scoreStates = states.IDLE_UP;
+                    }
+                }else {
+                    clawTimer.reset();
+                }
                 break;
             case READY_HIGH:
                 lift.high();
@@ -116,9 +127,13 @@ public class ScoreFSM extends Mechanism {
                 } else {
                     lift.lowerABit();
                     if (clawTimer.milliseconds() >= clawDelay) {
-                        arm.open();
-                        liftTimer.reset();
-                        scoreStates = states.DOWN;
+                        if(commit) {
+                            arm.open();
+                            liftTimer.reset();
+                            scoreStates = states.DOWN;
+                        }else {
+                            scoreStates = lastState;
+                        }
                     }
                 }
 
@@ -126,6 +141,9 @@ public class ScoreFSM extends Mechanism {
         }
         arm.loop();
         lift.loop();
+        if(ready()) {
+            lastState = scoreStates;
+        }
         if(debug) { //telemetry is laggy and will hurt loop time, honestly this shouldn't really be in the class it should be in a debug teleopmode itself
             tele.addData("liftTimer: ", liftTimer.milliseconds());
             tele.addData("armTimer: ", clawTimer.milliseconds());
@@ -141,7 +159,11 @@ public class ScoreFSM extends Mechanism {
         if(ready()) {
             score();
         }else {
-            arm.toggleClaw();
+            if(scoreStates == states.IDLE_UP) {
+                highGoal();
+            }else {
+                arm.toggleClaw();
+            }
         }
     }
 
