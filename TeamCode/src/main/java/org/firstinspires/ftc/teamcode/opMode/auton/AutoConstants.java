@@ -26,12 +26,12 @@ public class AutoConstants {
     public static double START_Y = 70.5 - (13.3858/2);
     public static double START_HEADING = Math.toRadians(270);
 
-    public static double[] STACK_SLIDES_POSITIONS = {180, 150, 80, 45, 0};
+    public static double[] STACK_SLIDES_POSITIONS = {170, 125, 70, 45, 0};
 
     // LEFT PARKING VALUES
-    public static double LPL_X = 12;
+    public static double LPL_X = 57;
     public static double LPM_X = 36;
-    public static double LPR_X = 60;
+    public static double LPR_X = 12;
     // RIGHT PARKING VALUES
     public static double RPL_X = -LPR_X;
     public static double RPM_X = -LPM_X;
@@ -49,7 +49,7 @@ public class AutoConstants {
     public static double L_SCORE_Y = 12;
     public static double L_SCORE_HEADING = Math.toRadians(180);
 
-    public static double L_STACK_X = 54.5;
+    public static double L_STACK_X = 54.4;
     public static double L_STACK_Y = 12;
     public static double L_STACK_HEADING = Math.toRadians(180);
 

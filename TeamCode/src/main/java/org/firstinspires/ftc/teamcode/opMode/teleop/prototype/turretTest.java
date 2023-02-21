@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 
-@TeleOp
+@TeleOp (group = "prototype")
 @Config
 public class turretTest extends LinearOpMode {
     Turret turret = new Turret();
