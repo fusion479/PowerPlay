@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 @Config
 public class Turret extends Mechanism{
-    DcMotorEx turrs[] = new DcMotorEx[2];
+    public DcMotorEx turrs[] = new DcMotorEx[2];
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
     public static double kP = -0.0016;

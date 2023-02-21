@@ -20,7 +20,7 @@ public class ScoreTurretFSM extends Mechanism {
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 700;
     public static int clawRaiseDelay = 400;
-    public static int turretDelay = 400;
+    public static int turretDelay = 650;
     public double customPos = 0;
     public double autoCounter = 0;
     public enum states {
@@ -86,11 +86,11 @@ public class ScoreTurretFSM extends Mechanism {
             case IDLE_UP:
                 arm.up();
                 lift.bottom();
-                if(lastState == states.DOWN) {
+                if(lastState == states.IDLE_DOWN) {
                     liftTimer.reset();
                     scoreStates = states.TURRET_SCORE;
                 }
-                if(lastState != states.TURRET_PICK) {
+                if(lastState == states.READY_BOTTOM || lastState == states.READY_LOW || lastState == states.READY_MEDIUM || lastState == states.READY_HIGH) {
                     scoreStates = states.TURRET_PICK;
                 }
                 break;
@@ -99,7 +99,7 @@ public class ScoreTurretFSM extends Mechanism {
                 arm.down();
                 if(!arm.arm.isOpen) {
                     if(clawTimer.milliseconds() >= clawRaiseDelay && commit) {
-                        lastState = states.DOWN;
+                        lastState = states.IDLE_DOWN;
                         scoreStates = states.IDLE_UP;
                     }
                 }else {
@@ -220,6 +220,10 @@ public class ScoreTurretFSM extends Mechanism {
             if (scoreStates == states.IDLE_UP) {
                 idleD();
             } else {
+                if(!arm.arm.isOpen) {
+                    liftTimer.reset();
+                    lastState = states.IDLE_DOWN;
+                }
                 idleU();
             }
         }

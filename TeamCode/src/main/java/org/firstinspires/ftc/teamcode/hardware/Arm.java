@@ -11,8 +11,9 @@ public class Arm extends Mechanism{
     //CONSTANTS
     public static double initPos = 0.87;
     public static double pickPos = 0.17;
-    public static double placePos = 0.7;
+    public static double placePos = 0.65;
     public static double autoReady = 0.5;
+    public double currentPos = 0;
             ;
     public static double close = 0.545;
     public static double open = 0.32;
@@ -33,26 +34,30 @@ public class Arm extends Mechanism{
     }
 
     public void resetArm() {
-        left.setPosition(initPos);
-        right.setPosition(1 - initPos);
-        isUp = true;
+        if(currentPos != initPos) {
+            left.setPosition(initPos);
+            right.setPosition(1 - initPos);
+            isUp = true;
+            currentPos = initPos;
+        }
     }
 
     public void pick() {
-        left.setPosition(pickPos);
-        right.setPosition(1 - pickPos);
-        isUp = false;
+        if(currentPos != pickPos) {
+            left.setPosition(pickPos);
+            right.setPosition(1 - pickPos);
+            isUp = false;
+            currentPos = pickPos;
+        }
     }
 
     public void place() {
-        left.setPosition(placePos);
-        right.setPosition(1 - placePos);
-        isUp = false;
-    }
-
-    public void armReady() {
-        left.setPosition(autoReady);
-        right.setPosition(1-autoReady);
+        if(currentPos != placePos) {
+            left.setPosition(placePos);
+            right.setPosition(1 - placePos);
+            isUp = false;
+            currentPos = placePos;
+        }
     }
 
     public void open() {

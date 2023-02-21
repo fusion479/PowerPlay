@@ -13,6 +13,8 @@ public class TestBot extends Mechanism{
     public ScoreTurretFSM score = new ScoreTurretFSM();
     public Servo odoLift;
 
+    public double raiseMultiplier = 0.5;
+
     //isPressed
     public boolean isPressedx = false;
     public boolean isPressedy = false;
@@ -35,13 +37,23 @@ public class TestBot extends Mechanism{
         score(gamepad);
     }
     public void move(Gamepad gamepad) {
-        drive.setWeightedDrivePower(
-                new Pose2d(
-                        -gamepad.left_stick_y,
-                        -gamepad.left_stick_x,
-                        -gamepad.right_stick_x
-                )
-        );
+        if(score.scoreStates == ScoreTurretFSM.states.READY_HIGH) {
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad.left_stick_y * raiseMultiplier,
+                            -gamepad.left_stick_x * raiseMultiplier,
+                            -gamepad.right_stick_x * raiseMultiplier
+                    )
+            );
+        }else {
+            drive.setWeightedDrivePower(
+                    new Pose2d(
+                            -gamepad.left_stick_y,
+                            -gamepad.left_stick_x,
+                            -gamepad.right_stick_x
+                    )
+            );
+        }
         drive.update();
     }
     public void score(Gamepad gamepad) {
@@ -73,10 +85,10 @@ public class TestBot extends Mechanism{
             score.turnRight();
         }
         if (!isPressedRT && gamepad.right_trigger >= 0.75) {
-            score.toggleLeft();
+            score.toggleRight();
         }
         if (!isPressedLT && gamepad.left_trigger >= 0.75) {
-            score.toggleRight();
+            score.toggleLeft();
         }
         isPressedRB = gamepad.right_bumper;
         isPressedLB = gamepad.left_bumper;

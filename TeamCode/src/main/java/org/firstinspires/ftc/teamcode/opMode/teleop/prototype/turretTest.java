@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 
 @TeleOp
@@ -46,6 +47,8 @@ public class turretTest extends LinearOpMode {
             tele.addData("target: ", target);
             tele.addData("target angle: ", target/turret.tpd);
             tele.addData("avg error: ", turret.getAvgError());
+            tele.addData("current1: ", turret.turrs[0].getCurrent(CurrentUnit.AMPS));
+            tele.addData("current2:", turret.turrs[1].getCurrent(CurrentUnit.AMPS));
             tele.update();
         }
     }

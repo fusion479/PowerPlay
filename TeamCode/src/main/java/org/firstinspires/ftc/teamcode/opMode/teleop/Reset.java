@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.hardware.Lift;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 
-@TeleOp (name = "Reset", group = "___1")
+@TeleOp (name = "Reset", group = "_1")
 public class Reset extends LinearOpMode {
     public Lift lift = new Lift();
     public Turret turret = new Turret();
