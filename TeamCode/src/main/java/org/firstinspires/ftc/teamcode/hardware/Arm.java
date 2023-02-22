@@ -10,7 +10,7 @@ public class Arm extends Mechanism{
     Servo claw;
     //CONSTANTS
     public static double initPos = 0.87;
-    public static double pickPos = 0.17;
+    public static double pickPos = 0.15;
     public static double placePos = 0.65;
     public static double autoReady = 0.5;
     public double currentPos = 0;

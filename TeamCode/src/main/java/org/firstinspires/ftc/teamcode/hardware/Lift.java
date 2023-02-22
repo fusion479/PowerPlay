@@ -31,6 +31,7 @@ public class Lift extends Mechanism{
     public static double kLow = -0.1;
     public static double bound = 20;
     public static double vMax = 1;
+    public static double retMult = 0.75;
 
     //pos
     public static double bottom = 0;
@@ -111,6 +112,9 @@ public class Lift extends Mechanism{
                 pd = 0;
             }
             isReached = true;
+        }
+        if(target == 0) {
+            pd *= retMult;
         }
         lastError[motor] = error;
         timer.reset();

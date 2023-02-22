@@ -27,7 +27,7 @@ public class Turret extends Mechanism{
     public static double incremenet = 4;
     public static double side = 1;
 
-    public static double pick = 350;
+    public static double pick = 413;
 
     public static double score = 100;
 

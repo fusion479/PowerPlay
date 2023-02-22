@@ -9,7 +9,7 @@ import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.hardware.ScoreTurretFSM;
 import org.firstinspires.ftc.teamcode.hardware.TestBot;
-@TeleOp (group = "prototype")
+@TeleOp (name="New Controls", group = "_1")
 public class ControlsTest extends LinearOpMode {
     TestBot bot = new TestBot();
     FtcDashboard dashboard = FtcDashboard.getInstance();

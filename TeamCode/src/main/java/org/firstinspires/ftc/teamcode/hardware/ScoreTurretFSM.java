@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.hardware;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+@Config
 public class ScoreTurretFSM extends Mechanism {
     public ArmFSM arm = new ArmFSM();
     public LiftFSM lift = new LiftFSM();
@@ -21,6 +22,7 @@ public class ScoreTurretFSM extends Mechanism {
     public static int autoArmDownDelay = 700;
     public static int clawRaiseDelay = 400;
     public static int turretDelay = 650;
+    public static int pickDelay = 450;
     public double customPos = 0;
     public double autoCounter = 0;
     public enum states {
@@ -72,7 +74,7 @@ public class ScoreTurretFSM extends Mechanism {
                 }
                 break;
             case TURRET_PICK:
-                if(liftTimer.milliseconds() >= turretDelay) {
+                if(liftTimer.milliseconds() >= pickDelay) {
                     turret.pick();
                     scoreStates = states.IDLE_UP;
                 }
