@@ -23,6 +23,7 @@ public class ScoreTurretFSM extends Mechanism {
     public static int clawRaiseDelay = 400;
     public static int turretDelay = 650;
     public static int pickDelay = 450;
+    public static int teleOpArmDownDelay = 200;
     public double customPos = 0;
     public double autoCounter = 0;
     public enum states {
@@ -82,7 +83,13 @@ public class ScoreTurretFSM extends Mechanism {
             case TURRET_SCORE:
                 if(liftTimer.milliseconds() >= turretDelay) {
                     turret.score();
-                    scoreStates = states.IDLE_UP;
+                    if(lastState == states.READY_HIGH) {
+                        if(liftTimer.milliseconds() >= turretDelay + teleOpArmDownDelay) {
+                            scoreStates = states.IDLE_DOWN;
+                        }
+                    }else {
+                        scoreStates = states.IDLE_UP;
+                    }
                 }
                 break;
             case IDLE_UP:
