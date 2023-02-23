@@ -15,8 +15,8 @@ public class Arm extends Mechanism{
     public static double autoReady = 0.5;
     public double currentPos = 0;
             ;
-    public static double close = 0.545;
-    public static double open = 0.32;
+    public static double close = 0.53;
+    public static double open = 0.73;
 
     public static double distanceThreshold = 50;
 
