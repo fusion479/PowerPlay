@@ -63,6 +63,8 @@ public class ArmFSM extends Mechanism {
         arm.close();
     }
 
-
+    public void autoReady() {
+        arm.setAutoReady();
+    }
 
 }

@@ -59,7 +59,7 @@ public class SixConeLeft extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = 42;
+    public static final double TURRET_SCORE_ANG = 41;
     public static final double TURRET_PICK_ANG = 180;
 
     public static double grabDelay = -0.5;
@@ -69,7 +69,7 @@ public class SixConeLeft extends LinearOpMode {
     public static double scoreDelay = -.2;
     public static double turretAfterScoreDelay = .7;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .5;
+    public static double cycleDelay = .52;
 
     public static final int maxCones = 6;
 
