@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.drive.KalmanThreeWheelLocalizer;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.hardware.Lift;
 import org.firstinspires.ftc.teamcode.hardware.LiftFSM;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
@@ -29,23 +31,20 @@ public class LocalizationTest extends LinearOpMode {
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         waitForStart();
         double lastTime = timer.milliseconds();
-        double[] driveweights = new double[]{0, 0, 0};
         while (!isStopRequested()) {
-            driveweights[2] = - gamepad1.right_stick_x;
-            if(Math.atan(Math.abs(-gamepad1.left_stick_x/-gamepad1.left_stick_y)) <= Math.PI/4) {
-                driveweights[0] = -gamepad1.left_stick_x;
-                driveweights[1] = 0;
-            }else {
-                driveweights[0] = 0;
-                driveweights[1] = -gamepad1.left_stick_y;
-            }
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            driveweights[0],
-                            driveweights[1],
-                            driveweights[2]
+                            -gamepad1.left_stick_y,
+                            -gamepad1.left_stick_x,
+                            -gamepad1.right_stick_x
                     )
             );
+            if(gamepad1.a) {
+                drive.setLocalizer(new KalmanThreeWheelLocalizer(hardwareMap));
+            }
+            if(gamepad1.b) {
+                drive.setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
+            }
             double curr = timer.milliseconds();
             telemetry.addData("loop: ", curr-lastTime);
             lastTime = curr;
