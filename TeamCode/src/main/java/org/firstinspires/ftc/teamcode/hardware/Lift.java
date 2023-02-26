@@ -36,13 +36,13 @@ public class Lift extends Mechanism{
     //pos
     public static double bottom = 0;
     public static double low = 0;
-    public static double mid = 315;
+    public static double mid = 300;
     public static double high = 615;
 
     public static double target = 0;
     public static double lastTarget = target;
-    public double lastError[] = {0, 0}; //separate error for each motor
-    public double powers[] = {0,0};
+    public double[] lastError = {0, 0}; //separate error for each motor
+    public double[] powers = {0,0};
     public boolean isReset = true;
     public boolean isReached = false;
 
@@ -52,13 +52,12 @@ public class Lift extends Mechanism{
 
     //roadrunner specific things
     public static PIDCoefficients coeff = new PIDCoefficients(kP, 0, 0);
-    public static PIDFController cont = new PIDFController(coeff, kG);
+    public static PIDFController controller = new PIDFController(coeff, kG);
     public static MotionProfile profile;
     public static ElapsedTime profileTimer;
     public static int MAX_VEL = 60;
     public static int MAX_ACCEL = 60;
-    public static int MAX_JERK = 100; //lol, said the scorpion, lmao
-    public static boolean profileActive = false;
+    public static boolean profileActive = true;
     public static boolean rrActive = false;
 
 
@@ -92,7 +91,6 @@ public class Lift extends Mechanism{
                     new MotionState(target, 0, 0),
                     MAX_VEL,
                     MAX_ACCEL
-
             );
             profileTimer.reset();
         }
@@ -125,29 +123,18 @@ public class Lift extends Mechanism{
 
     }
 
-    public void rrupdate() {
-        cont.setTargetPosition(target);
-        motors[0].setPower(cont.update(motors[0].getCurrentPosition()));
-        motors[1].setPower(cont.update(motors[0].getCurrentPosition()));
-    }
-
-    public void bbupdate() {
-        double error = motors[0].getCurrentPosition() - target;
-        if(Math.abs(error) > 200) {
-            motors[0].setPower(-1*Math.signum(error));
-            motors[1].setPower(-1*Math.signum(error));
-        } else{
-            update(0);
-            update(1);
-        }
+    public void RRUpdate() {
+        controller.setTargetPosition(target);
+        motors[0].setPower(controller.update(motors[0].getCurrentPosition()));
+        motors[1].setPower(controller.update(motors[0].getCurrentPosition()));
     }
 
     public void profiledUpdate() {
         MotionState state = profile.get(profileTimer.seconds());
-        cont.setTargetPosition(state.getX());
-        cont.setTargetVelocity(state.getV());
-        cont.setTargetAcceleration(state.getA());
-        double power = cont.update(motors[0].getCurrentPosition());
+        controller.setTargetPosition(state.getX());
+        controller.setTargetVelocity(state.getV());
+        controller.setTargetAcceleration(state.getA());
+        double power = controller.update(motors[0].getCurrentPosition());
         motors[0].setPower(power);
         motors[1].setPower(power);
     }
@@ -157,7 +144,7 @@ public class Lift extends Mechanism{
             recalibrate();
         } else {
             if(rrActive) {
-                rrupdate();
+                RRUpdate();
             }
             if(profileActive) {
                 profiledUpdate();
