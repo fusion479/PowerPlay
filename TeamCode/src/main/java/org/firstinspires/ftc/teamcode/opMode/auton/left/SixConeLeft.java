@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "6 Cone Left", group = "_Auto")
+@Autonomous(name = "LEFT 6 Cone", group = "_Auto")
 @Config
 public class SixConeLeft extends LinearOpMode {
 
@@ -62,14 +62,14 @@ public class SixConeLeft extends LinearOpMode {
     public static final double TURRET_SCORE_ANG = 43;
     public static final double TURRET_PICK_ANG = 180;
 
-    public static double grabDelay = -0.5;
+    public static double grabDelay = -0.45;
     public static double liftALittleAfterGrabDelay = -.15;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
-    public static double scoreDelay = -.1;
+    public static double scoreDelay = -.2;
     public static double turretAfterScoreDelay = .7;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .5;
+    public static double cycleDelay = .52;
 
     public static final int maxCones = 6;
 

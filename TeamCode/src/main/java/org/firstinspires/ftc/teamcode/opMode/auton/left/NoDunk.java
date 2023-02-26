@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode.opMode.auton.right;
+package org.firstinspires.ftc.teamcode.opMode.auton.left;
 
 import android.annotation.SuppressLint;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,7 +15,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumFaster;
+import org.firstinspires.ftc.teamcode.hardware.ScoreNoDunk;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.opMode.auton.AutoConstants;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -26,11 +28,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-// DO NOT TOUCH, IT WORKS!!!
 
-@Autonomous(name = "RIGHT 5 Cone", group = "_Auto")
+@Autonomous(name = "NoDunk", group = "_Auto")
 @Config
-public class FiveConeRight extends LinearOpMode {
+public class NoDunk extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -54,44 +55,47 @@ public class FiveConeRight extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
-    SampleMecanumDrive drive;
+    SampleMecanumFaster drive;
     Turret turret;
-    ScoreFSM score;
+    ScoreNoDunk score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = -45;
-    public static final double TURRET_PICK_ANG = -180;
+    public static final double TURRET_SCORE_ANG = 50;
+    public static final double TURRET_PICK_ANG = 180;
 
-    public static double grabDelay = -0.3;
-    public static double liftALittleAfterGrabDelay = 0.02;
+    public static final Pose2d SCOREPOS = new Pose2d(34, 12, Math.toRadians(180));
+    public static final Vector2d SCOREVEC = new Vector2d(34, 12);
+
+    public static double grabDelay = -0.5;
+    public static double liftALittleAfterGrabDelay = -.15;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
-    public static double scoreDelay = 0;
-    public static double turretAfterScoreDelay = .8;
+    public static double scoreDelay = -.1;
+    public static double turretAfterScoreDelay = .7;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .625;
+    public static double cycleDelay = .5;
 
-    public static final int maxCones = 5;
+    public static final int maxCones = 6;
 
     public static boolean isParked = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
         // called on init
-        drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumFaster(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         turret = new Turret();
         turret.init(hardwareMap);
         turret.setTargetAngle(0);
 
-        score = new ScoreFSM();
+        score = new ScoreNoDunk();
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        drive.setPoseEstimate(AutoConstants.R_START);
+        drive.setPoseEstimate(AutoConstants.L_START);
 
-        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.R_START)
+        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.L_START)
                 .addTemporalMarker(0, () -> {
                     score.idleU();
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -99,7 +103,7 @@ public class FiveConeRight extends LinearOpMode {
                 .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(AutoConstants.R_SCORE_POSE)
+                .lineToLinearHeading(SCOREPOS)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -110,7 +114,7 @@ public class FiveConeRight extends LinearOpMode {
                 // END CONE 1 (PRELOAD)
 
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -123,7 +127,7 @@ public class FiveConeRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(SCOREVEC)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -133,7 +137,7 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CONE 2
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -146,7 +150,7 @@ public class FiveConeRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(SCOREVEC)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -156,7 +160,7 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 3
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -169,7 +173,7 @@ public class FiveConeRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(SCOREVEC)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -179,7 +183,30 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 4
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
+                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
+                    score.toggleClaw();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
+                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
+                    score.highGoal();
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
+                    turret.setTargetAngle(TURRET_SCORE_ANG);
+                })
+                .lineTo(SCOREVEC)
+                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
+                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
+                })
+                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
+                    turret.setTargetAngle(TURRET_PICK_ANG);
+                })
+                .waitSeconds(cycleDelay)
+                // END CONE 5
+
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -192,11 +219,11 @@ public class FiveConeRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(SCOREVEC)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
-                // END CONE 5
+                // END CONE 6
                 .build();
 
 
@@ -207,7 +234,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_LEFT)
+                .lineToLinearHeading(AutoConstants.L_PARK_LEFT)
                 .back(12)
                 .build();
 
@@ -218,7 +245,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_MIDDLE)
+                .lineToLinearHeading(new Pose2d(36, 50, Math.toRadians(270)))
                 .back(12)
                 .build();
 //
@@ -229,7 +256,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_RIGHT)
+                .lineToLinearHeading(AutoConstants.L_PARK_RIGHT)
                 .back(12)
                 .build();
 

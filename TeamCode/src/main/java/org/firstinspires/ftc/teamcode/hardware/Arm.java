@@ -9,14 +9,14 @@ public class Arm extends Mechanism{
     Servo left, right;
     Servo claw;
     //CONSTANTS
-    public static double initPos = 0.87;
-    public static double pickPos = 0.15;
-    public static double placePos = 0.65;
-    public static double autoReady = 0.5;
+    public static double initPos = 0.85;
+    public static double pickPos = 0.155;
+    public static double placePos = 0.655;
+    public static double autoReady = 0.72;
     public double currentPos = 0;
             ;
-    public static double close = 0.545;
-    public static double open = 0.32;
+    public static double close = 0.53;
+    public static double open = 0.73;
 
     public static double distanceThreshold = 50;
 
@@ -104,4 +104,10 @@ public class Arm extends Mechanism{
         isOpen = bool;
     }
 
+    public void setAutoReady() {
+        left.setPosition(autoReady);
+        right.setPosition(1- autoReady);
+        isUp = false;
+        currentPos = autoReady;
+    }
 }

@@ -195,11 +195,7 @@ public class ScoreTurretFSM extends Mechanism {
         if(ready()) {
             score();
         }else {
-            if(scoreStates == states.IDLE_UP) {
-                highGoal();
-            }else {
-                arm.toggleClaw();
-            }
+            arm.toggleClaw();
         }
     }
 

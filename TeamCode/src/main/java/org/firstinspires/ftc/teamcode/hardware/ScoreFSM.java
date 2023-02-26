@@ -20,7 +20,7 @@ public class ScoreFSM extends Mechanism {
 
     public static int liftDelay = 300;
     public static int clawDelay = 150;
-    public static int autoArmDownDelay = 700;
+    public static int autoArmDownDelay = 650;
     public double customPos = 0;
     public double autoCounter = 0;
     public enum states {

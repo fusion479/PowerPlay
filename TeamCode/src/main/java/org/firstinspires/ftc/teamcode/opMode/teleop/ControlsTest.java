@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.teleop.prototype;
+package org.firstinspires.ftc.teamcode.opMode.teleop;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -9,7 +9,7 @@ import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.hardware.ScoreTurretFSM;
 import org.firstinspires.ftc.teamcode.hardware.TestBot;
-@TeleOp (name="New Controls", group = "_1")
+@TeleOp (name="MAIN", group = "_1")
 public class ControlsTest extends LinearOpMode {
     TestBot bot = new TestBot();
     FtcDashboard dashboard = FtcDashboard.getInstance();

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.auton.right;
+package org.firstinspires.ftc.teamcode.opMode.auton.left;
 
 import android.annotation.SuppressLint;
 
@@ -28,9 +28,9 @@ import java.util.ArrayList;
 
 // DO NOT TOUCH, IT WORKS!!!
 
-@Autonomous(name = "RIGHT 5 Cone", group = "_Auto")
+@Autonomous(name = "LEFT Mid Goal", group = "_Auto")
 @Config
-public class FiveConeRight extends LinearOpMode {
+public class MidGoalAuto extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -89,17 +89,17 @@ public class FiveConeRight extends LinearOpMode {
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        drive.setPoseEstimate(AutoConstants.R_START);
+        drive.setPoseEstimate(AutoConstants.L_START);
 
-        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.R_START)
+        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.L_START)
                 .addTemporalMarker(0, () -> {
                     score.idleU();
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
                 .addTemporalMarker(2.4, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
-                .lineToLinearHeading(AutoConstants.R_SCORE_POSE)
+                .lineToLinearHeading(AutoConstants.L_SCORE_POSE)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -110,7 +110,7 @@ public class FiveConeRight extends LinearOpMode {
                 // END CONE 1 (PRELOAD)
 
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -118,12 +118,12 @@ public class FiveConeRight extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(AutoConstants.L_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -133,7 +133,7 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CONE 2
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -141,12 +141,12 @@ public class FiveConeRight extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(AutoConstants.L_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -156,7 +156,7 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 3
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -164,12 +164,12 @@ public class FiveConeRight extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(AutoConstants.L_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -179,7 +179,7 @@ public class FiveConeRight extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 4
 
-                .lineTo(AutoConstants.R_STACK)
+                .lineTo(AutoConstants.L_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -187,18 +187,17 @@ public class FiveConeRight extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.R_SCORE_VECTOR)
+                .lineTo(AutoConstants.L_SCORE_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
                 // END CONE 5
                 .build();
-
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
@@ -207,7 +206,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_LEFT)
+                .lineToLinearHeading(AutoConstants.L_PARK_LEFT)
                 .back(12)
                 .build();
 
@@ -218,7 +217,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_MIDDLE)
+                .lineToLinearHeading(AutoConstants.L_PARK_MIDDLE)
                 .back(12)
                 .build();
 //
@@ -229,7 +228,7 @@ public class FiveConeRight extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.R_PARK_RIGHT)
+                .lineToLinearHeading(AutoConstants.L_PARK_RIGHT)
                 .back(12)
                 .build();
 
