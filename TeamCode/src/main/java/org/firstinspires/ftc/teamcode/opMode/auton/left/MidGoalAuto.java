@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumFaster;
 import org.firstinspires.ftc.teamcode.hardware.ScoreFSM;
 import org.firstinspires.ftc.teamcode.hardware.Turret;
 import org.firstinspires.ftc.teamcode.opMode.auton.AutoConstants;
@@ -27,10 +26,11 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
+// DO NOT TOUCH, IT WORKS!!!
 
-@Autonomous(name = "LEFT 6 Cone", group = "_Auto")
+@Autonomous(name = "LEFT Mid Goal", group = "_Auto")
 @Config
-public class SixConeLeft extends LinearOpMode {
+public class MidGoalAuto extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -54,31 +54,31 @@ public class SixConeLeft extends LinearOpMode {
 
     AprilTagDetection tagOfInterest = null;
 
-    SampleMecanumFaster drive;
+    SampleMecanumDrive drive;
     Turret turret;
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = 43;
-    public static final double TURRET_PICK_ANG = 180;
+    public static final double TURRET_SCORE_ANG = -45;
+    public static final double TURRET_PICK_ANG = -180;
 
-    public static double grabDelay = -0.45;
-    public static double liftALittleAfterGrabDelay = -.15;
+    public static double grabDelay = -0.3;
+    public static double liftALittleAfterGrabDelay = 0.02;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
-    public static double scoreDelay = -.2;
-    public static double turretAfterScoreDelay = .7;
+    public static double scoreDelay = 0;
+    public static double turretAfterScoreDelay = .8;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .52;
+    public static double cycleDelay = .625;
 
-    public static final int maxCones = 6;
+    public static final int maxCones = 5;
 
     public static boolean isParked = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
         // called on init
-        drive = new SampleMecanumFaster(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         turret = new Turret();
@@ -97,7 +97,7 @@ public class SixConeLeft extends LinearOpMode {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
                 .addTemporalMarker(2.4, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .lineToLinearHeading(AutoConstants.L_SCORE_POSE)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
@@ -118,7 +118,7 @@ public class SixConeLeft extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -141,7 +141,7 @@ public class SixConeLeft extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -164,7 +164,7 @@ public class SixConeLeft extends LinearOpMode {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -183,34 +183,11 @@ public class SixConeLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
-                .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay, () -> {
-                    score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
-                    turret.setTargetAngle(TURRET_SCORE_ANG);
-                })
-                .lineTo(AutoConstants.L_SCORE_VECTOR)
-                .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
-                    score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
-                })
-                .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
-                    turret.setTargetAngle(TURRET_PICK_ANG);
-                })
-                .waitSeconds(cycleDelay)
-                // END CONE 5
-
-                .lineTo(AutoConstants.L_STACK)
-                .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
-                    score.toggleClaw();
-                })
                 .UNSTABLE_addTemporalMarkerOffset(liftALittleAfterGrabDelay + .02, () -> {
                     score.setTargetPosition(score.lift.lift.getPos() + liftHeightMod);
                 })
                 .UNSTABLE_addTemporalMarkerOffset(liftAfterGrabDelay, () -> {
-                    score.highGoal();
+                    score.midGoal();
                 })
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -219,9 +196,8 @@ public class SixConeLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
-                // END CONE 6
+                // END CONE 5
                 .build();
-
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
