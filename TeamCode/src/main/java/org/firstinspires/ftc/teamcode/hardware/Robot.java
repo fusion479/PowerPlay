@@ -32,6 +32,8 @@ public class Robot extends Mechanism {
         score.lift.isAuto = false;
         odoLift = hwMap.get(Servo.class, "odoLiftF");
         score.arm.open();
+        score.arm.up();
+        score.lift.bottom();
     }
     public void run(Gamepad gamepad) {
         move(gamepad);

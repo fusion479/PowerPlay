@@ -1,25 +1,28 @@
 package org.firstinspires.ftc.teamcode.opMode.teleop;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.hardware.Robot;
-@TeleOp(name = "Old TeleOp", group = "_2")
+import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.hardware.ScoreTurretFSM;
+import org.firstinspires.ftc.teamcode.hardware.TestBot;
+@TeleOp (name="MAIN", group = "_1")
 public class MainTeleOp extends LinearOpMode {
-    public Robot robot = new Robot();
-    ElapsedTime timer = new ElapsedTime();
+    TestBot bot = new TestBot();
+    FtcDashboard dashboard = FtcDashboard.getInstance();
+    MultipleTelemetry tele = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
+        bot.init(hardwareMap);
         waitForStart();
-        double lastTime = timer.milliseconds();
         while(opModeIsActive()) {
-            robot.run(gamepad1);
-            double curr = timer.milliseconds();
-            telemetry.addData("looptime: ", curr-lastTime);
-            telemetry.update();
-            lastTime = curr;
+            bot.run(gamepad1);
         }
+        tele.addData("turr1 current: ", bot.score.turret.turrs[0].getCurrent(CurrentUnit.AMPS));
+        tele.addData("turr2 current: ", bot.score.turret.turrs[1].getCurrent(CurrentUnit.AMPS));
+        tele.update();
     }
 }

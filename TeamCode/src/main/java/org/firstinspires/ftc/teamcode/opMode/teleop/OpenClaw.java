@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp (name="Open the Claw", group="_1")
+@TeleOp (name="RESET FOR PRELOAD", group="_1")
 public class OpenClaw extends LinearOpMode {
     Servo claw;
 

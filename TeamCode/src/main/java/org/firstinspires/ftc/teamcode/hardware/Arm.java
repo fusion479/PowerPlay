@@ -8,13 +8,17 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Arm extends Mechanism{
     Servo left, right;
     Servo claw;
+    Servo poleGuide;
     //CONSTANTS
     public static double initPos = 0.85;
     public static double pickPos = 0.155;
     public static double placePos = 0.655;
     public static double autoReady = 0.72;
     public double currentPos = 0;
-            ;
+
+    public static double polePlace = 0;
+    public static double poleDown = 1;
+
     public static double close = 0.53;
     public static double open = 0.73;
 
@@ -29,6 +33,7 @@ public class Arm extends Mechanism{
         claw = hwMap.get(Servo.class, "claw");
         left = hwMap.get(Servo.class, "armLeft");
         right = hwMap.get(Servo.class, "armRight");
+        poleGuide = hwMap.get(Servo.class, "poleGuide");
         resetArm();
         close();
     }
@@ -46,6 +51,7 @@ public class Arm extends Mechanism{
         if(currentPos != pickPos) {
             left.setPosition(pickPos);
             right.setPosition(1 - pickPos);
+            poleGuide.setPosition(poleDown);
             isUp = false;
             currentPos = pickPos;
         }
@@ -55,6 +61,7 @@ public class Arm extends Mechanism{
         if(currentPos != placePos) {
             left.setPosition(placePos);
             right.setPosition(1 - placePos);
+            poleGuide.setPosition(polePlace);
             isUp = false;
             currentPos = placePos;
         }
@@ -106,7 +113,7 @@ public class Arm extends Mechanism{
 
     public void setAutoReady() {
         left.setPosition(autoReady);
-        right.setPosition(1- autoReady);
+        right.setPosition(1 - autoReady);
         isUp = false;
         currentPos = autoReady;
     }
