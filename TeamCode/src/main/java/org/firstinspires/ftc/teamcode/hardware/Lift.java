@@ -52,7 +52,7 @@ public class Lift extends Mechanism{
 
     //roadrunner specific things
     public static PIDCoefficients coeff = new PIDCoefficients(kP, 0, 0);
-    public static PIDFController controller = new PIDFController(coeff, 0, 0, 0, (x, v) -> kG);
+    public static PIDFController controller = new PIDFController(coeff, kG);
     public static MotionProfile profile;
     public static ElapsedTime profileTimer;
     public static int MAX_VEL = 60;
@@ -98,24 +98,20 @@ public class Lift extends Mechanism{
     }
 
     public void update(int motor) {
-        update(motor, target);
-    }
-
-    public void update(int motor, double reference) {
         double time = timer.milliseconds();
-        double error = motors[0].getCurrentPosition() - reference;
+        double error = motors[0].getCurrentPosition() - target;
         double pd = Range.clip(kP * error + kD * (error-lastError[motor]) / time + kG, -vMax, vMax);
         if(Math.abs(error) < bound) {
             pd = kG;
-            if(reference <= 300) {
+            if(target <= 300) {
                 pd = kLow;
             }
-            if(reference == 0) {
+            if(target == 0) {
                 pd = 0;
             }
             isReached = true;
         }
-        if(reference == 0) {
+        if(target == 0) {
             pd *= retMult;
         }
         lastError[motor] = error;
@@ -124,6 +120,7 @@ public class Lift extends Mechanism{
             powers[motor] = pd;
             motors[motor].setPower(powers[motor]);
         }
+
     }
 
     public void RRUpdate() {
@@ -132,20 +129,14 @@ public class Lift extends Mechanism{
         motors[1].setPower(controller.update(motors[0].getCurrentPosition()));
     }
 
-//    public void profiledUpdate() {
-//        MotionState state = profile.get(profileTimer.seconds());
-//        controller.setTargetPosition(state.getX());
-//        controller.setTargetVelocity(state.getV());
-//        controller.setTargetAcceleration(state.getA());
-//        double power = controller.update(motors[0].getCurrentPosition());
-//        motors[0].setPower(power);
-//        motors[1].setPower(power);
-//    }
-
     public void profiledUpdate() {
         MotionState state = profile.get(profileTimer.seconds());
-        update(0, state.getX());
-        update(1, state.getX());
+        controller.setTargetPosition(state.getX());
+        controller.setTargetVelocity(state.getV());
+        controller.setTargetAcceleration(state.getA());
+        double power = controller.update(motors[0].getCurrentPosition());
+        motors[0].setPower(power);
+        motors[1].setPower(power);
     }
 
     public void loop() {

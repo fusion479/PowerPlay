@@ -75,35 +75,19 @@ public class ScoreNoDunk extends Mechanism {
                 break;
             case READY_HIGH:
                 lift.high();
-                if(lift.isAuto) {
-                    arm.autoReady();
-                }else if(lift.targetReached()) {
-                    arm.autoReady();
-                }
+                arm.autoReady();
                 break;
             case READY_MEDIUM:
                 lift.mid();
-                if(lift.isAuto) {
-                    arm.autoReady();
-                }else if(lift.targetReached()) {
-                    arm.autoReady();
-                }
+                arm.autoReady();
                 break;
             case READY_LOW:
                 lift.low();
-                if(lift.isAuto) {
-                    arm.autoReady();
-                }else if(lift.targetReached()) {
-                    arm.autoReady();
-                }
+                arm.autoReady();
                 break;
             case READY_BOTTOM:
                 lift.bottom();
-                if(lift.isAuto) {
-                    arm.autoReady();
-                }else if(lift.targetReached()) {
-                    arm.autoReady();
-                }
+                arm.autoReady();
                 break;
             case SCORE:
                     lift.lowerABit();

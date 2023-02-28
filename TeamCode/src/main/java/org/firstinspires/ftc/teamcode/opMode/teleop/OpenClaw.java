@@ -4,25 +4,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.hardware.ArmFSM;
+
 @TeleOp (name="RESET FOR PRELOAD", group="_1")
 public class OpenClaw extends LinearOpMode {
-    Servo claw;
+    ArmFSM arm = new ArmFSM();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        claw = hardwareMap.get(Servo.class, "claw");
 
-        claw.setPosition(.73);
+
+        arm.init(hardwareMap);
+        arm.up();
+        arm.open();
 
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            if(gamepad1.a) {
-                claw.setPosition(.73);
-            } else if (gamepad1.b) {
-                claw.setPosition(.53);
-            }
-
+            arm.up();
+            arm.open();
         }
     }
 

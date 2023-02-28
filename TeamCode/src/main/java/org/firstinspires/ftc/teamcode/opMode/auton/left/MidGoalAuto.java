@@ -67,9 +67,9 @@ public class MidGoalAuto extends LinearOpMode {
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = -.2;
-    public static double turretAfterScoreDelay = .7;
+    public static double turretAfterScoreDelay = .4;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .55;
+    public static double cycleDelay = .50;
 
     public static final int maxCones = 6;
 
@@ -176,7 +176,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(TURRET_PICK_ANG);
                 })
-                .waitSeconds(cycleDelay + .2)
+                .waitSeconds(cycleDelay)
                 //END CONE 4
 
                 .lineTo(AutoConstants.L_STACK)
@@ -199,7 +199,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(TURRET_PICK_ANG);
                 })
-                .waitSeconds(cycleDelay + .1)
+                .waitSeconds(cycleDelay)
                 // END CONE 5
 
                 .lineTo(AutoConstants.L_STACK)

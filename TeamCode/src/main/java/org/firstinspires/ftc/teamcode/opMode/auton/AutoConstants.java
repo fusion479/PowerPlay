@@ -49,18 +49,27 @@ public class AutoConstants {
     public static double L_SCORE_Y = 12;
     public static double L_SCORE_HEADING = Math.toRadians(180);
 
-    public static double L_SCORE_MID_X = 36.8;
+    public static double L_SCORE_MID_X = 37.2;
+    public static double L_SCORE_NODUNK_X = 31.7;
+    public static double L_SCORE_NODUNK_Y = 10.4;
 
     public static double L_STACK_X = 55.1;
     public static double L_STACK_Y = 12;
     public static double L_STACK_HEADING = Math.toRadians(180);
 
     public static final Pose2d L_START = new Pose2d(START_X, START_Y, START_HEADING);
+    public static final Vector2d L_STACK = new Vector2d(L_STACK_X, L_STACK_Y);
+
     public static final Pose2d L_SCORE_POSE = new Pose2d(L_SCORE_X, L_SCORE_Y, L_SCORE_HEADING);
     public static final Vector2d L_SCORE_VECTOR = new Vector2d(L_SCORE_X, L_SCORE_Y);
+
     public static final Pose2d L_SCORE_MID_POSE = new Pose2d(L_SCORE_MID_X, L_SCORE_Y, L_SCORE_HEADING);
     public static final Vector2d L_SCORE_MID_VECTOR = new Vector2d(L_SCORE_MID_X, L_SCORE_Y);
-    public static final Vector2d L_STACK = new Vector2d(L_STACK_X, L_STACK_Y);
+
+    public static final Pose2d L_SCORE_NODUNK_POSE = new Pose2d(L_SCORE_NODUNK_X, L_SCORE_NODUNK_Y, L_SCORE_HEADING);
+    public static final Vector2d L_SCORE_NODUNK_VECTOR = new Vector2d(L_SCORE_NODUNK_X, L_SCORE_NODUNK_Y);
+
+
 
 
     public static double R_SCORE_X = -37.4;

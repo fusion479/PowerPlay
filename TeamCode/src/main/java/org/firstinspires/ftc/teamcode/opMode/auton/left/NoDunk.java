@@ -63,15 +63,12 @@ public class NoDunk extends LinearOpMode {
     public static final double TURRET_SCORE_ANG = 50;
     public static final double TURRET_PICK_ANG = 180;
 
-    public static final Pose2d SCOREPOS = new Pose2d(34, 12, Math.toRadians(180));
-    public static final Vector2d SCOREVEC = new Vector2d(34, 12);
-
     public static double grabDelay = -0.5;
     public static double liftALittleAfterGrabDelay = -.15;
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = -.1;
-    public static double turretAfterScoreDelay = .7;
+    public static double turretAfterScoreDelay = .5;
     public static double liftHeightMod = 175;
     public static double cycleDelay = .5;
 
@@ -103,7 +100,7 @@ public class NoDunk extends LinearOpMode {
                 .addTemporalMarker(2.4, () -> {
                     score.highGoal();
                 })
-                .lineToLinearHeading(SCOREPOS)
+                .lineToLinearHeading(AutoConstants.L_SCORE_NODUNK_POSE)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -127,7 +124,7 @@ public class NoDunk extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(SCOREVEC)
+                .lineTo(AutoConstants.L_SCORE_NODUNK_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -150,7 +147,7 @@ public class NoDunk extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(SCOREVEC)
+                .lineTo(AutoConstants.L_SCORE_NODUNK_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -173,7 +170,7 @@ public class NoDunk extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(SCOREVEC)
+                .lineTo(AutoConstants.L_SCORE_NODUNK_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -196,7 +193,7 @@ public class NoDunk extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(SCOREVEC)
+                .lineTo(AutoConstants.L_SCORE_NODUNK_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -219,7 +216,7 @@ public class NoDunk extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(SCOREVEC)
+                .lineTo(AutoConstants.L_SCORE_NODUNK_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
