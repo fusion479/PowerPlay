@@ -49,7 +49,7 @@ public class AutoConstants {
     public static double L_SCORE_Y = 12;
     public static double L_SCORE_HEADING = Math.toRadians(180);
 
-    public static double L_SCORE_MID_X = 35.8;
+    public static double L_SCORE_MID_X = 36.8;
 
     public static double L_STACK_X = 55.1;
     public static double L_STACK_Y = 12;

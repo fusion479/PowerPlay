@@ -57,7 +57,7 @@ public class Lift extends Mechanism{
     public static ElapsedTime profileTimer;
     public static int MAX_VEL = 60;
     public static int MAX_ACCEL = 60;
-    public static boolean profileActive = true;
+    public static boolean profileActive = false;
     public static boolean rrActive = false;
 
 
