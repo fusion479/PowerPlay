@@ -28,7 +28,7 @@ public class Lift extends Mechanism{
     public static double kG = -0.2;
     public static double kP = 0.008;
     public static double kD = 0;
-    public static double kLow = -0.1;
+    public static double kLow = -0.13;
     public static double bound = 20;
     public static double vMax = 1;
     public static double retMult = 0.75;

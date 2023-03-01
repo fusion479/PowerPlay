@@ -67,7 +67,7 @@ public class SixConeLeft extends LinearOpMode {
     public static double liftAfterGrabDelay = 0.45;
     public static double turretAfterGrabDelay = 0.15;
     public static double scoreDelay = -.2;
-    public static double turretAfterScoreDelay = .7;
+    public static double turretAfterScoreDelay = .4;
     public static double liftHeightMod = 175;
     public static double cycleDelay = .52;
 

@@ -65,7 +65,7 @@ public class FiveConeLeft extends LinearOpMode {
     public static double grabDelay = -0.3;
     public static double liftALittleAfterGrabDelay = 0.02;
     public static double liftAfterGrabDelay = 0.45;
-    public static double turretAfterGrabDelay = 0.15;
+    public static double turretAfterGrabDelay = 0.2;
     public static double scoreDelay = 0;
     public static double turretAfterScoreDelay = .8;
     public static double liftHeightMod = 175;

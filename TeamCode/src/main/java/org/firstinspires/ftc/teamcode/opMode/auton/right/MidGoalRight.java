@@ -59,17 +59,17 @@ public class MidGoalRight extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = 42;
+    public static final double TURRET_SCORE_ANG = 40;
     public static final double TURRET_PICK_ANG = 180;
 
     public static double grabDelay = -0.45;
     public static double liftALittleAfterGrabDelay = -.15;
-    public static double liftAfterGrabDelay = 0.45;
-    public static double turretAfterGrabDelay = 0.15;
+    public static double liftAfterGrabDelay = 0.2;
+    public static double turretAfterGrabDelay = 0.25;
     public static double scoreDelay = -.2;
-    public static double turretAfterScoreDelay = .4;
+    public static double turretAfterScoreDelay = .1;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .50;
+    public static double cycleDelay = .57;
 
     public static final int maxCones = 6;
 
