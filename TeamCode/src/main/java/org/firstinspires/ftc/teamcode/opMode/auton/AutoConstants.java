@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.opencv.core.Mat;
 
 @Config
 public class AutoConstants {
@@ -33,12 +34,13 @@ public class AutoConstants {
     public static double LPM_X = 36;
     public static double LPR_X = 12;
     // RIGHT PARKING VALUES
-    public static double RPL_X = -LPR_X;
+    public static double RPL_X = -LPR_X + 2;
     public static double RPM_X = -LPM_X;
-    public static double RPR_X = -LPL_X;
+    public static double RPR_X = -LPL_X - 2;
 
     public static double PARK_Y = 12;
     public static double PARK_HEADING = Math.toRadians(270);
+    public static double RIGHT_PARK_HEADING = Math.toRadians(260);
 
     // BASIC PARKING
     public static double FORWARD_DIST = 30;
@@ -73,23 +75,28 @@ public class AutoConstants {
 
 
     public static double R_SCORE_X = -37.4;
-    public static double R_SCORE_Y = 12;
+    public static double R_SCORE_Y = 14;
     public static double R_SCORE_HEADING = Math.toRadians(-10);
 
-    public static double R_STACK_X = -54.5;
-    public static double R_STACK_Y = 12;
+    public static double R_SCORE_MID_X = -41.5;
+
+    public static double R_STACK_X = -61.2;
+    public static double R_STACK_Y = 14;
     public static double R_STACK_HEADING = Math.toRadians(0);
 
     public static final Pose2d R_START = new Pose2d(-START_X, START_Y, START_HEADING);
-    public static final Pose2d R_SCORE_POSE = new Pose2d(R_SCORE_X, R_SCORE_Y, R_SCORE_HEADING);
-    public static final Vector2d R_SCORE_VECTOR = new Vector2d(R_SCORE_X, R_SCORE_Y);
     public static final Vector2d R_STACK = new Vector2d(R_STACK_X, R_STACK_Y);
 
+    public static final Pose2d R_SCORE_POSE = new Pose2d(R_SCORE_X, R_SCORE_Y, R_SCORE_HEADING);
+    public static final Vector2d R_SCORE_VECTOR = new Vector2d(R_SCORE_X, R_SCORE_Y);
+
+    public static final Pose2d R_SCORE_MID_POSE = new Pose2d(R_SCORE_MID_X, R_SCORE_Y, R_SCORE_HEADING);
+    public static final Vector2d R_SCORE_MID_VECTOR = new Vector2d(R_SCORE_MID_X, R_SCORE_Y);
 
     public static final Pose2d L_PARK_LEFT = new Pose2d(LPL_X, PARK_Y, PARK_HEADING);
     public static final Pose2d L_PARK_MIDDLE = new Pose2d(LPM_X, PARK_Y, PARK_HEADING);
     public static final Pose2d L_PARK_RIGHT = new Pose2d(LPR_X, PARK_Y, PARK_HEADING);
-    public static final Pose2d R_PARK_LEFT = new Pose2d(RPL_X, PARK_Y, PARK_HEADING);
-    public static final Pose2d R_PARK_MIDDLE = new Pose2d(RPM_X, PARK_Y, PARK_HEADING);
-    public static final Pose2d R_PARK_RIGHT = new Pose2d(RPR_X, PARK_Y, PARK_HEADING);
+    public static final Pose2d R_PARK_LEFT = new Pose2d(RPL_X, PARK_Y, RIGHT_PARK_HEADING);
+    public static final Pose2d R_PARK_MIDDLE = new Pose2d(RPM_X, PARK_Y, RIGHT_PARK_HEADING);
+    public static final Pose2d R_PARK_RIGHT = new Pose2d(RPR_X, PARK_Y, RIGHT_PARK_HEADING);
 }

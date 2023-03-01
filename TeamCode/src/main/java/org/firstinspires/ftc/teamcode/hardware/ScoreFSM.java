@@ -22,6 +22,7 @@ public class ScoreFSM extends Mechanism {
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 650;
     public double customPos = 0;
+    public double autoMidPos = 350;
     public double autoCounter = 0;
     public enum states {
         DOWN,
@@ -82,8 +83,8 @@ public class ScoreFSM extends Mechanism {
                 }
                 break;
             case READY_MEDIUM:
-                lift.mid();
                 if(lift.isAuto) {
+                    lift.setTargetPosition(autoMidPos);
                     arm.up();
                 }else if(lift.targetReached()) {
                     arm.ready();

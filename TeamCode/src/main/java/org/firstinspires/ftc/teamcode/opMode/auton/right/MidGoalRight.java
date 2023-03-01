@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opMode.auton.left;
+package org.firstinspires.ftc.teamcode.opMode.auton.right;
 
 import android.annotation.SuppressLint;
 
@@ -28,9 +28,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "LEFT Mid Goal", group = "_Auto")
+@Autonomous(name = "RIGHT Mid Goal", group = "_Auto")
 @Config
-public class MidGoalAuto extends LinearOpMode {
+public class MidGoalRight extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
     double lastTime = 0;
@@ -59,8 +59,8 @@ public class MidGoalAuto extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = -38;
-    public static final double TURRET_PICK_ANG = -180;
+    public static final double TURRET_SCORE_ANG = 42;
+    public static final double TURRET_PICK_ANG = 180;
 
     public static double grabDelay = -0.45;
     public static double liftALittleAfterGrabDelay = -.15;
@@ -89,9 +89,9 @@ public class MidGoalAuto extends LinearOpMode {
         score.init(hardwareMap);
         score.lift.isAuto = true;
 
-        drive.setPoseEstimate(AutoConstants.L_START);
+        drive.setPoseEstimate(AutoConstants.R_START);
 
-        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.L_START)
+        TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.R_START)
                 .addTemporalMarker(0, () -> {
                     score.idleU();
                     turret.setTargetAngle(TURRET_SCORE_ANG);
@@ -99,7 +99,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .addTemporalMarker(2.4, () -> {
                     score.midGoal();
                 })
-                .lineToLinearHeading(AutoConstants.L_SCORE_MID_POSE)
+                .lineToLinearHeading(AutoConstants.R_SCORE_MID_POSE)
                 .UNSTABLE_addTemporalMarkerOffset(0, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[0]);
                 })
@@ -110,7 +110,7 @@ public class MidGoalAuto extends LinearOpMode {
                 // END CONE 1 (PRELOAD)
 
 
-                .lineTo(AutoConstants.L_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -123,7 +123,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.L_SCORE_MID_VECTOR)
+                .lineTo(AutoConstants.R_SCORE_MID_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[1]);
                 })
@@ -133,7 +133,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CONE 2
 
-                .lineTo(AutoConstants.L_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -146,7 +146,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.L_SCORE_MID_VECTOR)
+                .lineTo(AutoConstants.R_SCORE_MID_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[2]);
                 })
@@ -156,7 +156,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 3
 
-                .lineTo(AutoConstants.L_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -169,7 +169,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.L_SCORE_MID_VECTOR)
+                .lineTo(AutoConstants.R_SCORE_MID_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[3]);
                 })
@@ -179,7 +179,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 //END CONE 4
 
-                .lineTo(AutoConstants.L_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -192,7 +192,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.L_SCORE_MID_VECTOR)
+                .lineTo(AutoConstants.R_SCORE_MID_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -202,7 +202,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .waitSeconds(cycleDelay)
                 // END CONE 5
 
-                .lineTo(AutoConstants.L_STACK)
+                .lineTo(AutoConstants.R_STACK)
                 .UNSTABLE_addTemporalMarkerOffset(grabDelay, () -> {
                     score.toggleClaw();
                 })
@@ -215,7 +215,7 @@ public class MidGoalAuto extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterGrabDelay, () -> {
                     turret.setTargetAngle(TURRET_SCORE_ANG);
                 })
-                .lineTo(AutoConstants.L_SCORE_MID_VECTOR)
+                .lineTo(AutoConstants.R_SCORE_MID_VECTOR)
                 .UNSTABLE_addTemporalMarkerOffset(scoreDelay, () -> {
                     score.autoScore(AutoConstants.STACK_SLIDES_POSITIONS[4]);
                 })
@@ -230,7 +230,7 @@ public class MidGoalAuto extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.L_PARK_LEFT)
+                .lineToLinearHeading(AutoConstants.R_PARK_LEFT)
                 .back(12)
                 .build();
 
@@ -241,7 +241,7 @@ public class MidGoalAuto extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.L_PARK_MIDDLE)
+                .lineToLinearHeading(AutoConstants.R_PARK_MIDDLE)
                 .back(12)
                 .build();
 //
@@ -252,7 +252,7 @@ public class MidGoalAuto extends LinearOpMode {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
-                .lineToLinearHeading(AutoConstants.L_PARK_RIGHT)
+                .lineToLinearHeading(AutoConstants.R_PARK_RIGHT)
                 .back(12)
                 .build();
 
