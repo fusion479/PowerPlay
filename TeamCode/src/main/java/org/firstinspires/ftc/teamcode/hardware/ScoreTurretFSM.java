@@ -16,6 +16,7 @@ public class ScoreTurretFSM extends Mechanism {
     public boolean debug = false;
     public boolean isOpen = false;
     public boolean commit = false;
+    public boolean cycleMode = true;
 
     public static int liftDelay = 300;
     public static int clawDelay = 150;
@@ -82,7 +83,11 @@ public class ScoreTurretFSM extends Mechanism {
                 break;
             case TURRET_SCORE:
                 if(liftTimer.milliseconds() >= turretDelay) {
-                    turret.score();
+                    if (cycleMode) {
+                        turret.score();
+                    } else {
+                        turret.sideways();
+                    }
                     if(lastState == states.READY_HIGH) {
                         if(liftTimer.milliseconds() >= turretDelay + teleOpArmDownDelay) {
                             scoreStates = states.IDLE_DOWN;

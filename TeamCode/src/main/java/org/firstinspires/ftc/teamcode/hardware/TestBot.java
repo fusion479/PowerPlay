@@ -19,6 +19,7 @@ public class TestBot extends Mechanism{
     public boolean isPressedx = false;
     public boolean isPressedy = false;
     public boolean isPresseda = false;
+    public boolean isPressedB = false;
     public boolean isPressedRB = false;
     public boolean isPressedLB = false;
     public boolean isPressedRT = false;
@@ -65,6 +66,9 @@ public class TestBot extends Mechanism{
         }
         if(!isPresseda && gamepad.a) {
             score.toggleLow();
+        }
+        if(!isPressedB && gamepad.b) {
+            score.cycleMode = !score.cycleMode;
         }
         if(!isPressedRB && gamepad.right_bumper) {
             score.toggleClaw();
