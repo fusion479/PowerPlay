@@ -32,7 +32,7 @@ public class Turret extends Mechanism{
     public static double score = 100;
 
     public static boolean isPicking = false;
-    public static boolean cycleMode = true;
+    public static boolean cycleMode = false;
 
 
     @Override
