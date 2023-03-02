@@ -68,7 +68,7 @@ public class TestBot extends Mechanism{
             score.toggleLow();
         }
         if(!isPressedB && gamepad.b) {
-            score.cycleMode = !score.cycleMode;
+            score.turret.cycleMode = !score.turret.cycleMode;
         }
         if(!isPressedRB && gamepad.right_bumper) {
             score.toggleClaw();

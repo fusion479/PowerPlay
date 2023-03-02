@@ -32,6 +32,7 @@ public class Turret extends Mechanism{
     public static double score = 100;
 
     public static boolean isPicking = false;
+    public static boolean cycleMode = true;
 
 
     @Override
@@ -131,7 +132,11 @@ public class Turret extends Mechanism{
 
     public void toggleTurret() {
         if(isPicking) {
-            score();
+            if(cycleMode) {
+                score();
+            }else {
+                sideways();
+            }
         }else {
             pick();
         }
