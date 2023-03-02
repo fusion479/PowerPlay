@@ -12,7 +12,7 @@ public class Arm extends Mechanism{
     //CONSTANTS
     public static double initPos = 0.85;
     public static double pickPos = 0.155;
-    public static double placePos = 0.655;
+    public static double placePos = 0.75;
     public static double autoReady = 0.72;
     public double currentPos = 0;
 

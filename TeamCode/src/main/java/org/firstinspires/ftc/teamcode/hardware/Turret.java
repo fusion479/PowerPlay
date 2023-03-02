@@ -126,17 +126,17 @@ public class Turret extends Mechanism{
     }
 
     public void score() {
-        setTargetPosition(side*score);
+        if(cycleMode) {
+            sideways();
+        }else {
+            setTargetPosition(side * score);
+        }
         isPicking = false;
     }
 
     public void toggleTurret() {
         if(isPicking) {
-            if(cycleMode) {
-                score();
-            }else {
-                sideways();
-            }
+            score();
         }else {
             pick();
         }
