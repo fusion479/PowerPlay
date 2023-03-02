@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "LEFT Mid Goal", group = "_Auto")
+@Autonomous(name = "LEFT Mid Goal", group = "_Auto", preselectTeleOp = "MAIN")
 @Config
 public class MidGoalLeft extends LinearOpMode {
 

@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "LEFT 6 Cone", group = "_Auto")
+@Autonomous(name = "LEFT 6 Cone", group = "_Auto", preselectTeleOp = "MAIN")
 @Config
 public class SixConeLeft extends LinearOpMode {
 

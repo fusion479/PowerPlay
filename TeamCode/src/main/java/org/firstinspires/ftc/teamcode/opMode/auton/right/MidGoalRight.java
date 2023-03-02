@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "RIGHT Mid Goal", group = "_Auto")
+@Autonomous(name = "RIGHT Mid Goal", group = "_Auto", preselectTeleOp = "MAIN")
 @Config
 public class MidGoalRight extends LinearOpMode {
 
@@ -69,7 +69,7 @@ public class MidGoalRight extends LinearOpMode {
     public static double scoreDelay = -.2;
     public static double turretAfterScoreDelay = .1;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .57;
+    public static double cycleDelay = .4; //.57
 
     public static final int maxCones = 6;
 
@@ -226,7 +226,7 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
@@ -237,7 +237,7 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
@@ -248,7 +248,7 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
-                .addTemporalMarker(0, () -> {
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })

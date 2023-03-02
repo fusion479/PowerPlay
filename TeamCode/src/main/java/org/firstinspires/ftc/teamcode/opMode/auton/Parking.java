@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(name = "Parking", group = "_Auto")
+@Autonomous(name = "Parking", group = "_Auto", preselectTeleOp = "MAIN")
 public class Parking extends LinearOpMode {
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;

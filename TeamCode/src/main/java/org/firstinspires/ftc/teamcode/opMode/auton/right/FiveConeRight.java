@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 // DO NOT TOUCH, IT WORKS!!!
 
 @Autonomous(name = "RIGHT 5 Cone", group = "_Auto")
-@Config
+@Disabled
 public class FiveConeRight extends LinearOpMode {
 
     ElapsedTime timer = new ElapsedTime();
