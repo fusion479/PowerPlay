@@ -20,8 +20,8 @@ public class Arm extends Mechanism{
     public static double guideTurn = 0.75;
     public static double guidePick = 0.86;
 
-    public static double close = 0.53;
-    public static double open = 0.73;
+    public static double close = 0.73;
+    public static double open = 0.92;
 
     public static double distanceThreshold = 50;
 
