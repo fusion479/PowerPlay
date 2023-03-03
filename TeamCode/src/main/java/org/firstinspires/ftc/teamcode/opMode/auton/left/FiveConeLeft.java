@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 // DO NOT TOUCH, IT WORKS!!!
 
-@Autonomous(name = "LEFT 5 Cone", group = "_Auto", preselectTeleOp = "MAIN")
+@Autonomous(name = "LEFT 5 Cone", group = "_AutoL", preselectTeleOp = "MAIN")
 @Config
 public class FiveConeLeft extends LinearOpMode {
 

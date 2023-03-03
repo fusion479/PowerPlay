@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "LEFT 6 Cone", group = "_Auto", preselectTeleOp = "MAIN")
+@Autonomous(name = "LEFT 6 Cone", group = "_AutoL", preselectTeleOp = "MAIN")
 @Config
 public class SixConeLeft extends LinearOpMode {
 
@@ -59,7 +59,7 @@ public class SixConeLeft extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = 43;
+    public static final double TURRET_SCORE_ANG = 42;
     public static final double TURRET_PICK_ANG = 180;
 
     public static double grabDelay = -0.45;

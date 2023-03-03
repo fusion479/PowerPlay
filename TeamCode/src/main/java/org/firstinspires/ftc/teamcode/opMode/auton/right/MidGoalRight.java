@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "RIGHT Mid Goal", group = "_Auto", preselectTeleOp = "MAIN")
+@Autonomous(name = "RIGHT Mid Goal", group = "_AutoR", preselectTeleOp = "MAIN")
 @Config
 public class MidGoalRight extends LinearOpMode {
 
@@ -59,7 +59,7 @@ public class MidGoalRight extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = 40;
+    public static final double TURRET_SCORE_ANG = 35;
     public static final double TURRET_PICK_ANG = 180;
 
     public static double grabDelay = -0.45;
@@ -106,7 +106,7 @@ public class MidGoalRight extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(TURRET_PICK_ANG);
                 })
-                .waitSeconds(cycleDelay)
+                .waitSeconds(cycleDelay + .12)
                 // END CONE 1 (PRELOAD)
 
 
@@ -226,6 +226,9 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
+                .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
                 .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
@@ -237,6 +240,9 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence middlePark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
+                .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
                 .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
@@ -248,6 +254,9 @@ public class MidGoalRight extends LinearOpMode {
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(path.end())
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
+                .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
                 .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();

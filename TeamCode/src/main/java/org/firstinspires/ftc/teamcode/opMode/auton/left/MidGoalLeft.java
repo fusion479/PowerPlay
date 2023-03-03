@@ -28,7 +28,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 
-@Autonomous(name = "LEFT Mid Goal", group = "_Auto", preselectTeleOp = "MAIN")
+@Autonomous(name = "LEFT Mid Goal", group = "_AutoL", preselectTeleOp = "MAIN")
 @Config
 public class MidGoalLeft extends LinearOpMode {
 
@@ -59,7 +59,7 @@ public class MidGoalLeft extends LinearOpMode {
     ScoreFSM score;
     FtcDashboard dashboard;
 
-    public static final double TURRET_SCORE_ANG = -37;
+    public static final double TURRET_SCORE_ANG = -34;
     public static final double TURRET_PICK_ANG = -180;
 
     public static double grabDelay = -0.45;
@@ -69,7 +69,7 @@ public class MidGoalLeft extends LinearOpMode {
     public static double scoreDelay = -.2;
     public static double turretAfterScoreDelay = .1;
     public static double liftHeightMod = 175;
-    public static double cycleDelay = .57;
+    public static double cycleDelay = .4; //.57
 
     public static final int maxCones = 6;
 
@@ -106,7 +106,7 @@ public class MidGoalLeft extends LinearOpMode {
                 .UNSTABLE_addTemporalMarkerOffset(turretAfterScoreDelay, () -> {
                     turret.setTargetAngle(TURRET_PICK_ANG);
                 })
-                .waitSeconds(cycleDelay)
+                .waitSeconds(cycleDelay + .12)
                 // END CONE 1 (PRELOAD)
 
 
@@ -227,6 +227,9 @@ public class MidGoalLeft extends LinearOpMode {
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
@@ -238,6 +241,9 @@ public class MidGoalLeft extends LinearOpMode {
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })
@@ -249,6 +255,9 @@ public class MidGoalLeft extends LinearOpMode {
                 .setVelConstraint(AutoConstants.PARK_VEL)
                 .setAccelConstraint(AutoConstants.PARK_ACCEL)
                 .addTemporalMarker(0, () -> {
+                    score.highGoal();
+                })
+                .addTemporalMarker(1, () -> {
                     turret.setTargetAngle(0);
                     score.idleU();
                 })

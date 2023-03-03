@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.hardware.Robot;
-@TeleOp(name = "Old TeleOp", group = "_2")
+@TeleOp(name = "Old TeleOp", group = "_3")
 public class OldTeleop extends LinearOpMode {
     public Robot robot = new Robot();
     ElapsedTime timer = new ElapsedTime();
