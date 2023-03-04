@@ -14,6 +14,7 @@ public class Arm extends Mechanism{
     public static double pickPos = 0.155;
     public static double placePos = 0.75;
     public static double autoReady = 0.72;
+    public static double lowReadyPos = 0.80;
     public double currentPos = 0;
 
     public static double guideScore = 0.635;
@@ -127,5 +128,12 @@ public class Arm extends Mechanism{
         poleGuide.setPosition(guideScore);
         isUp = false;
         currentPos = autoReady;
+    }
+
+    public void lowReady() {
+        left.setPosition(lowReadyPos);
+        right.setPosition(1-lowReadyPos);
+        isUp = false;
+        currentPos = lowReadyPos;
     }
 }

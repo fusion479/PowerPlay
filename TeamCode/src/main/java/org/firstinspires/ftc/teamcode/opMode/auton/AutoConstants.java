@@ -71,7 +71,7 @@ public class AutoConstants {
     public static final Pose2d L_SCORE_NODUNK_POSE = new Pose2d(L_SCORE_NODUNK_X, L_SCORE_NODUNK_Y, L_SCORE_HEADING);
     public static final Vector2d L_SCORE_NODUNK_VECTOR = new Vector2d(L_SCORE_NODUNK_X, L_SCORE_NODUNK_Y);
 
-    public static double R_SCORE_X = -37.4;
+    public static double R_SCORE_X = -42;
     public static double R_SCORE_Y = 14;
     public static double R_SCORE_HEADING = Math.toRadians(-10);
 

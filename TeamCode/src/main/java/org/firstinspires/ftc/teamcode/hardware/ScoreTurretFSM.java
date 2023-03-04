@@ -70,7 +70,11 @@ public class ScoreTurretFSM extends Mechanism {
                 break;
             case AUTO_PICK:
                 lift.setTargetPosition(customPos);
-                if((clawTimer.milliseconds() >= autoArmDownDelay) && (autoCounter < 7)) {
+                if (lift.isAuto) {
+                    if ((clawTimer.milliseconds() >= autoArmDownDelay) && (autoCounter < 7)) {
+                        arm.down();
+                    }
+                } else {
                     arm.down();
                 }
                 break;
@@ -260,6 +264,7 @@ public class ScoreTurretFSM extends Mechanism {
     }
 
     public void setTargetPosition(double pos) {
+        scoreStates = states.AUTO_PICK;
         customPos = pos;
     }
     public void debug(boolean isTrue) {

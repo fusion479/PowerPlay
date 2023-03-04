@@ -17,7 +17,7 @@ public class turretintegration extends LinearOpMode {
         waitForStart();
         double lastTime = timer.milliseconds();
         while(opModeIsActive()) {
-            robot.run(gamepad1);
+            robot.run(gamepad1, gamepad2);
             double curr = timer.milliseconds();
             telemetry.addData("looptime: ", curr-lastTime);
             telemetry.update();

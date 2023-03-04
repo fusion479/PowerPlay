@@ -19,7 +19,7 @@ public class MainTeleOp extends LinearOpMode {
         bot.init(hardwareMap);
         waitForStart();
         while(opModeIsActive()) {
-            bot.run(gamepad1);
+            bot.run(gamepad1, gamepad2);
         }
         tele.addData("turr1 current: ", bot.score.turret.turrs[0].getCurrent(CurrentUnit.AMPS));
         tele.addData("turr2 current: ", bot.score.turret.turrs[1].getCurrent(CurrentUnit.AMPS));

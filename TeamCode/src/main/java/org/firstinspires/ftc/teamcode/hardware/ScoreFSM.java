@@ -95,7 +95,7 @@ public class ScoreFSM extends Mechanism {
                 if(lift.isAuto) {
                     arm.up();
                 }else if(lift.targetReached()) {
-                    arm.ready();
+                    arm.lowReady();
                 }
                 break;
             case READY_BOTTOM:

@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.opMode.auton.AutoConstants;
 
 public class TestBot extends Mechanism{
     public SampleMecanumDrive drive;
@@ -25,6 +26,12 @@ public class TestBot extends Mechanism{
     public boolean isPressedRT = false;
     public boolean isPressedLT = false;
 
+    public boolean isPressedX2 = false;
+    public boolean isPressedY2 = false;
+    public boolean isPressedA2 = false;
+    public boolean isPressedB2 = false;
+    public boolean isPressedRB2 = false;
+
     @Override
     public void init(HardwareMap hwMap) {
         drive = new SampleMecanumDrive(hwMap);
@@ -33,9 +40,9 @@ public class TestBot extends Mechanism{
         score.lift.isAuto = false;
         odoLift = hwMap.get(Servo.class, "odoLiftF");
     }
-    public void run(Gamepad gamepad) {
+    public void run(Gamepad gamepad, Gamepad gamepad2) {
         move(gamepad);
-        score(gamepad);
+        score(gamepad, gamepad2);
     }
     public void move(Gamepad gamepad) {
         if(score.scoreStates == ScoreTurretFSM.states.READY_HIGH) {
@@ -57,7 +64,7 @@ public class TestBot extends Mechanism{
         }
         drive.update();
     }
-    public void score(Gamepad gamepad) {
+    public void score(Gamepad gamepad, Gamepad gamepad2) {
         if(!isPressedx && gamepad.x) {
             score.toggleHigh();
         }
@@ -94,14 +101,39 @@ public class TestBot extends Mechanism{
         if (!isPressedLT && gamepad.left_trigger >= 0.75) {
             score.toggleLeft();
         }
+        if (!isPressedA2 && gamepad2.b) {
+            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[0]);
+        }
+        if (!isPressedY2 && gamepad2.y) {
+            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[1]);
+        }
+        if (!isPressedA2 && gamepad2.x) {
+            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[2]);
+        }
+        if (!isPressedA2 && gamepad2.a) {
+            score.setTargetPosition(AutoConstants.STACK_SLIDES_POSITIONS[3]);
+        }
+        if (!isPressedRB2 && gamepad2.right_bumper) {
+            score.setTargetPosition(score.lift.lift.getPos() + 175);
+        }
+
+
         isPressedRB = gamepad.right_bumper;
         isPressedLB = gamepad.left_bumper;
         isPresseda = gamepad.a;
         isPressedy = gamepad.y;
         isPressedx = gamepad.x;
+        isPressedB = gamepad.b;
         score.commit = gamepad.right_bumper;
         isPressedLT = gamepad.left_trigger >= 0.75;
         isPressedRT = gamepad.right_trigger >= 0.75;
+
+        isPressedA2 = gamepad2.a;
+        isPressedB2 = gamepad2.b;
+        isPressedX2 = gamepad2.x;
+        isPressedY2 = gamepad2.y;
+        isPressedRB2 = gamepad2.right_bumper;
+
         score.loop();
     }
 

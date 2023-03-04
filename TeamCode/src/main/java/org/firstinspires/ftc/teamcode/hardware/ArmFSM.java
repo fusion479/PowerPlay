@@ -11,6 +11,7 @@ public class ArmFSM extends Mechanism {
         up,
         ready,
         autoReady,
+        lowReady
     }
     public states armStates;
     @Override
@@ -31,6 +32,9 @@ public class ArmFSM extends Mechanism {
                 break;
             case autoReady:
                 arm.setAutoReady();
+                break;
+            case lowReady:
+                arm.lowReady();
                 break;
         }
     }
@@ -70,5 +74,7 @@ public class ArmFSM extends Mechanism {
     public void autoReady() {
         armStates = states.autoReady;
     }
+
+    public void lowReady() { armStates = states.lowReady; }
 
 }
