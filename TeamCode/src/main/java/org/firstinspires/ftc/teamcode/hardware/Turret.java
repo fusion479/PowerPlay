@@ -29,7 +29,7 @@ public class Turret extends Mechanism{
 
     public static double pick = 413;
 
-    public static double score = 100;
+    public static double score = 207;
 
     public static boolean isPicking = false;
     public static boolean cycleMode = false;

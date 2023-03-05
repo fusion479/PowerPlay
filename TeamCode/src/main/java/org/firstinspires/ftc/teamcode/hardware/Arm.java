@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Arm extends Mechanism{
     Servo left, right;
     Servo claw;
-    Servo poleGuide;
     //CONSTANTS
     public static double initPos = 0.85;
     public static double pickPos = 0.155;
@@ -16,10 +15,6 @@ public class Arm extends Mechanism{
     public static double autoReady = 0.72;
     public static double lowReadyPos = 0.80;
     public double currentPos = 0;
-
-    public static double guideScore = 0.635;
-    public static double guideTurn = 0.75;
-    public static double guidePick = 0.86;
 
     public static double close = 0.73;
     public static double open = 0.92;
@@ -35,7 +30,6 @@ public class Arm extends Mechanism{
         claw = hwMap.get(Servo.class, "claw");
         left = hwMap.get(Servo.class, "armLeft");
         right = hwMap.get(Servo.class, "armRight");
-        poleGuide = hwMap.get(Servo.class, "poleGuide");
         resetArm();
         close();
     }
@@ -44,7 +38,6 @@ public class Arm extends Mechanism{
         if(currentPos != initPos) {
             left.setPosition(initPos);
             right.setPosition(1 - initPos);
-            poleGuide.setPosition(guidePick);
             isUp = true;
             currentPos = initPos;
         }
@@ -54,7 +47,6 @@ public class Arm extends Mechanism{
         if(currentPos != pickPos) {
             left.setPosition(pickPos);
             right.setPosition(1 - pickPos);
-            poleGuide.setPosition(guidePick);
             isUp = false;
             currentPos = pickPos;
         }
@@ -64,18 +56,9 @@ public class Arm extends Mechanism{
         if(currentPos != placePos) {
             left.setPosition(placePos);
             right.setPosition(1 - placePos);
-            poleGuide.setPosition(guidePick);
             isUp = false;
             currentPos = placePos;
         }
-    }
-
-    public void setGuideTurn() {
-        poleGuide.setPosition(guideTurn);
-    }
-
-    public void setGuideIdle() {
-        poleGuide.setPosition(guidePick);
     }
 
     public void open() {
@@ -125,7 +108,6 @@ public class Arm extends Mechanism{
     public void setAutoReady() {
         left.setPosition(autoReady);
         right.setPosition(1 - autoReady);
-        poleGuide.setPosition(guideScore);
         isUp = false;
         currentPos = autoReady;
     }

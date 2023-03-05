@@ -31,6 +31,9 @@ public class TestBot extends Mechanism{
     public boolean isPressedA2 = false;
     public boolean isPressedB2 = false;
     public boolean isPressedRB2 = false;
+    public boolean isPressedLB2 = false;
+    public boolean isPressedRT2 = false;
+    public boolean isPressedLT2 = false;
 
     @Override
     public void init(HardwareMap hwMap) {
@@ -116,6 +119,15 @@ public class TestBot extends Mechanism{
         if (!isPressedRB2 && gamepad2.right_bumper) {
             score.setTargetPosition(score.lift.lift.getPos() + 175);
         }
+        if (!isPressedLB2 && gamepad2.left_bumper) {
+            score.setTargetPosition(score.lift.lift.getPos() - 175);
+        }
+        if (!isPressedRT2 && gamepad2.right_trigger >= 0.75) {
+            score.setTargetPosition(score.lift.lift.getPos() + 50);
+        }
+        if (!isPressedLT2 && gamepad2.left_trigger >= 0.75) {
+            score.setTargetPosition(score.lift.lift.getPos() - 50);
+        }
 
 
         isPressedRB = gamepad.right_bumper;
@@ -133,6 +145,8 @@ public class TestBot extends Mechanism{
         isPressedX2 = gamepad2.x;
         isPressedY2 = gamepad2.y;
         isPressedRB2 = gamepad2.right_bumper;
+        isPressedLT2 = gamepad2.left_trigger >= 0.75;
+        isPressedRT2 = gamepad2.right_trigger >= 0.75;
 
         score.loop();
     }
