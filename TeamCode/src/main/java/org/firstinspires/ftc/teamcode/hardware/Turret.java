@@ -60,7 +60,7 @@ public class Turret extends Mechanism{
         double time = timer.milliseconds();
         double error = turrs[motor].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
-        if(Math.abs(distance) <= 300 && Math.abs(target) == 217) {
+        if(Math.abs(distance) <= 300 && Math.abs(target) == 207) {
             pd = kP_sideways * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
         }
         lastError[motor] = error;
