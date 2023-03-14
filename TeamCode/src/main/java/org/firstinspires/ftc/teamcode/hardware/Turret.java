@@ -14,6 +14,7 @@ public class Turret extends Mechanism{
     ElapsedTime timer = new ElapsedTime();
     //CONSTANTS
     public static double kP = -0.0016;
+    public static double kP_sideways = -0.003;
     public static double kD = 0;
     public static double kS = 0.2;
     public static double vMax = 1;
@@ -23,6 +24,7 @@ public class Turret extends Mechanism{
     public double lastError[] = {0, 0}; //separate error for each motor
     public double powers[] = {0, 0};
     public static double bound = 2; //error bound for turret
+    public static double distance = 0;
 
     public static double incremenet = 4;
     public static double side = 1;
@@ -58,6 +60,9 @@ public class Turret extends Mechanism{
         double time = timer.milliseconds();
         double error = turrs[motor].getCurrentPosition() - target;
         double pd = kP * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
+        if(Math.abs(distance) <= 300 && Math.abs(target) == 217) {
+            pd = kP_sideways * error + kD * (error-lastError[motor]) / time - kS * Math.signum(error);
+        }
         lastError[motor] = error;
         timer.reset();
         if(Math.abs(error) < bound) {
@@ -129,7 +134,9 @@ public class Turret extends Mechanism{
         if(cycleMode) {
             sideways();
         }else {
+            distance = target;
             setTargetPosition(side * score);
+            distance -= target;
         }
         isPicking = false;
     }
@@ -153,7 +160,9 @@ public class Turret extends Mechanism{
     }
 
     public void sideways() {
+        distance = target;
         setTargetPosition(side*207);
+        distance -= target;
         isPicking = false;
     }
 
