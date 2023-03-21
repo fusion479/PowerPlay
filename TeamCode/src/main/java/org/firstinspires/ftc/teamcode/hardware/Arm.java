@@ -13,11 +13,12 @@ public class Arm extends Mechanism{
     public static double pickPos = 0.155;
     public static double placePos = 0.75;
     public static double autoReady = 0.72;
-    public static double lowReadyPos = 0.80;
+    public static double lowReadyPos = 0.81;
+    public static double mediumReadyPos = 0.815;
     public double currentPos = 0;
 
-    public static double close = 0.73;
-    public static double open = 0.92;
+    public static double close = 0.04;
+    public static double open = 0.25;
 
     public static double distanceThreshold = 50;
 
@@ -117,5 +118,12 @@ public class Arm extends Mechanism{
         right.setPosition(1-lowReadyPos);
         isUp = false;
         currentPos = lowReadyPos;
+    }
+
+    public void mediumReady() {
+        left.setPosition(mediumReadyPos);
+        right.setPosition(1-mediumReadyPos);
+        isUp = false;
+        currentPos = mediumReadyPos;
     }
 }
