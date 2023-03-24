@@ -21,7 +21,7 @@ public class ScoreTurretFSM extends Mechanism {
     public static int clawDelay = 150;
     public static int autoArmDownDelay = 700;
     public static int clawRaiseDelay = 400;
-    public static int turretDelay = 650;
+    public static int turretDelay = 300;
     public static int pickDelay = 450;
     public static int teleOpArmDownDelay = 200;
     public double customPos = 0;
