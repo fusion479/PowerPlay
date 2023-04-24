@@ -123,7 +123,7 @@ public class ScoreTurretFSM extends Mechanism {
                 lift.high();
                 if(lift.isAuto) {
                     arm.up();
-                }else if(lift.targetReached()) {
+                } else {
                     arm.ready();
                 }
                 break;
