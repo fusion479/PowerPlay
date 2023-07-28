@@ -18,7 +18,7 @@ public class Turret extends Mechanism{
     public static double kP_sideways = -0.003;
     public static double kD = 0;
     public static double kS = 0.2;
-    public static double vMax = .65;
+    public static double vMax = 1;
     public static double tpd = 2.296875; //encoder res * gear ratio / 360 degrees = ticks per degree
 
     public static double target = 0;
