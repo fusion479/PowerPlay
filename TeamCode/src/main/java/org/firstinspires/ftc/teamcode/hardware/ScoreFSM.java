@@ -83,6 +83,7 @@ public class ScoreFSM extends Mechanism {
                 }
                 break;
             case READY_MEDIUM:
+                lift.mid();
                 if(lift.isAuto) {
                     lift.setTargetPosition(autoMidPos);
                     arm.up();
