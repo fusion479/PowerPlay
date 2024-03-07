@@ -73,6 +73,7 @@ public class Robot extends Mechanism {
         isPressedx = gamepad.x;
         score.loop();
     }
+
     public void turr(Gamepad gamepad) {
         if(score.scoreStates != ScoreFSM.states.IDLE_DOWN) {
             if (!isPressedRT && gamepad.right_trigger >= 0.75) {

@@ -90,7 +90,6 @@ public class MidGoalRight extends LinearOpMode {
         score.lift.isAuto = true;
 
         drive.setPoseEstimate(AutoConstants.R_START);
-
         TrajectorySequence path = drive.trajectorySequenceBuilder(AutoConstants.R_START)
                 .addTemporalMarker(0, () -> {
                     score.idleU();

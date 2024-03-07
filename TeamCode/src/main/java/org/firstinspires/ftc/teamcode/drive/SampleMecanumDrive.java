@@ -150,6 +150,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // TODO: if desired, use setLocalizer() to change the localization method
         setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap));
 

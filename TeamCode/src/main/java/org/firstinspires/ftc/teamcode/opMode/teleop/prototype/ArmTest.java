@@ -19,6 +19,7 @@ public class ArmTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         arm.init(hardwareMap);
+
         waitForStart();
         while(opModeIsActive()) {
             if (!isPressed && gamepad1.a) {

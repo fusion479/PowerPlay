@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 @Config
-public class Lift extends Mechanism{
+public class Lift extends Mechanism {
     DcMotorEx motors[] = new DcMotorEx[2];
     TouchSensor limit;
     ElapsedTime timer = new ElapsedTime();
@@ -31,13 +31,13 @@ public class Lift extends Mechanism{
     public static double kLow = -0.13;
     public static double bound = 20;
     public static double vMax = 1;
-    public static double retMult = 0.75;
+    public static double retMult = .65;
 
     //pos
     public static double bottom = 0;
-    public static double low = 0;
-    public static double mid = 300;
-    public static double high = 560;
+    public static double low = 50;
+    public static double mid = 350;
+    public static double high = 650;
 
     public static double target = 0;
     public static double lastTarget = target;
